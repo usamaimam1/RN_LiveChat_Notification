@@ -128,10 +128,11 @@ export default class Login extends React.Component {
                                         <Text style={{ flex: 1, textAlign: 'right' }}> Not have an ID? </Text>
                                         <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('SignUp') }}> Sign Up? </Text>
                                     </View>
-                                    <View>
-                                        <Button title="Forgot Password?" onPress={() => {
-                                            navigate('ForgotPassword', { code: null })
-                                        }} />
+                                    <View style={{justifyContent:'center',alignItems:'center',flex:1,marginBottom:10}}>
+                                        <Text style={{ flex: 1, textAlign: 'center',color:'red' }} onPress={()=>{
+                                            navigate('ForgotPassword')
+                                        }}> Forgot Password? </Text>
+
                                     </View>
                                 </View>
                             </View>
@@ -144,20 +145,21 @@ export default class Login extends React.Component {
 
 const styles = StyleSheet.create({
     logo: {
-        flex: 1,
+        flex: 4,
     },
     background: {
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height
     },
     form: {
-        flex: 2,
+        flex: 4,
         margin: 20
     },
     inputContainer: {
 
     },
     signinButton: {
+        flex:1,
         marginTop: 10,
         marginLeft: 50,
         marginRight: 50
