@@ -133,7 +133,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.invertase.rnfirebasestarter"
+        applicationId "com.spl.firebasetest"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -230,6 +230,7 @@ dependencies {
     implementation "com.google.firebase:firebase-storage"
     // Dynamic Links
     implementation "com.google.firebase:firebase-dynamic-links"
+    implementation "com.google.firebase:firebase-invites:17.0.0"
     // Real-time Database
     implementation "com.google.firebase:firebase-database"
     // Cloud Functions
