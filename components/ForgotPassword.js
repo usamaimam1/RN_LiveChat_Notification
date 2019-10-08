@@ -120,7 +120,7 @@ export default class ForgotPassword extends React.Component {
                                             if(this.state.newPassword == this.state.confirmnewPassword){
                                                 firebase.auth().confirmPasswordReset(this.state.passwordChangeCode,this.state.newPassword).then(()=>{
                                                     ToastAndroid.show("Password Changed Successfully..",ToastAndroid.SHORT)
-                                                    this.setState({newPassword:null,confirmPasswordReset:null})
+                                                    this.setState({newPassword:null,confirmPasswordReset:null,passwordChangeCode:null})
                                                     navigate('Home')
                                                 }).catch(err=>{
                                                     ToastAndroid.show(err.message,ToastAndroid.SHORT)

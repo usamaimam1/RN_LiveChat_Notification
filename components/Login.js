@@ -87,7 +87,6 @@ export default class Login extends React.Component {
         firebase.auth().onAuthStateChanged(user => {
             this.setState({ isLoading: false })
             this.setState({ foundUser: user ? true : false })
-            this.setState({ user: user })
             this.props.navigation.navigate(user ? 'Dashboard' : 'Home')
         })
     }
