@@ -12,6 +12,7 @@ import {
     Button
 } from 'react-native'
 import firebase from 'react-native-firebase'
+import * as Progress from 'react-native-progress'
 
 export default class ChangePassword extends React.Component {
     static navigationOptions = {
@@ -30,6 +31,7 @@ export default class ChangePassword extends React.Component {
         this.handleNewPasswordConfirm = this.handleNewPasswordConfirm.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.reauthenticate = this.reauthenticate.bind(this)
+        this.handleConfirmAndValidation = this.handleConfirmAndValidation.bind(this)
     }
     handleOldPassword(oldPassword) {
         this.setState({ oldPassword: oldPassword })
@@ -57,6 +59,17 @@ export default class ChangePassword extends React.Component {
             }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT); });
         }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT) });
         this.setState({showActivity:false})
+    }
+    handleConfirmAndValidation(){
+        if (this.state.oldPassword && this.state.newPassword && this.state.newPasswordConfirm) {
+            if (this.state.newPassword == this.state.newPasswordConfirm) {
+                this.handleChangePassword(this.state.oldPassword, this.state.newPassword)
+            } else {
+                ToastAndroid.show("Passwords Do NOT Match!..")
+            }
+        } else {
+            ToastAndroid.show("Please don't leave the fields empty...")
+        }
     }
     render() {
         const { navigate } = this.props.navigation
@@ -87,21 +100,9 @@ export default class ChangePassword extends React.Component {
                                 </View>
                                 <View style={styles.signinButton}>
                                     <Button title={"Validate and Confirm"} onPress={() => {
-                                        if (this.state.oldPassword && this.state.newPassword && this.state.newPasswordConfirm) {
-                                            if (this.state.newPassword == this.state.newPasswordConfirm) {
-                                                this.handleChangePassword(this.state.oldPassword, this.state.newPassword)
-                                            } else {
-                                                ToastAndroid.show("Passwords Do NOT Match!..")
-                                            }
-                                        } else {
-                                            ToastAndroid.show("Please don't leave the fields empty...")
-                                        }
+                                       this.handleConfirmAndValidation()
                                     }}> </Button>
                                 </View>
-                                {/* <View style={styles.SignupText}>
-                                <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
-                                <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
-                            </View> */}
                             </View>
                         </View>
                     </ImageBackground>

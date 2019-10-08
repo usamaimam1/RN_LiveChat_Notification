@@ -14,7 +14,6 @@ import {
     Alert
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { NavigationEvents } from 'react-navigation'
 
 export default class ForgotPassword extends React.Component {
     static navigationOptions = {
