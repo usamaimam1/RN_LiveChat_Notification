@@ -30,6 +30,7 @@ target 'firebasetest' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'React-ART', :path => '../node_modules/react-native/Libraries/ART'
   # Required by RNFirebase
   pod 'Firebase/Core', '~> 6.8.1'
 
@@ -46,6 +47,7 @@ target 'firebasetest' do
   pod 'Firebase/Performance', '~> 6.8.1'
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
+  pod 'Firebase/Analytics'
 
   target 'firebasetestTests' do
     inherit! :search_paths

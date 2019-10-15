@@ -7,7 +7,8 @@ import {
     Button,
     ToastAndroid,
     Picker,
-    Dimensions
+    Dimensions,
+    SafeAreaView
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import OptionsMenu from 'react-native-options-menu'
@@ -42,26 +43,34 @@ export default class Dashboard extends React.Component {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
-            <View style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1 }}>
-                    <View style={{ flex: 1, margin: 10 }}>
-                        <Text> Welcome User! </Text>
+                    <View style={{ flex: 1, justifyContent:'center',alignItems:'flex-start' }}>
+                        <Text style={{margin:10}}> Welcome User! </Text>
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                        <OptionsMenu
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        {Platform.OS == "ios" ? 
+                        <OptionsMenu 
+                            button={require('../assets/ReactNativeFirebase.png')}
+                            buttonStyle={{ width: 40, height: 40, resizeMode: "contain" }}
+                            destructiveIndex={1}
+                            options={["Change Password", "Sign Out","Cancel"]}
+                            actions={[this.handleChangePassword,this.handleSignOut,()=>{}]} />
+                        :<OptionsMenu
                             button={require('../assets/ReactNativeFirebase.png')}
                             buttonStyle={{ width: 40, height: 40, resizeMode: "contain" }}
                             destructiveIndex={1}
                             options={["Change Password", "Sign Out"]}
                             actions={[this.handleChangePassword,this.handleSignOut]} />
+                        }
                     </View>
                 </View>
                 <View style={{ flex: 14, justifyContent: 'center', alignItems: 'center' }}>
-                   <Image source={require('../assets/iqbal.jpg')} resizeMode="contain" style={{flex:1,height:height,width:width}}>
+                   {/* <Image source={require('../assets/iqbal.jpg')} resizeMode="contain" style={{flex:1,height:height,width:width}}>
                        
-                    </Image>
+                    </Image> */}
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }
