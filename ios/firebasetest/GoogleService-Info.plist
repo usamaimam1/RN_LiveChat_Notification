@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>438947594492-n6ohdqignk51cuuguu8mc6eit6cit9tq.apps.googleusercontent.com</string>
+	<string>733156438127-9sgdh9qqsalusv5um2pdkuq4r0lkhbd4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.438947594492-n6ohdqignk51cuuguu8mc6eit6cit9tq</string>
+	<string>com.googleusercontent.apps.733156438127-9sgdh9qqsalusv5um2pdkuq4r0lkhbd4</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAhQu9FKJiNbLwYp9EHYYo8LjzggLR_YnI</string>
+	<string>AIzaSyDeA6grOwIXhgFlQ62m49mO1vbN0IaMLWs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>438947594492</string>
+	<string>733156438127</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.invertase.firebasetest</string>
 	<key>PROJECT_ID</key>
-	<string>spl-mobileapps</string>
+	<string>fir-test-ce7b3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>spl-mobileapps.appspot.com</string>
+	<string>fir-test-ce7b3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:438947594492:ios:278cf4e8ef9c52149c1779</string>
+	<string>1:733156438127:ios:bd5816bcce0531ffa89d9a</string>
 	<key>DATABASE_URL</key>
-	<string>https://spl-mobileapps.firebaseio.com</string>
+	<string>https://fir-test-ce7b3.firebaseio.com</string>
 </dict>
 </plist>

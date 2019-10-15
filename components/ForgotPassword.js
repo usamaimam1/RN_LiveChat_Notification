@@ -96,7 +96,7 @@ export default class ForgotPassword extends React.Component {
                             title={"Submit"}
                             onPress={() => {
                                 if (!this.state.receivedCode) {
-                                    firebase.auth().sendPasswordResetEmail(this.state.userEmail, { android: { packageName: "com.spl.firebasetest" }, iOS: {}, url: "https://firebasetestrandom.page.link", handleCodeInApp: true })
+                                    firebase.auth().sendPasswordResetEmail(this.state.userEmail, { android: { packageName: "com.spl.firebasetest" }, iOS: {bundleId:"com.invertase.firebasetest"}, url: "https://splfirebasetestlink.page.link/", handleCodeInApp: true })
                                         .then(() => {
                                             // console.log(url)
                                             Alert.alert(
