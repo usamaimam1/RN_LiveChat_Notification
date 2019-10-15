@@ -9,14 +9,17 @@ import {
     TextInput,
     ToastAndroid,
     Dimensions,
-    Button
+    Button,
+    Platform,
+    SafeAreaView
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import * as Progress from 'react-native-progress'
+// import { platform } from 'os'
 
 export default class ChangePassword extends React.Component {
     static navigationOptions = {
-        header: null
+        // header: null
     }
     constructor(props) {
         super(props)
@@ -49,18 +52,18 @@ export default class ChangePassword extends React.Component {
         return user.reauthenticateWithCredential(cred);
     }
     handleChangePassword(oldPassword, newPassword) {
-        this.setState({showActivity:true})
+        this.setState({ showActivity: true })
         this.reauthenticate(oldPassword).then(() => {
             let user = firebase.auth().currentUser;
             user.updatePassword(newPassword).then(() => {
                 ToastAndroid.show("Password updated!", ToastAndroid.LONG);
-                this.setState({ oldPassword: null, newPassword: null, newPasswordConfirm: null,showActivity:false})
+                this.setState({ oldPassword: null, newPassword: null, newPasswordConfirm: null, showActivity: false })
                 this.props.navigation.navigate('Dashboard')
             }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT); });
         }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT) });
-        this.setState({showActivity:false})
+        this.setState({ showActivity: false })
     }
-    handleConfirmAndValidation(){
+    handleConfirmAndValidation() {
         if (this.state.oldPassword && this.state.newPassword && this.state.newPasswordConfirm) {
             if (this.state.newPassword == this.state.newPasswordConfirm) {
                 this.handleChangePassword(this.state.oldPassword, this.state.newPassword)
@@ -73,40 +76,45 @@ export default class ChangePassword extends React.Component {
     }
     render() {
         const { navigate } = this.props.navigation
+        const contentToRender = (<ImageBackground style={styles.background} source={require('../assets/splash-bg.jpg')}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.logo} >
+                    <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
+
+                    </Image>
+                </View>
+                <View style={styles.form} >
+                    <View style={styles.inputContainer}>
+                        <TextInput placeholder="Enter Original Password : " textContentType="password" style={styles.Text} onChangeText={this.handleOldPassword} secureTextEntry={true} value={this.state.oldPassword} >
+
+                        </TextInput>
+                        <TextInput placeholder="Enter New Password : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPassword} secureTextEntry={true} value={this.state.newPassword}>
+
+                        </TextInput>
+                        <TextInput placeholder="Enter New Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPasswordConfirm} secureTextEntry={true} value={this.state.newPasswordConfirm}>
+
+                        </TextInput>
+                    </View>
+                    <View style={styles.signinButton}>
+                        <Button title={"Validate and Confirm"} onPress={() => {
+                            this.handleConfirmAndValidation()
+                        }}> </Button>
+                    </View>
+                </View>
+            </View>
+        </ImageBackground>)
         return (
             this.state.showActivity ? (
                 <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
-                </View>):
-                < ScrollView keyboardShouldPersistTaps = "always" >
-                    <ImageBackground style={styles.background} source={require('../assets/bg-hd.jpg')}>
-                        <View style={{ flex: 1 }}>
-                            <View style={styles.logo} >
-                                <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
-
-                                </Image>
-                            </View>
-                            <View style={styles.form} >
-                                <View style={styles.inputContainer}>
-                                    <TextInput placeholder="Enter Original Password : " textContentType="password" style={styles.Text} onChangeText={this.handleOldPassword} secureTextEntry={true} value={this.state.oldPassword} >
-
-                                    </TextInput>
-                                    <TextInput placeholder="Enter New Password : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPassword} secureTextEntry={true} value={this.state.newPassword}>
-
-                                    </TextInput>
-                                    <TextInput placeholder="Enter New Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPasswordConfirm} secureTextEntry={true} value={this.state.newPasswordConfirm}>
-
-                                    </TextInput>
-                                </View>
-                                <View style={styles.signinButton}>
-                                    <Button title={"Validate and Confirm"} onPress={() => {
-                                       this.handleConfirmAndValidation()
-                                    }}> </Button>
-                                </View>
-                            </View>
-                        </View>
-                    </ImageBackground>
-            </ScrollView >
+                </View>) :
+                Platform.OS === "ios" ? 
+                <SafeAreaView>
+                    {contentToRender}
+                </SafeAreaView>
+                :< ScrollView keyboardShouldPersistTaps="always" >
+                    {contentToRender}
+                </ScrollView >
         )
     }
 }
@@ -135,7 +143,9 @@ const styles = StyleSheet.create({
     Text: {
         backgroundColor: 'white',
         margin: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        height:50,
+        backgroundColor:'lightgrey'
     },
     SignupText: {
         flex: 1,

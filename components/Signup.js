@@ -11,7 +11,8 @@ import {
     TextInput,
     Button,
     ToastAndroid,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    SafeAreaView
 } from 'react-native';
 
 import firebase from 'react-native-firebase'
@@ -20,7 +21,7 @@ import * as Progress from 'react-native-progress'
 
 export default class SignUp extends React.Component {
     static navigationOptions = {
-        header: null
+        // header: null
     }
     constructor() {
         super();
@@ -46,7 +47,7 @@ export default class SignUp extends React.Component {
         this.setState({ userPasswordConfirm: changedPassword })
     }
     handleSignUp() {
-        this.setState({showActivity: true})
+        this.setState({ showActivity: true })
         if (this.state.userEmail && this.state.userPassword && this.state.userPasswordConfirm) {
             if (this.state.userPassword === this.state.userPasswordConfirm) {
                 firebase.auth().createUserWithEmailAndPassword(this.state.userEmail, this.state.userPassword)
@@ -63,48 +64,53 @@ export default class SignUp extends React.Component {
         } else {
             ToastAndroid.show("Please do not leave the fields Empty!", ToastAndroid.SHORT)
         }
-        this.setState({showActivity:false})
+        this.setState({ showActivity: false })
     }
     render() {
         const { navigate } = this.props.navigation
-        console.log(this.state)
+        // console.log(this.state)
+        const contentToRender = (<ImageBackground style={styles.background} source={require('../assets/splash-bg.jpg')}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.logo} >
+                    <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
+
+                    </Image>
+                </View>
+                <View style={styles.form} >
+                    <View style={styles.inputContainer}>
+                        <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail} >
+
+                        </TextInput>
+                        <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}>
+
+                        </TextInput>
+                        <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}>
+
+                        </TextInput>
+                    </View>
+                    <View style={styles.signinButton}>
+                        <Button title={"Sign Up"} onPress={() => {
+                            this.handleSignUp()
+                        }}> </Button>
+                    </View>
+                    <View style={styles.SignupText}>
+                        <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
+                        <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
+                    </View>
+                </View>
+            </View>
+        </ImageBackground>)
         return (
             this.state.showActivity ?
                 (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
                 </View>)
-                : <ScrollView keyboardShouldPersistTaps="always">
-                    <ImageBackground style={styles.background} source={require('../assets/bg-hd.jpg')}>
-                        <View style={{ flex: 1 }}>
-                            <View style={styles.logo} >
-                                <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
-
-                                </Image>
-                            </View>
-                            <View style={styles.form} >
-                                <View style={styles.inputContainer}>
-                                    <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail} >
-
-                                    </TextInput>
-                                    <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}>
-
-                                    </TextInput>
-                                    <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}>
-
-                                    </TextInput>
-                                </View>
-                                <View style={styles.signinButton}>
-                                    <Button title={"Sign Up"} onPress={() => {
-                                        this.handleSignUp()
-                                    }}> </Button>
-                                </View>
-                                <View style={styles.SignupText}>
-                                    <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
-                                    <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </ImageBackground>
+                :Platform.OS ==="ios" ?
+                <SafeAreaView>
+                    {contentToRender}
+                </SafeAreaView>
+                :<ScrollView keyboardShouldPersistTaps="always">
+                    {contentToRender}
                 </ScrollView>)
     }
 }
@@ -132,7 +138,9 @@ const styles = StyleSheet.create({
     Text: {
         backgroundColor: 'white',
         margin: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        height:50,
+        backgroundColor:'lightgrey'
     },
     SignupText: {
         flex: 1,

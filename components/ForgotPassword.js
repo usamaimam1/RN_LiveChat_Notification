@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-navigation'
 
 export default class ForgotPassword extends React.Component {
     static navigationOptions = {
-        header: null
+        // header: null
     }
     constructor(props) {
         super(props)

@@ -20,7 +20,7 @@ import * as Progress from 'react-native-progress'
 
 export default class Login extends React.Component {
     static navigationOptions = {
-        header: null
+        // header: null
     };
     constructor() {
         super();
