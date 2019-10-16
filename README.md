@@ -20,8 +20,8 @@ A basic react native app with [`react-native-firebase`](https://github.com/inver
 
 #### 1) Clone & Install Dependencies
 
-- 1.1) `git clone https://github.com/invertase/react-native-firebase-starter.git`
-- 1.2) `cd react-native-firebase-starter` - cd into your newly created project directory.
+- 1.1) `https://github.com/usamaimam1/react-native-firebase-auth-login-signup-boilerplate.git`
+- 1.2) `cd react-native-firebase-auth-login-signup-boilerplate` - cd into your newly created project directory.
 - 1.3) Install NPM packages with your package manager of choice - i.e run `yarn` or `npm install`
 
 #### 2) Rename Project
@@ -49,8 +49,9 @@ A basic react native app with [`react-native-firebase`](https://github.com/inver
 - 5.2) **[iOS]** Remove or change in `info.plist` by editing the `GADApplicationIdentifier` key string.
 - 5.3) **[Android]** Remove or change in `AndroidManifest.xml` by modifying the content of `<meta-data />` tag within the `<application />` tag.
 - 5.4) More instrucation can be found [here](https://developers.google.com/admob/android/quick-start).
+#### 6) Setup your database and configure dynamic links(if any)
 
-#### 6) Start your app
+#### 7) Start your app
 
 - 6.1) Start the react native packager, run `yarn run start` or `npm start` from the root of your project.
 - 6.2) **[iOS]** Build and run the iOS app, run `npm run ios` or `yarn run ios` from the root of your project. The first build will take some time. This will automatically start up a simulator also for you on a successful build if one wasn't already started.
