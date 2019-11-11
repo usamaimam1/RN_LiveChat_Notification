@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "firebasetest-tvOS.app"
-               BlueprintName = "firebasetest-tvOS"
-               ReferencedContainer = "container:firebasetest.xcodeproj">
+               BuildableName = "RTChat-tvOS.app"
+               BlueprintName = "RTChat-tvOS"
+               ReferencedContainer = "container:RTChat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "firebasetest-tvOSTests.xctest"
-               BlueprintName = "firebasetest-tvOSTests"
-               ReferencedContainer = "container:firebasetest.xcodeproj">
+               BuildableName = "RTChat-tvOSTests.xctest"
+               BlueprintName = "RTChat-tvOSTests"
+               ReferencedContainer = "container:RTChat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "firebasetest-tvOSTests.xctest"
-               BlueprintName = "firebasetest-tvOSTests"
-               ReferencedContainer = "container:firebasetest.xcodeproj">
+               BuildableName = "RTChat-tvOSTests.xctest"
+               BlueprintName = "RTChat-tvOSTests"
+               ReferencedContainer = "container:RTChat.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "firebasetest-tvOS.app"
-            BlueprintName = "firebasetest-tvOS"
-            ReferencedContainer = "container:firebasetest.xcodeproj">
+            BuildableName = "RTChat-tvOS.app"
+            BlueprintName = "RTChat-tvOS"
+            ReferencedContainer = "container:RTChat.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "firebasetest-tvOS.app"
-            BlueprintName = "firebasetest-tvOS"
-            ReferencedContainer = "container:firebasetest.xcodeproj">
+            BuildableName = "RTChat-tvOS.app"
+            BlueprintName = "RTChat-tvOS"
+            ReferencedContainer = "container:RTChat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "firebasetest-tvOS.app"
-            BlueprintName = "firebasetest-tvOS"
-            ReferencedContainer = "container:firebasetest.xcodeproj">
+            BuildableName = "RTChat-tvOS.app"
+            BlueprintName = "RTChat-tvOS"
+            ReferencedContainer = "container:RTChat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,4 +1,4 @@
-package com.spl.firebasetest;
+package com.spl.RTChat;
 
 import androidx.multidex.MultiDexApplication;
 

@@ -13,6 +13,7 @@ import {
     Platform,
     SafeAreaView
 } from 'react-native'
+import { Toast, Root } from 'native-base'
 import firebase from 'react-native-firebase'
 import * as Progress from 'react-native-progress'
 // import { platform } from 'os'
@@ -56,11 +57,30 @@ export default class ChangePassword extends React.Component {
         this.reauthenticate(oldPassword).then(() => {
             let user = firebase.auth().currentUser;
             user.updatePassword(newPassword).then(() => {
-                ToastAndroid.show("Password updated!", ToastAndroid.LONG);
+                // ToastAndroid.show("Password updated!", ToastAndroid.LONG);
+                Toast.show({
+                    text: 'Password Updated',
+                    buttonText: 'OK',
+                    duration: 2500
+                })
                 this.setState({ oldPassword: null, newPassword: null, newPasswordConfirm: null, showActivity: false })
                 this.props.navigation.navigate('Dashboard')
-            }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT); });
-        }).catch((error) => { ToastAndroid.show(error.message, ToastAndroid.SHORT) });
+            }).catch((error) => {
+                // ToastAndroid.show(error.message, ToastAndroid.SHORT);
+                Toast.show({
+                    text: error.message,
+                    buttonText: 'OK',
+                    duration: 2500
+                })
+            });
+        }).catch((error) => {
+            // ToastAndroid.show(error.message, ToastAndroid.SHORT)
+            Toast.show({
+                text: error.message,
+                buttonText: 'OK',
+                duration: 2500
+            })
+        });
         this.setState({ showActivity: false })
     }
     handleConfirmAndValidation() {
@@ -68,10 +88,20 @@ export default class ChangePassword extends React.Component {
             if (this.state.newPassword == this.state.newPasswordConfirm) {
                 this.handleChangePassword(this.state.oldPassword, this.state.newPassword)
             } else {
-                ToastAndroid.show("Passwords Do NOT Match!..")
+                // ToastAndroid.show("Passwords Do NOT Match!..")
+                Toast.show({
+                    text: 'Passwords Do Not Match',
+                    buttonText: 'OK',
+                    duration: 2500
+                })
             }
         } else {
-            ToastAndroid.show("Please don't leave the fields empty...")
+            // ToastAndroid.show("Please don't leave the fields empty...")
+            Toast.show({
+                text: 'Please Do Not Leave the Fields Empty',
+                buttonText: 'OK',
+                duration: 2500
+            })
         }
     }
     render() {
@@ -104,17 +134,21 @@ export default class ChangePassword extends React.Component {
             </View>
         </ImageBackground>)
         return (
-            this.state.showActivity ? (
-                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
-                </View>) :
-                Platform.OS === "ios" ? 
-                <SafeAreaView>
-                    {contentToRender}
-                </SafeAreaView>
-                :< ScrollView keyboardShouldPersistTaps="always" >
-                    {contentToRender}
-                </ScrollView >
+            <Root>
+                {
+                    this.state.showActivity ? (
+                        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                            <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
+                        </View>) :
+                        Platform.OS === "ios" ?
+                            (<SafeAreaView>
+                                {contentToRender}
+                            </SafeAreaView>)
+                            : (< ScrollView keyboardShouldPersistTaps="always" >
+                                {contentToRender}
+                            </ScrollView >)
+                }
+            </Root>
         )
     }
 }
@@ -144,8 +178,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         margin: 10,
         borderRadius: 5,
-        height:50,
-        backgroundColor:'lightgrey'
+        height: 50,
+        backgroundColor: 'lightgrey'
     },
     SignupText: {
         flex: 1,

@@ -10,11 +10,11 @@ import {
     ImageBackground,
     TextInput,
     Button,
-    ToastAndroid,
     ActivityIndicator,
     KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native'
+import { Toast, Root } from 'native-base'
 import firebase from 'react-native-firebase';
 import * as Progress from 'react-native-progress'
 
@@ -58,7 +58,7 @@ export default class Login extends React.Component {
             this.props.navigation.navigate('ForgotPassword', { code: params.oobCode })
         }
     }
-    handleSubmit(){
+    handleSubmit() {
         if (this.state.userEmail && this.state.userPassword) {
             this.setState({ showActivity: true })
             firebase.auth().signInWithEmailAndPassword(this.state.userEmail, this.state.userPassword)
@@ -68,11 +68,19 @@ export default class Login extends React.Component {
                 })
                 .catch((error) => {
                     this.setState({ userEmail: null, userPassword: null, showActivity: false })
-                    ToastAndroid.show(error.message, ToastAndroid.SHORT)
+                    // ToastAndroid.show(error.message, ToastAndroid.SHORT)
+                    Toast.show({
+                        text: error.message,
+                        buttonText: 'Ok'
+                    })
                 })
 
         } else {
-            ToastAndroid.show("Please do not leave the fields empty", ToastAndroid.SHORT)
+            // ToastAndroid.show("Please do not leave the fields empty", ToastAndroid.SHORT)
+            Toast.show({
+                text: 'Please do not leave the fields empty',
+                buttonText: 'Ok'
+            })
         }
     }
     componentDidMount() {
@@ -113,7 +121,7 @@ export default class Login extends React.Component {
                         </TextInput>
                     </View>
                     <View style={styles.signinButton}>
-                        <Button title={"Sign In"} style={{color:'black'}} onPress={() => {
+                        <Button title={"Sign In"} style={{ color: 'black' }} onPress={() => {
                             this.handleSubmit()
                         }}></Button>
                     </View>
@@ -121,8 +129,8 @@ export default class Login extends React.Component {
                         <Text style={{ flex: 1, textAlign: 'right' }}> Not have an ID? </Text>
                         <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('SignUp') }}> Sign Up? </Text>
                     </View>
-                    <View style={{justifyContent:'center',alignItems:'center',flex:1,marginBottom:10}}>
-                        <Text style={{ flex: 1, textAlign: 'center',color:'red' }} onPress={()=>{
+                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, marginBottom: 10 }}>
+                        <Text style={{ flex: 1, textAlign: 'center', color: 'red' }} onPress={() => {
                             navigate('ForgotPassword')
                         }}> Forgot Password? </Text>
 
@@ -131,21 +139,24 @@ export default class Login extends React.Component {
             </View>
         </ImageBackground>)
         return (
-            this.state.showActivity ? (
-            <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
-                <Progress.Circle size={50} indeterminate={true} style={{justifyContent:'center',flex:1}} />
-            </View>):
-                Platform.OS ==="ios" ?
-                <SafeAreaView keyboardShouldPersistTaps="always">
-                    {this.state.isLoading ? <ActivityIndicator size="large" /> :
-                    contentToRender    
-                    }
-                </SafeAreaView>:
-                <ScrollView keyboardShouldPersistTaps="always" >
-                    {this.state.isLoading ? <ActivityIndicator size="large" /> :
-                    contentToRender    
-                    }
-                </ScrollView>
+            <Root>{
+                this.state.showActivity ? (
+                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                        <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
+                    </View>) :
+                    Platform.OS === "ios" ?
+                        <SafeAreaView keyboardShouldPersistTaps="always">
+                            {this.state.isLoading ? <ActivityIndicator size="large" /> :
+                                contentToRender
+                            }
+                        </SafeAreaView> :
+                        <ScrollView keyboardShouldPersistTaps="always" >
+                            {this.state.isLoading ? <ActivityIndicator size="large" /> :
+                                contentToRender
+                            }
+                        </ScrollView>
+            }
+            </Root>
         )
     }
 }
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
 
     },
     signinButton: {
-        flex:1,
+        flex: 1,
         marginTop: 10,
         marginLeft: 50,
         marginRight: 50
@@ -175,8 +186,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         margin: 10,
         borderRadius: 5,
-        height:50,
-        backgroundColor:'lightgrey'
+        height: 50,
+        backgroundColor: 'lightgrey'
     },
     SignupText: {
         flex: 1,

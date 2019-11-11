@@ -13,6 +13,7 @@ import {
     ToastAndroid,
     Alert
 } from 'react-native'
+import { Toast, Root } from 'native-base'
 import firebase from 'react-native-firebase'
 import { SafeAreaView } from 'react-navigation'
 
@@ -96,40 +97,73 @@ export default class ForgotPassword extends React.Component {
                             title={"Submit"}
                             onPress={() => {
                                 if (!this.state.receivedCode) {
-                                    firebase.auth().sendPasswordResetEmail(this.state.userEmail, { android: { packageName: "com.spl.firebasetest" }, iOS: {bundleId:"com.invertase.firebasetest"}, url: "https://splfirebasetestlink.page.link/", handleCodeInApp: true })
-                                        .then(() => {
-                                            // console.log(url)
-                                            Alert.alert(
-                                                'Notification',
-                                                'Please Check Your Email',
-                                                [
-                                                    { text: 'OK', onPress: () => navigate('Home') }
-                                                ],
-                                                { cancelable: false },
-                                            );
+                                    if (this.state.userEmail) {
+                                        firebase.auth().sendPasswordResetEmail(this.state.userEmail, { android: { packageName: "com.spl.RTChat" }, iOS: { bundleId: "com.invertase.RTChat" }, url: "https://splrtchat.page.link/", handleCodeInApp: true })
+                                            .then(() => {
+                                                // console.log(url)
+                                                Alert.alert(
+                                                    'Notification',
+                                                    'Please Check Your Email',
+                                                    [
+                                                        { text: 'OK', onPress: () => navigate('Home') }
+                                                    ],
+                                                    { cancelable: false },
+                                                );
 
-                                            // this.setState({receivedCode:true})
+                                                // this.setState({receivedCode:true})
 
+                                            })
+                                            .catch(err => {
+                                                // ToastAndroid.show(err.message, ToastAndroid.LONG)
+                                                Toast.show({
+                                                    text: error.message,
+                                                    buttonText: 'OK',
+                                                    duration: 2500
+                                                })
+                                            })
+                                    }else{
+                                        Toast.show({
+                                            text:'Do not leave the fields empty',
+                                            buttonText:'Okay',
+                                            duration:2500
                                         })
-                                        .catch(err => {
-                                            ToastAndroid.show(err.message, ToastAndroid.LONG)
-                                        })
+                                    }
                                 } else {
                                     if (this.state.newPassword && this.state.confirmnewPassword) {
                                         if (this.state.newPassword == this.state.confirmnewPassword) {
                                             firebase.auth().confirmPasswordReset(this.state.passwordChangeCode, this.state.newPassword).then(() => {
-                                                ToastAndroid.show("Password Changed Successfully..", ToastAndroid.SHORT)
+                                                // ToastAndroid.show("Password Changed Successfully..", ToastAndroid.SHORT)
+                                                Toast.show({
+                                                    text: 'Password Changed Successfully',
+                                                    buttonText: 'OK',
+                                                    duration: 2500
+                                                })
                                                 this.setState({ newPassword: null, confirmPasswordReset: null, passwordChangeCode: null })
                                                 navigate('Home')
                                             }).catch(err => {
-                                                ToastAndroid.show(err.message, ToastAndroid.SHORT)
+                                                // ToastAndroid.show(err.message, ToastAndroid.SHORT)
+                                                Toast.show({
+                                                    text: error.message,
+                                                    buttonText: 'OK',
+                                                    duration: 2500
+                                                })
                                             })
                                         } else {
-                                            ToastAndroid.show("Passwords Do not match", ToastAndroid.SHORT)
+                                            // ToastAndroid.show("Passwords Do not match", ToastAndroid.SHORT)
+                                            Toast.show({
+                                                text: 'Passwords Do Not Match',
+                                                buttonText: 'OK',
+                                                duration: 2500
+                                            })
                                             this.setState({ newPassword: null, confirmnewPassword: null })
                                         }
                                     } else {
-                                        ToastAndroid.show('Please do not leave the fields empty', ToastAndroid.SHORT)
+                                        // ToastAndroid.show('Please do not leave the fields empty', ToastAndroid.SHORT)
+                                        Toast.show({
+                                            text: 'Please do not leave the fields empty',
+                                            buttonText: 'OK',
+                                            duration: 2500
+                                        })
                                     }
                                 }
                             }} />
@@ -138,14 +172,18 @@ export default class ForgotPassword extends React.Component {
             </ImageBackground>)
         if (Platform.OS === "ios") {
             return (
-                <SafeAreaView style={styles.Container}>
-                    {ContentToRender}
-                </SafeAreaView>)
+                <Root>
+                    <SafeAreaView style={styles.Container}>
+                        {ContentToRender}
+                    </SafeAreaView>
+                </Root>)
         } else {
             return (
-                <ScrollView style={styles.Container} keyboardShouldPersistTaps="always">
-                    {ContentToRender}
-                </ScrollView>
+                <Root>
+                    <ScrollView style={styles.Container} keyboardShouldPersistTaps="always">
+                        {ContentToRender}
+                    </ScrollView>
+                </Root>
             )
         }
     }

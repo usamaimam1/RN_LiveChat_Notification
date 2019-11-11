@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* firebasetestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* firebasetestTests.m */; };
-		039963B89D919933DA02DD1D /* libPods-firebasetest-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A114661868ACFA83CCA60B3 /* libPods-firebasetest-tvOS.a */; };
+		00E356F31AD99517003FC87E /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		27760E91229B6FDF00F5F127 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27760E6A229B6FDF00F5F127 /* GoogleService-Info.plist */; };
+		1E32E554C4471BCE97BE443D /* libPods-RTChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBBCA860B88C5CB91B0C21BC /* libPods-RTChat.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
-		2DCD954D1E0B4F2C00145EB5 /* firebasetestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* firebasetestTests.m */; };
-		66F583A38C047519D1E18159 /* libPods-firebasetest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 599A1087F9C545123EFD61BE /* libPods-firebasetest.a */; };
-		ADDA258B0C3DE0261C60A364 /* libPods-firebasetest-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B23455DE3C4D5673E7318E /* libPods-firebasetest-tvOSTests.a */; };
-		CB23C3742761BB2944FDCE0B /* libPods-firebasetestTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3AC53CF282E97E63953C49 /* libPods-firebasetestTests.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
+		3B256739E3C6C2F16E4CC225 /* libPods-RTChat-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21AF910D002494F62737A55A /* libPods-RTChat-tvOS.a */; };
+		62AFDB94237990F9006985DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62AFDB93237990F9006985DA /* GoogleService-Info.plist */; };
+		95BF35C19268CF60A7676A7F /* libPods-RTChatTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5CFC7BAFB5E0A3538A3B5A3 /* libPods-RTChatTests.a */; };
+		B175FD46ED8D7628CD2DC973 /* libPods-RTChat-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 467137ECBE36CCAB4EEB29ED /* libPods-RTChat-tvOSTests.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
@@ -32,47 +32,47 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = firebasetest;
+			remoteInfo = RTChat;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "firebasetest-tvOS";
+			remoteInfo = "RTChat-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* firebasetestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = firebasetestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* RTChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RTChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* firebasetestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = firebasetestTests.m; sourceTree = "<group>"; };
-		0B0D8FD9866DDB3E9D5FE660 /* Pods-firebasetest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest.release.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest/Pods-firebasetest.release.xcconfig"; sourceTree = "<group>"; };
-		11B23455DE3C4D5673E7318E /* libPods-firebasetest-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-firebasetest-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* firebasetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = firebasetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = firebasetest/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = firebasetest/AppDelegate.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* RTChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTChatTests.m; sourceTree = "<group>"; };
+		0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* RTChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RTChat/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RTChat/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = firebasetest/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = firebasetest/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = firebasetest/main.m; sourceTree = "<group>"; };
-		22D75A04A020FD0E088C0426 /* Pods-firebasetest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest/Pods-firebasetest.debug.xcconfig"; sourceTree = "<group>"; };
-		27760E6A229B6FDF00F5F127 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "firebasetest/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* firebasetest-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "firebasetest-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* firebasetest-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "firebasetest-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RTChat/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RTChat/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RTChat/main.m; sourceTree = "<group>"; };
+		21AF910D002494F62737A55A /* libPods-RTChat-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RTChat-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26112205BDDD3FE000C49B62 /* Pods-RTChat-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* RTChat-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RTChat-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* RTChat-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RTChat-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A114661868ACFA83CCA60B3 /* libPods-firebasetest-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-firebasetest-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		599A1087F9C545123EFD61BE /* libPods-firebasetest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-firebasetest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5C04F7E60E3774814827066E /* Pods-firebasetest-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest-tvOS/Pods-firebasetest-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		7A230A0DEF48DF21D545AA71 /* Pods-firebasetest-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest-tvOS/Pods-firebasetest-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		9C3AC53CF282E97E63953C49 /* libPods-firebasetestTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-firebasetestTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC301B00DE1F70B71BE4D317 /* Pods-firebasetestTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetestTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetestTests/Pods-firebasetestTests.release.xcconfig"; sourceTree = "<group>"; };
-		CA346B7E0D05342E8E702E1C /* Pods-firebasetest-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest-tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest-tvOSTests/Pods-firebasetest-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E36E327AAA5B4552B4028263 /* Pods-firebasetestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetestTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetestTests/Pods-firebasetestTests.debug.xcconfig"; sourceTree = "<group>"; };
+		40BC9B0397B3F2698EF36B15 /* Pods-RTChat-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOSTests/Pods-RTChat-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		467137ECBE36CCAB4EEB29ED /* libPods-RTChat-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RTChat-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat.release.xcconfig"; path = "Target Support Files/Pods-RTChat/Pods-RTChat.release.xcconfig"; sourceTree = "<group>"; };
+		527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChatTests.debug.xcconfig"; path = "Target Support Files/Pods-RTChatTests/Pods-RTChatTests.debug.xcconfig"; sourceTree = "<group>"; };
+		62AFDB93237990F9006985DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Users/systemplusglobal/Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat.debug.xcconfig"; path = "Target Support Files/Pods-RTChat/Pods-RTChat.debug.xcconfig"; sourceTree = "<group>"; };
+		8641AC0D8301051B49C0E3C8 /* Pods-RTChatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChatTests.release.xcconfig"; path = "Target Support Files/Pods-RTChatTests/Pods-RTChatTests.release.xcconfig"; sourceTree = "<group>"; };
+		A74ACEEA0BF0D7F6636CAFA0 /* Pods-RTChat-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOSTests/Pods-RTChat-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B5CFC7BAFB5E0A3538A3B5A3 /* libPods-RTChatTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RTChatTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBBCA860B88C5CB91B0C21BC /* libPods-RTChat.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RTChat.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F2C89EE2F4607D097253AE26 /* Pods-firebasetest-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firebasetest-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-firebasetest-tvOSTests/Pods-firebasetest-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB23C3742761BB2944FDCE0B /* libPods-firebasetestTests.a in Frameworks */,
+				95BF35C19268CF60A7676A7F /* libPods-RTChatTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
-				66F583A38C047519D1E18159 /* libPods-firebasetest.a in Frameworks */,
+				1E32E554C4471BCE97BE443D /* libPods-RTChat.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +99,7 @@
 			files = (
 				ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */,
-				039963B89D919933DA02DD1D /* libPods-firebasetest-tvOS.a in Frameworks */,
+				3B256739E3C6C2F16E4CC225 /* libPods-RTChat-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,20 +107,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADDA258B0C3DE0261C60A364 /* libPods-firebasetest-tvOSTests.a in Frameworks */,
+				B175FD46ED8D7628CD2DC973 /* libPods-RTChat-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* firebasetestTests */ = {
+		00E356EF1AD99517003FC87E /* RTChatTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* firebasetestTests.m */,
+				00E356F21AD99517003FC87E /* RTChatTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = firebasetestTests;
+			path = RTChatTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -131,25 +131,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		0F65422D7FF42AB1B1B439CC /* Pods */ = {
+		13B07FAE1A68108700A75B9A /* RTChat */ = {
 			isa = PBXGroup;
 			children = (
-				5C04F7E60E3774814827066E /* Pods-firebasetest-tvOS.debug.xcconfig */,
-				7A230A0DEF48DF21D545AA71 /* Pods-firebasetest-tvOS.release.xcconfig */,
-				CA346B7E0D05342E8E702E1C /* Pods-firebasetest-tvOSTests.debug.xcconfig */,
-				F2C89EE2F4607D097253AE26 /* Pods-firebasetest-tvOSTests.release.xcconfig */,
-				22D75A04A020FD0E088C0426 /* Pods-firebasetest.debug.xcconfig */,
-				0B0D8FD9866DDB3E9D5FE660 /* Pods-firebasetest.release.xcconfig */,
-				E36E327AAA5B4552B4028263 /* Pods-firebasetestTests.debug.xcconfig */,
-				AC301B00DE1F70B71BE4D317 /* Pods-firebasetestTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		13B07FAE1A68108700A75B9A /* firebasetest */ = {
-			isa = PBXGroup;
-			children = (
-				27760E6A229B6FDF00F5F127 /* GoogleService-Info.plist */,
+				62AFDB93237990F9006985DA /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -158,7 +143,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = firebasetest;
+			name = RTChat;
 			sourceTree = "<group>";
 		};
 		2759474C2261A42900BA95C5 /* Recovered References */ = {
@@ -174,10 +159,10 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				599A1087F9C545123EFD61BE /* libPods-firebasetest.a */,
-				4A114661868ACFA83CCA60B3 /* libPods-firebasetest-tvOS.a */,
-				11B23455DE3C4D5673E7318E /* libPods-firebasetest-tvOSTests.a */,
-				9C3AC53CF282E97E63953C49 /* libPods-firebasetestTests.a */,
+				EBBCA860B88C5CB91B0C21BC /* libPods-RTChat.a */,
+				21AF910D002494F62737A55A /* libPods-RTChat-tvOS.a */,
+				467137ECBE36CCAB4EEB29ED /* libPods-RTChat-tvOSTests.a */,
+				B5CFC7BAFB5E0A3538A3B5A3 /* libPods-RTChatTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,13 +177,13 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* firebasetest */,
+				13B07FAE1A68108700A75B9A /* RTChat */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* firebasetestTests */,
+				00E356EF1AD99517003FC87E /* RTChatTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				0F65422D7FF42AB1B1B439CC /* Pods */,
 				2759474C2261A42900BA95C5 /* Recovered References */,
+				AF80C35BA3662823087223B7 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -208,22 +193,38 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* firebasetest.app */,
-				00E356EE1AD99517003FC87E /* firebasetestTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* firebasetest-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* firebasetest-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* RTChat.app */,
+				00E356EE1AD99517003FC87E /* RTChatTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* RTChat-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* RTChat-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AF80C35BA3662823087223B7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */,
+				5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */,
+				0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */,
+				26112205BDDD3FE000C49B62 /* Pods-RTChat-tvOS.release.xcconfig */,
+				A74ACEEA0BF0D7F6636CAFA0 /* Pods-RTChat-tvOSTests.debug.xcconfig */,
+				40BC9B0397B3F2698EF36B15 /* Pods-RTChat-tvOSTests.release.xcconfig */,
+				527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */,
+				8641AC0D8301051B49C0E3C8 /* Pods-RTChatTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* firebasetestTests */ = {
+		00E356ED1AD99517003FC87E /* RTChatTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "firebasetestTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RTChatTests" */;
 			buildPhases = (
-				4FA1736D7C4B627B721868D5 /* [CP] Check Pods Manifest.lock */,
+				AB7269953076BE53598203EB /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -233,37 +234,37 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = firebasetestTests;
-			productName = firebasetestTests;
-			productReference = 00E356EE1AD99517003FC87E /* firebasetestTests.xctest */;
+			name = RTChatTests;
+			productName = RTChatTests;
+			productReference = 00E356EE1AD99517003FC87E /* RTChatTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* firebasetest */ = {
+		13B07F861A680F5B00A75B9A /* RTChat */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "firebasetest" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RTChat" */;
 			buildPhases = (
-				68C8DDEF1FB1D75B5BB1B6BF /* [CP] Check Pods Manifest.lock */,
+				BB66DEB043951CA93A86EB07 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				E5B4B8AE4D595D54AD312DFD /* [CP] Copy Pods Resources */,
 				494F16552324DA6A0094D17B /* ShellScript */,
+				61DF89FDBD79BD64B8E4E463 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = firebasetest;
+			name = RTChat;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* firebasetest.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* RTChat.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* firebasetest-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* RTChat-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "firebasetest-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RTChat-tvOS" */;
 			buildPhases = (
-				F2D1C0B3AA54F23E0D104D24 /* [CP] Check Pods Manifest.lock */,
+				75B9BFB822C3BB6E695F1409 /* [CP] Check Pods Manifest.lock */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
@@ -273,16 +274,16 @@
 			);
 			dependencies = (
 			);
-			name = "firebasetest-tvOS";
-			productName = "firebasetest-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* firebasetest-tvOS.app */;
+			name = "RTChat-tvOS";
+			productName = "RTChat-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* RTChat-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* firebasetest-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* RTChat-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "firebasetest-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RTChat-tvOSTests" */;
 			buildPhases = (
-				79393CDDE0E200C8D21E3C57 /* [CP] Check Pods Manifest.lock */,
+				92FA399F9B44F917D749E725 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -292,9 +293,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "firebasetest-tvOSTests";
-			productName = "firebasetest-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* firebasetest-tvOSTests.xctest */;
+			name = "RTChat-tvOSTests";
+			productName = "RTChat-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* RTChat-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -321,7 +322,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "firebasetest" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "RTChat" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -335,10 +336,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* firebasetest */,
-				00E356ED1AD99517003FC87E /* firebasetestTests */,
-				2D02E47A1E0B4A5D006451C7 /* firebasetest-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* firebasetest-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* RTChat */,
+				00E356ED1AD99517003FC87E /* RTChatTests */,
+				2D02E47A1E0B4A5D006451C7 /* RTChat-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* RTChat-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -357,7 +358,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				27760E91229B6FDF00F5F127 /* GoogleService-Info.plist in Resources */,
+				62AFDB94237990F9006985DA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,79 +425,13 @@
 			shellPath = /bin/sh;
 			shellScript = "if nc -w 5 -z localhost 8081 ; then\nif ! curl -s \"http://localhost:8081/status\" | grep -q \"packager-status:running\" ; then\necho \"Port 8081 already in use, packager is either not running or not running correctly\"\nexit 2\n\nfi\nelse\nopen \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\nfi\n\n";
 		};
-		4FA1736D7C4B627B721868D5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-firebasetestTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		68C8DDEF1FB1D75B5BB1B6BF /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-firebasetest-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		79393CDDE0E200C8D21E3C57 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-firebasetest-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E5B4B8AE4D595D54AD312DFD /* [CP] Copy Pods Resources */ = {
+		61DF89FDBD79BD64B8E4E463 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-firebasetest/Pods-firebasetest-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-RTChat/Pods-RTChat-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/gRPCCertificates-Cpp.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -505,10 +440,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-firebasetest/Pods-firebasetest-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RTChat/Pods-RTChat-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F2D1C0B3AA54F23E0D104D24 /* [CP] Check Pods Manifest.lock */ = {
+		75B9BFB822C3BB6E695F1409 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -523,7 +458,73 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-firebasetest-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-RTChat-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		92FA399F9B44F917D749E725 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RTChat-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB7269953076BE53598203EB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RTChatTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB66DEB043951CA93A86EB07 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RTChat-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -537,7 +538,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* firebasetestTests.m in Sources */,
+				00E356F31AD99517003FC87E /* RTChatTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,7 +564,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* firebasetestTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* RTChatTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,12 +573,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* firebasetest */;
+			target = 13B07F861A680F5B00A75B9A /* RTChat */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* firebasetest-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* RTChat-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -589,7 +590,7 @@
 				13B07FB21A68108700A75B9A /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = firebasetest;
+			path = RTChat;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -597,7 +598,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E36E327AAA5B4552B4028263 /* Pods-firebasetestTests.debug.xcconfig */;
+			baseConfigurationReference = 527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -608,7 +609,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = firebasetestTests/Info.plist;
+				INFOPLIST_FILE = RTChatTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -621,13 +622,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firebasetest.app/firebasetest";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTChat.app/RTChat";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC301B00DE1F70B71BE4D317 /* Pods-firebasetestTests.release.xcconfig */;
+			baseConfigurationReference = 8641AC0D8301051B49C0E3C8 /* Pods-RTChatTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -635,7 +636,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = firebasetestTests/Info.plist;
+				INFOPLIST_FILE = RTChatTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -648,13 +649,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firebasetest.app/firebasetest";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTChat.app/RTChat";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22D75A04A020FD0E088C0426 /* Pods-firebasetest.debug.xcconfig */;
+			baseConfigurationReference = 73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -663,22 +664,22 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = firebasetest/Info.plist;
+				INFOPLIST_FILE = RTChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.firebasetest;
-				PRODUCT_NAME = firebasetest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
+				PRODUCT_NAME = RTChat;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B0D8FD9866DDB3E9D5FE660 /* Pods-firebasetest.release.xcconfig */;
+			baseConfigurationReference = 5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -686,22 +687,22 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = firebasetest/Info.plist;
+				INFOPLIST_FILE = RTChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.firebasetest;
-				PRODUCT_NAME = firebasetest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
+				PRODUCT_NAME = RTChat;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C04F7E60E3774814827066E /* Pods-firebasetest-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -716,7 +717,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = "firebasetest-tvOS/Info.plist";
+				INFOPLIST_FILE = "RTChat-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -726,7 +727,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.firebasetest-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.RTChat-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -736,7 +737,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A230A0DEF48DF21D545AA71 /* Pods-firebasetest-tvOS.release.xcconfig */;
+			baseConfigurationReference = 26112205BDDD3FE000C49B62 /* Pods-RTChat-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -751,7 +752,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = "firebasetest-tvOS/Info.plist";
+				INFOPLIST_FILE = "RTChat-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -761,7 +762,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.firebasetest-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.RTChat-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -771,7 +772,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA346B7E0D05342E8E702E1C /* Pods-firebasetest-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = A74ACEEA0BF0D7F6636CAFA0 /* Pods-RTChat-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -785,7 +786,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = "firebasetest-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "RTChat-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -795,17 +796,17 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.firebasetest-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.RTChat-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firebasetest-tvOS.app/firebasetest-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTChat-tvOS.app/RTChat-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F2C89EE2F4607D097253AE26 /* Pods-firebasetest-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 40BC9B0397B3F2698EF36B15 /* Pods-RTChat-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -819,7 +820,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
-				INFOPLIST_FILE = "firebasetest-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "RTChat-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -829,10 +830,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.firebasetest-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.invertase.RTChat-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firebasetest-tvOS.app/firebasetest-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTChat-tvOS.app/RTChat-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -939,7 +940,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "firebasetestTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RTChatTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -948,7 +949,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "firebasetest" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RTChat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -957,7 +958,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "firebasetest-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RTChat-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -966,7 +967,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "firebasetest-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RTChat-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -975,7 +976,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "firebasetest" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "RTChat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
