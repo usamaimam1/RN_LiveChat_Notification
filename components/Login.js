@@ -14,7 +14,7 @@ import {
     KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native'
-import { Toast, Root } from 'native-base'
+import { Toast, Root, Container, Spinner } from 'native-base'
 import firebase from 'react-native-firebase';
 import * as Progress from 'react-native-progress'
 
@@ -141,17 +141,23 @@ export default class Login extends React.Component {
         return (
             <Root>{
                 this.state.showActivity ? (
-                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
-                    </View>) :
+                    <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                        <Spinner color="red" />
+                    </Container>) :
                     Platform.OS === "ios" ?
                         <SafeAreaView keyboardShouldPersistTaps="always">
-                            {this.state.isLoading ? <ActivityIndicator size="large" /> :
+                            {this.state.isLoading ?
+                                (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                                    <Spinner color="red" />
+                                </Container>) :
                                 contentToRender
                             }
                         </SafeAreaView> :
                         <ScrollView keyboardShouldPersistTaps="always" >
-                            {this.state.isLoading ? <ActivityIndicator size="large" /> :
+                            {this.state.isLoading ?
+                                (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                                    <Spinner color="red" />
+                                </Container>) :
                                 contentToRender
                             }
                         </ScrollView>

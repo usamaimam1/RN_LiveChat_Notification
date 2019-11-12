@@ -14,7 +14,7 @@ import {
     KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native';
-import { Toast, Root } from 'native-base'
+import { Toast, Root, Container, Spinner } from 'native-base'
 import firebase from 'react-native-firebase'
 import * as Progress from 'react-native-progress'
 
@@ -53,10 +53,27 @@ export default class SignUp extends React.Component {
                 firebase.auth().createUserWithEmailAndPassword(this.state.userEmail, this.state.userPassword)
                     .then(() => {
                         this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
-                        console.log("here")
+                        const ref = firebase.database().ref("users")
+                        // console.log(firebase.auth().currentUser)
+                        const User = firebase.auth().currentUser._user
+                        ref.child(User.uid).set({
+                            email:User.email,
+                            uid:User.uid,
+                            adminaccess:false
+                        },(err)=>{
+                            console.log(err)
+                        })
+                        // const upload = {
+                        //     [firebase.auth().currentUser._user.uid]:
+                        //     {uid:firebase.auth().currentUser._user.uid,
+                        //     email:firebase.auth().currentUser._user.email}}
+                        // ref.set(upload,()=>{
+                        //     console.log("user added")
+                        // })
                         this.props.navigation.navigate('Dashboard')
                     })
                     .catch(error => {
+                        this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
                         Toast.show({
                             text: error.message,
                             buttonText: 'OK',
@@ -66,22 +83,22 @@ export default class SignUp extends React.Component {
 
             } else {
                 // ToastAndroid.show("Passwords do not match!", ToastAndroid.LONG)
+                this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
                 Toast.show({
                     text: 'Passwords Do not Match',
                     buttonText: 'OK',
                     duration: 2000
                 })
             }
-            this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
         } else {
             // ToastAndroid.show("Please do not leave the fields Empty!", ToastAndroid.SHORT)
+            this.setState({ showActivity: false })
             Toast.show({
                 text: 'Please do not leave the fields empty',
                 buttonText: 'OK',
                 duration: 2000
             })
         }
-        this.setState({ showActivity: false })
     }
     render() {
         const { navigate } = this.props.navigation
@@ -120,9 +137,11 @@ export default class SignUp extends React.Component {
         return (
             <Root>{
                 this.state.showActivity ?
-                    (<View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        <Progress.Circle size={50} indeterminate={true} style={{ justifyContent: 'center', flex: 1 }} />
-                    </View>)
+                    (
+                        <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                            <Spinner color="red" />
+                        </Container>
+                    )
                     : Platform.OS === "ios" ?
                         (<SafeAreaView>
                             {contentToRender}

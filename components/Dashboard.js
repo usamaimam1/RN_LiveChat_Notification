@@ -14,7 +14,7 @@ import {
 import firebase from 'react-native-firebase'
 import OptionsMenu from 'react-native-options-menu'
 
-function Item({ body,poet }) {
+function Item({ body, poet }) {
     return (
         <View style={styles.item}>
             <Text style={styles.body}>{body[0]}</Text>
@@ -32,11 +32,12 @@ export default class Dashboard extends React.Component {
         super()
         this.state = {
             navigateTo: null,
-            docs: null
+            docs: null,
+            status:null
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
-        this.unsubscribe = firebase.firestore().collection("poetry").onSnapshot(querySnapShot=>{
+        this.unsubscribe = firebase.firestore().collection("poetry").onSnapshot(querySnapShot => {
             this.setState({ docs: querySnapShot._docs })
         })
     }
@@ -45,7 +46,19 @@ export default class Dashboard extends React.Component {
             // console.log(querySnapShot._docs[0].data())
             this.setState({ docs: querySnapShot._docs })
         })
-        // console.warn(firebase.auth().currentUser.email)
+        const User = firebase.auth().currentUser._user
+        const ref = firebase.database().ref("users").child(User.uid)
+        ref.once('value').then(data => {
+            this.setState({status:data._value.adminaccess ? 'Admin':'Employee'})
+            console.log(data._value.adminaccess)
+        })
+
+        const anotherRef = firebase.database().ref("users")
+        anotherRef.once('value').then(data=>{
+            console.log(data)
+        }).catch(err=>{
+            console.log(err.message)
+        })
     }
     handleSignOut() {
         firebase.auth().signOut().then(() => {
@@ -65,7 +78,7 @@ export default class Dashboard extends React.Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ margin: 10 }}> Welcome User! </Text>
+                        <Text style={{ margin: 10 }}> Signed In as {this.state.status} </Text>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
                         {Platform.OS == "ios" ?
@@ -96,17 +109,17 @@ export default class Dashboard extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    item:{
-        flex:1,
-        margin:10,
-        justifyContent:'center',
-        alignItems:'center',
-        borderBottomWidth:1
+    item: {
+        flex: 1,
+        margin: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1
     },
-    body:{
-        flex:2
+    body: {
+        flex: 2
     },
-    poet:{
-        flex:1
+    poet: {
+        flex: 1
     }
 })
