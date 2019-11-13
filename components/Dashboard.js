@@ -14,6 +14,16 @@ import {
 import firebase from 'react-native-firebase'
 import OptionsMenu from 'react-native-options-menu'
 
+import ImagePicker from 'react-native-image-picker';
+
+const options = {
+    title: 'Select Image',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images'
+    }
+};
+
 function Item({ body, poet }) {
     return (
         <View style={styles.item}>
@@ -31,34 +41,30 @@ export default class Dashboard extends React.Component {
     constructor() {
         super()
         this.state = {
-            navigateTo: null,
-            docs: null,
-            status:null
+            userData:null,
+            status: null,
+            imgSource: null
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
-        this.unsubscribe = firebase.firestore().collection("poetry").onSnapshot(querySnapShot => {
-            this.setState({ docs: querySnapShot._docs })
-        })
+        this.pickImage = this.pickImage.bind(this)
     }
     componentDidMount() {
-        firebase.firestore().collection("poetry").get().then(querySnapShot => {
-            // console.log(querySnapShot._docs[0].data())
-            this.setState({ docs: querySnapShot._docs })
-        })
         const User = firebase.auth().currentUser._user
         const ref = firebase.database().ref("users").child(User.uid)
-        ref.once('value').then(data => {
-            this.setState({status:data._value.adminaccess ? 'Admin':'Employee'})
-            console.log(data._value.adminaccess)
+        const funcref = ref.on('value',data => {
+            console.log(data)
+            // this.setState({userData:data._data})
+            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee',userData:data._value })
+            // console.log(data._value.adminaccess)
         })
 
-        const anotherRef = firebase.database().ref("users")
-        anotherRef.once('value').then(data=>{
-            console.log(data)
-        }).catch(err=>{
-            console.log(err.message)
-        })
+        // const anotherRef = firebase.database().ref("users")
+        // anotherRef.once('value').then(data => {
+        //     console.log(data)
+        // }).catch(err => {
+        //     console.log(err.message)
+        // })
     }
     handleSignOut() {
         firebase.auth().signOut().then(() => {
@@ -70,10 +76,25 @@ export default class Dashboard extends React.Component {
     handleChangePassword() {
         this.props.navigation.navigate('ChangePassword')
     }
+    pickImage = () => {
+        ImagePicker.showImagePicker(options, response => {
+            if (response.didCancel) {
+                alert('You cancelled image picker 😟');
+            } else if (response.error) {
+                alert('And error occured: ', response.error);
+            } else {
+                const source = { uri: response.uri };
+                this.setState({
+                    imgSource: source
+                });
+            }
+        });
+    };
     render() {
         const { navigate } = this.props.navigation
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
+        console.log(this.state)
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1 }}>
@@ -98,11 +119,7 @@ export default class Dashboard extends React.Component {
                     </View>
                 </View>
                 <View style={{ flex: 14, justifyContent: 'center', alignItems: 'center' }}>
-                    <FlatList
-                        data={this.state.docs}
-                        renderItem={({ item }) => <Item body={item.data().body} poet={item.data().poet} />}
-                        keyExtractor={item => item.id}
-                    />
+                    <Image source={this.state.userData ? {uri:this.state.userData.profilepic}:null} style={{width:100,height:100}}></Image>
                 </View>
             </SafeAreaView>
         )

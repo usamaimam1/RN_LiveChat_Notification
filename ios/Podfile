@@ -49,6 +49,8 @@ target 'RTChat' do
   pod 'Crashlytics', '~> 3.14.0'
   pod 'Firebase/Analytics'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'RTChatTests' do
     inherit! :search_paths
     # Pods for testing
