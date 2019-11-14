@@ -1,20 +1,11 @@
 import React from 'react'
-import {
-    StyleSheet,
-    Platform,
-    Image,
-    Text,
-    View,
-    ScrollView,
-    ImageBackground,
-    Dimensions,
-    TextInput,
-    Button,
-    ToastAndroid,
-    KeyboardAvoidingView,
+import {StyleSheet,Platform,
+    Image,Text,View,ScrollView,ImageBackground,
+    Dimensions,TextInput,Button,ToastAndroid,KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker'
+import ImageResizer from 'react-native-image-resizer'
 import { Toast, Root, Container, Spinner } from 'native-base'
 import firebase from 'react-native-firebase'
 import * as Progress from 'react-native-progress'
@@ -138,9 +129,18 @@ export default class SignUp extends React.Component {
                 alert('And error occured: ', response.error);
             } else {
                 const source = { uri: response.uri };
-                this.setState({
-                    imgSource: source
-                });
+                ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG',99).then((output) => {
+                    this.setState({imgSource:{uri:output.uri}})
+                    console.log(output.size)
+                    // response.uri is the URI of the new image that can now be displayed, uploaded...
+                    // response.path is the path of the new image
+                    // response.name is the name of the new image with the extension
+                    // response.size is the size of the new image
+                  }).catch((err) => {
+                      console.log(err.message)
+                    // Oops, something went wrong. Check that the filename is correct and
+                    // inspect err to get more details.
+                  });
             }
         });
     }

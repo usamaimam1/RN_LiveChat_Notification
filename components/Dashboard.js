@@ -4,7 +4,6 @@ import {
     View,
     StyleSheet,
     Image,
-    Button,
     ToastAndroid,
     Picker,
     Dimensions,
@@ -12,9 +11,14 @@ import {
     FlatList
 } from 'react-native'
 import firebase from 'react-native-firebase'
+import { Content, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button } from 'native-base'
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import OptionsMenu from 'react-native-options-menu'
-
+import RNFetchBlob from 'rn-fetch-blob'
 import ImagePicker from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer'
+import UUIDGenerator from 'react-native-uuid-generator';
 
 const options = {
     title: 'Select Image',
@@ -41,9 +45,11 @@ export default class Dashboard extends React.Component {
     constructor() {
         super()
         this.state = {
-            userData:null,
+            userData: null,
             status: null,
-            imgSource: null
+            imgSource: null,
+            iconSource: require('../assets/ReactNativeFirebase.png'),
+            active: null
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
@@ -52,18 +58,15 @@ export default class Dashboard extends React.Component {
     componentDidMount() {
         const User = firebase.auth().currentUser._user
         const ref = firebase.database().ref("users").child(User.uid)
-        const funcref = ref.on('value',data => {
+        const funcref = ref.on('value', data => {
             console.log(data)
-            // this.setState({userData:data._data})
-            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee',userData:data._value })
-            // console.log(data._value.adminaccess)
+            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
+            this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
         })
 
-        // const anotherRef = firebase.database().ref("users")
-        // anotherRef.once('value').then(data => {
-        //     console.log(data)
-        // }).catch(err => {
-        //     console.log(err.message)
+        // const uuid = UUIDGenerator.getRandomUUID()
+        // uuid.then(val=>{
+        //     console.log(val)
         // })
     }
     handleSignOut() {
@@ -84,9 +87,7 @@ export default class Dashboard extends React.Component {
                 alert('And error occured: ', response.error);
             } else {
                 const source = { uri: response.uri };
-                this.setState({
-                    imgSource: source
-                });
+                this.setState({ imgSource: source })
             }
         });
     };
@@ -97,29 +98,34 @@ export default class Dashboard extends React.Component {
         console.log(this.state)
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1 }}>
+                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: 'grey' }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
                         <Text style={{ margin: 10 }}> Signed In as {this.state.status} </Text>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
                         {Platform.OS == "ios" ?
                             <OptionsMenu
-                                button={require('../assets/ReactNativeFirebase.png')}
-                                buttonStyle={{ width: 40, height: 40, resizeMode: "contain" }}
+                                button={this.state.iconSource}
+                                buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
                                 destructiveIndex={1}
                                 options={["Change Password", "Sign Out", "Cancel"]}
                                 actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
                             : <OptionsMenu
-                                button={require('../assets/ReactNativeFirebase.png')}
-                                buttonStyle={{ width: 40, height: 40, resizeMode: "contain" }}
+                                button={this.state.iconSource}
+                                buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
                                 destructiveIndex={1}
                                 options={["Change Password", "Sign Out"]}
                                 actions={[this.handleChangePassword, this.handleSignOut]} />
                         }
                     </View>
                 </View>
-                <View style={{ flex: 14, justifyContent: 'center', alignItems: 'center' }}>
-                    <Image source={this.state.userData ? {uri:this.state.userData.profilepic}:null} style={{width:100,height:100}}></Image>
+                <View style={{ flex: 13, justifyContent: 'center', alignItems: 'center',borderWidth:1 }}>
+
+                </View>
+                <View style={{ flex: 1,alignItems:'center',justifyContent:'center',marginBottom:5 }}>
+                    <Button rounded success style={{width:RFValue(40),height:RFValue(40),alignItems:'center',justifyContent:'center'}}>
+                        <Text style={{fontSize:RFValue(20)}}>+</Text>
+                    </Button>
                 </View>
             </SafeAreaView>
         )
