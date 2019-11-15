@@ -9,18 +9,18 @@ import firebase from 'react-native-firebase';
 
 import Login from './components/Login'
 import SignUp from './components/Signup'
-// import Loading from './components/Loading';
 import Dashboard from './components/Dashboard'
 import ForgotPassword from './components/ForgotPassword';
 import ChangePassword from './components/ChangePassword';
-
+import AddProject from './components/AddProject'
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Login},
   SignUp: {screen: SignUp},
   Dashboard:{screen:Dashboard},
   ForgotPassword:{screen:ForgotPassword,params:{code:null}},
-  ChangePassword:{screen:ChangePassword}
+  ChangePassword:{screen:ChangePassword},
+  AddProject:{screen:AddProject}
 });
 
 const App = createAppContainer(MainNavigator);

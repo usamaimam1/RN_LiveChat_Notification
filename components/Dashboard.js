@@ -8,17 +8,18 @@ import {
     Picker,
     Dimensions,
     SafeAreaView,
-    FlatList
+    FlatList,
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import { Content, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button } from 'native-base'
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import OptionsMenu from 'react-native-options-menu'
 import RNFetchBlob from 'rn-fetch-blob'
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer'
 import UUIDGenerator from 'react-native-uuid-generator';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const options = {
     title: 'Select Image',
@@ -63,11 +64,10 @@ export default class Dashboard extends React.Component {
             this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
             this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
         })
-
-        // const uuid = UUIDGenerator.getRandomUUID()
-        // uuid.then(val=>{
-        //     console.log(val)
-        // })
+        const projRef = firebase.database().ref('Projects')
+        const projFunc = projRef.on('value',data=>{
+            
+        })
     }
     handleSignOut() {
         firebase.auth().signOut().then(() => {
@@ -119,14 +119,18 @@ export default class Dashboard extends React.Component {
                         }
                     </View>
                 </View>
-                <View style={{ flex: 13, justifyContent: 'center', alignItems: 'center',borderWidth:1 }}>
-
+                <View style={{ flex: 13, alignItems: 'center', borderWidth: 1 }}>
+                    <Text>Welcome {this.state.userData ? this.state.userData.fullName : null}</Text>
+                    <ScrollView style={{height:Dimensions.get("window").height-100}}>
+                        <Text style={{textAlign:'center'}}>My Projects</Text>
+                    </ScrollView>
                 </View>
-                <View style={{ flex: 1,alignItems:'center',justifyContent:'center',marginBottom:5 }}>
-                    <Button rounded success style={{width:RFValue(40),height:RFValue(40),alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{fontSize:RFValue(20)}}>+</Text>
-                    </Button>
-                </View>
+                {this.state.userData ? this.state.userData.adminaccess ?
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}>
+                        <Button rounded success style={{ width: RFValue(40), height: RFValue(40), alignItems: 'center', justifyContent: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}>
+                            <Text style={{ fontSize: RFValue(20) }}>+</Text>
+                        </Button>
+                    </View> : null : null}
             </SafeAreaView>
         )
     }
