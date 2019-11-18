@@ -11,7 +11,12 @@ import {
 } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import ImageResizer from 'react-native-image-resizer'
-import { Button, Toast, Root, Spinner } from 'native-base';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {
+    Button, Toast, Root, Spinner,
+    Container, Content, Header, Footer, Title,
+    Left, Icon, Body, Right, Subtitle, Item, Input
+} from 'native-base';
 import UUIDGenerator from 'react-native-uuid-generator';
 import firebase from 'react-native-firebase';
 const options = {
@@ -22,6 +27,9 @@ const options = {
     }
 };
 export default class AddProject extends React.Component {
+    static navigationOptions = {
+        header: null
+    }
     constructor(props) {
         super(props)
         this.state = {
@@ -60,6 +68,7 @@ export default class AddProject extends React.Component {
                 teammembers: null,
                 teamleads: null,
                 projectTitle: this.state.projectTitle,
+                dateAdded: Date.now()
             }
             const projectRef = firebase.database().ref('Projects').child(val)
             projectRef.set(toUpload)
@@ -72,14 +81,14 @@ export default class AddProject extends React.Component {
                         duration: 2000,
                         buttonText: 'Ok'
                     })
-                    this.setState({submitting:false})
+                    this.setState({ submitting: false,projectTitle:null,projectThumbnail:{uri:null} })
                 }).catch(err => {
                     Toast.show({
                         text: err.message,
                         duration: 2000,
                         buttonText: 'Ok'
                     })
-                    this.setState({submitting:false})
+                    this.setState({ submitting: false,projectTitle:null,projectThumbnail:{uri:null} })
                 })
         })
     }
@@ -111,19 +120,35 @@ export default class AddProject extends React.Component {
             {this.state.submitting ?
                 <View>
                     <Spinner />
-                </View>:
-                <ScrollView style={{ flex: 1, height: Dimensions.get("window").height }} keyboardShouldPersistTaps="always">
-                    <Text style={{ textAlign: 'center', fontSize: 25, fontStyle: 'italic' }}> Add Project</Text>
+                </View> :
+                <Container style={{ flex: 1, height: Dimensions.get("window").height }} keyboardShouldPersistTaps="always">
+                    <KeyboardAwareScrollView>
+                    <Header transparent>
+                        <Left>
+                            <Button transparent>
+                                <Icon name="arrow-back" style={{ color: 'blue' }} />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title style={{color:'black'}}> Add Project</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
                     <View style={{ height: 300 }} >
                         <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
                     </View>
                     <View style={{ flex: 1, margin: 5 }}>
                         {this.projectDetails.map(x => {
                             return (
-                                <View style={{ borderWidth: 1, margin: 5 }} key={x._key}>
+                                <View style={{margin: 5 }} key={x._key}>
                                     {x._key === 'projectThumbnail' ?
-                                        <TextInput value={this.state.projectThumbnail.uri} placeholder={x._key} onFocus={() => { this.handlePickImage() }} style={styles.Text} /> :
-                                        <TextInput value={this.state[x._key]} placeholder={x._key} onChangeText={(newVal) => { this.handleInput(x._key, newVal) }} style={styles.Text} />
+                                        <Item rounded>
+                                            <Input placeholder={x._key} value={this.state.projectThumbnail.uri} onFocus={() => { this.handlePickImage() }} />
+                                        </Item> :
+                                        <Item rounded>
+                                            <Input value={this.state[x._key]} placeholder={x._key} onChangeText={(newVal) => { this.handleInput(x._key, newVal) }} />
+                                        </Item>
                                     }
                                 </View>
                             )
@@ -132,7 +157,8 @@ export default class AddProject extends React.Component {
                             <Text style={{ color: 'white' }}>Add</Text>
                         </Button>
                     </View>
-                </ScrollView>}
+                    </KeyboardAwareScrollView>
+                </Container>}
         </Root>)
     }
 

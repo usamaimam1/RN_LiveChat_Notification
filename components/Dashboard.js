@@ -9,6 +9,8 @@ import {
     Dimensions,
     SafeAreaView,
     FlatList,
+    ImageBackground,
+    Alert
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail } from 'native-base'
@@ -52,11 +54,13 @@ export default class Dashboard extends React.Component {
             iconSource: require('../assets/ReactNativeFirebase.png'),
             active: null,
             myProjects: [],
-            projectDetails: []
+            projectDetails: [],
+            refresh:null
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.pickImage = this.pickImage.bind(this)
+        this.formatDate = this.formatDate.bind(this)
     }
     componentDidMount() {
         const User = firebase.auth().currentUser._user
@@ -67,24 +71,42 @@ export default class Dashboard extends React.Component {
             this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
         })
         const projRef = firebase.database().ref('Projects')
+        console.log(projRef)
         const projFunc = projRef.on('value', data => {
+            console.log('Project Changed')
             if (!data._value) {
+                this.setState({ projectDetails: [] })
                 return
             }
-            this.setState({projectDetails:[]})
+            this.setState({ projectDetails: [] })
             const projectIds = Object.keys(data._value)
             // console.log(Object.keys(data._value))
             const res = projectIds.filter(projectId => {
                 return (
                     data._value[projectId].projectmanager[User.uid] ||
-                    data._value[projectId].teamleads[User.uid] ||
-                    data._value[projectId].teammembers[User.uid]
+                    (data._value[projectId].teamleads ? data._value[projectId].teamleads[User.uid] : false) ||
+                    (data._value[projectId].teammembers ? data._value[projectId].teammembers[User.uid]:false)
                 )
             })
             res.forEach(id => {
                 this.setState({ projectDetails: [...this.state.projectDetails, data._value[id]] })
             })
         })
+    }
+    formatDate(date) {
+        console.log(date)
+        var monthNames = [
+            "JAN", "FEB", "MAR",
+            "APR", "MAY", "JUNE", "JULY",
+            "AUG", "SEP", "OCT",
+            "NOV", "DEC"
+        ];
+
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
     handleSignOut() {
         firebase.auth().signOut().then(() => {
@@ -114,82 +136,110 @@ export default class Dashboard extends React.Component {
         const height = Dimensions.get("window").height
         return (
             <Container>
-                <Header transparent>
-                    <Left>
-                        <Button transparent>
-                            <Icon name="arrow-back" style={{ color: 'blue' }} />
-                        </Button>
-                    </Left>
-                    <Body style={{ alignSelf: 'center' }}>
-                        <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
-                        <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
-                    </Body>
-                    <Right>
-                        {Platform.OS == "ios" ?
-                            <OptionsMenu
-                                button={this.state.iconSource}
-                                buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                destructiveIndex={1}
-                                options={["Change Password", "Sign Out", "Cancel"]}
-                                actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
-                            : <OptionsMenu
-                                button={this.state.iconSource}
-                                buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                destructiveIndex={1}
-                                options={["Change Password", "Sign Out"]}
-                                actions={[this.handleChangePassword, this.handleSignOut]} />
-                        }
-                    </Right>
-                </Header>
-                <Content>
-                    <List>
-                        {this.state.projectDetails.map(proj => {
-                            return (
-                                <ListItem key={proj.projectId} thumbnail onPress={()=>{
-                                    console.log("clicked")
+                <ImageBackground source={require('../assets/splash-bg.jpg')}
+                    style={{ width: width, height: height }}>
+                    <Header transparent>
+                        <Left>
+                            <Button transparent>
+                                <Icon name="arrow-back" style={{ color: 'blue' }} />
+                            </Button>
+                        </Left>
+                        <Body style={{ alignSelf: 'center' }}>
+                            <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
+                            <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
+                        </Body>
+                        <Right>
+                            {Platform.OS == "ios" ?
+                                <OptionsMenu
+                                    button={this.state.iconSource}
+                                    buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
+                                    destructiveIndex={1}
+                                    options={["Change Password", "Sign Out", "Cancel"]}
+                                    actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
+                                : <OptionsMenu
+                                    button={this.state.iconSource}
+                                    buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
+                                    destructiveIndex={1}
+                                    options={["Change Password", "Sign Out"]}
+                                    actions={[this.handleChangePassword, this.handleSignOut]} />
+                            }
+                        </Right>
+                    </Header>
+                    <Content>
+                        <List>
+                            {this.state.projectDetails.map(proj => {
+                                return (
+                                    <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                        this.props.navigation.navigate('ProjectScreen',{projectId:proj.projectId})
+                                    }}>
+                                        <Left>
+                                            <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                        </Left>
+                                        <Body>
+                                            <Text>{proj.projectTitle}</Text>
+                                            <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                        </Body>
+                                        <Right>
+                                            {this.state.userData.adminaccess ?
+                                            <Button transparent onPress={() => {
+                                                Alert.alert(
+                                                    'Warning',
+                                                    'Are you sure to want to delete this project?',
+                                                    [
+                                                        {
+                                                            text: 'Cancel',
+                                                            onPress: () => console.log('Cancel Pressed'),
+                                                            style: 'cancel',
+                                                        },
+                                                        {
+                                                            text: 'OK',
+                                                            onPress:()=>{
+                                                                const ref = firebase.database().ref('Projects').child(proj.projectId)
+                                                                ref.remove().then(()=>{
+                                                                    console.log("Remove Successful!")
+                                                                    this.setState({refresh:null})
+                                                                })
+                                                            }
+                                                        },
+                                                    ],
+                                                    { cancelable: true },
+                                                );
+                                            }} >
+                                                <Icon name="cross" type="Entypo" />
+                                            </Button>:null}
+                                        </Right>
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+                    </Content>
+                    <Footer>
+                        <FooterTab>
+                            <Button badge vertical>
+                                <Badge><Text>2</Text></Badge>
+                                <Icon name="message1" type="AntDesign" />
+                                <Text>Messages</Text>
+                            </Button>
+                            <Button vertical>
+                                <Icon name="user" type="AntDesign" />
+                                <Text>User</Text>
+                            </Button>
+                            <Button active badge vertical>
+                                <Badge ><Text>51</Text></Badge>
+                                <Icon name="issue-opened" type="Octicons" />
+                                <Text>Issues</Text>
+                            </Button>
+                            {this.state.userData ? this.state.userData.adminaccess ?
+                                <Button vertical onPress={() => {
+                                    this.props.navigation.navigate('AddProject')
                                 }}>
-                                    <Left>
-                                        <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                    </Left>
-                                    <Body>
-                                        <Text>{proj.projectTitle}</Text>
-                                    </Body>
-                                    <Right>
-                                        <Button transparent>
-                                            <Text>View</Text>
-                                        </Button>
-                                    </Right>
-                                </ListItem>
-                            )
-                        })}
-                    </List>
-                </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button badge vertical>
-                            <Badge><Text>2</Text></Badge>
-                            <Icon name="message1" type="AntDesign" />
-                            <Text>Messages</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="user" type="AntDesign" />
-                            <Text>User</Text>
-                        </Button>
-                        <Button active badge vertical>
-                            <Badge ><Text>51</Text></Badge>
-                            <Icon name="issue-opened" type="Octicons" />
-                            <Text>Issues</Text>
-                        </Button>
-                        {this.state.userData ? this.state.userData.adminaccess ?
-                            <Button vertical onPress={()=>{
-                                this.props.navigation.navigate('AddProject')
-                            }}>
-                                <Icon name="plus" type="AntDesign" />
-                                <Text>Add Project</Text>
-                            </Button> : null : null
-                        }
-                    </FooterTab>
-                </Footer>
+                                    <Icon name="plus" type="AntDesign" />
+                                    <Text>Add Project</Text>
+                                </Button> : null : null
+                            }
+                        </FooterTab>
+                    </Footer>
+                </ImageBackground>
             </Container>
         )
     }
