@@ -11,7 +11,7 @@ import {
     FlatList,
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { Content, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button } from 'native-base'
+import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail } from 'native-base'
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import OptionsMenu from 'react-native-options-menu'
@@ -50,7 +50,9 @@ export default class Dashboard extends React.Component {
             status: null,
             imgSource: null,
             iconSource: require('../assets/ReactNativeFirebase.png'),
-            active: null
+            active: null,
+            myProjects: [],
+            projectDetails: []
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
@@ -65,8 +67,23 @@ export default class Dashboard extends React.Component {
             this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
         })
         const projRef = firebase.database().ref('Projects')
-        const projFunc = projRef.on('value',data=>{
-            
+        const projFunc = projRef.on('value', data => {
+            if (!data._value) {
+                return
+            }
+            this.setState({projectDetails:[]})
+            const projectIds = Object.keys(data._value)
+            // console.log(Object.keys(data._value))
+            const res = projectIds.filter(projectId => {
+                return (
+                    data._value[projectId].projectmanager[User.uid] ||
+                    data._value[projectId].teamleads[User.uid] ||
+                    data._value[projectId].teammembers[User.uid]
+                )
+            })
+            res.forEach(id => {
+                this.setState({ projectDetails: [...this.state.projectDetails, data._value[id]] })
+            })
         })
     }
     handleSignOut() {
@@ -95,14 +112,19 @@ export default class Dashboard extends React.Component {
         const { navigate } = this.props.navigation
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
-        console.log(this.state)
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <View style={{ flex: 1, flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: 'grey' }}>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
-                        <Text style={{ margin: 10 }}> Signed In as {this.state.status} </Text>
-                    </View>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
+            <Container>
+                <Header transparent>
+                    <Left>
+                        <Button transparent>
+                            <Icon name="arrow-back" style={{ color: 'blue' }} />
+                        </Button>
+                    </Left>
+                    <Body style={{ alignSelf: 'center' }}>
+                        <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
+                        <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
+                    </Body>
+                    <Right>
                         {Platform.OS == "ios" ?
                             <OptionsMenu
                                 button={this.state.iconSource}
@@ -117,21 +139,58 @@ export default class Dashboard extends React.Component {
                                 options={["Change Password", "Sign Out"]}
                                 actions={[this.handleChangePassword, this.handleSignOut]} />
                         }
-                    </View>
-                </View>
-                <View style={{ flex: 13, alignItems: 'center', borderWidth: 1 }}>
-                    <Text>Welcome {this.state.userData ? this.state.userData.fullName : null}</Text>
-                    <ScrollView style={{height:Dimensions.get("window").height-100}}>
-                        <Text style={{textAlign:'center'}}>My Projects</Text>
-                    </ScrollView>
-                </View>
-                {this.state.userData ? this.state.userData.adminaccess ?
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}>
-                        <Button rounded success style={{ width: RFValue(40), height: RFValue(40), alignItems: 'center', justifyContent: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}>
-                            <Text style={{ fontSize: RFValue(20) }}>+</Text>
+                    </Right>
+                </Header>
+                <Content>
+                    <List>
+                        {this.state.projectDetails.map(proj => {
+                            return (
+                                <ListItem key={proj.projectId} thumbnail onPress={()=>{
+                                    console.log("clicked")
+                                }}>
+                                    <Left>
+                                        <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                    </Left>
+                                    <Body>
+                                        <Text>{proj.projectTitle}</Text>
+                                    </Body>
+                                    <Right>
+                                        <Button transparent>
+                                            <Text>View</Text>
+                                        </Button>
+                                    </Right>
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                </Content>
+                <Footer>
+                    <FooterTab>
+                        <Button badge vertical>
+                            <Badge><Text>2</Text></Badge>
+                            <Icon name="message1" type="AntDesign" />
+                            <Text>Messages</Text>
                         </Button>
-                    </View> : null : null}
-            </SafeAreaView>
+                        <Button vertical>
+                            <Icon name="user" type="AntDesign" />
+                            <Text>User</Text>
+                        </Button>
+                        <Button active badge vertical>
+                            <Badge ><Text>51</Text></Badge>
+                            <Icon name="issue-opened" type="Octicons" />
+                            <Text>Issues</Text>
+                        </Button>
+                        {this.state.userData ? this.state.userData.adminaccess ?
+                            <Button vertical onPress={()=>{
+                                this.props.navigation.navigate('AddProject')
+                            }}>
+                                <Icon name="plus" type="AntDesign" />
+                                <Text>Add Project</Text>
+                            </Button> : null : null
+                        }
+                    </FooterTab>
+                </Footer>
+            </Container>
         )
     }
 }

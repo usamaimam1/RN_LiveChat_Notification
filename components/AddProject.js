@@ -48,10 +48,7 @@ export default class AddProject extends React.Component {
                 duration: 2000,
                 buttonText: 'Ok'
             })
-            console.log("Here")
             return
-        } else {
-            console.log("Not Here")
         }
         this.setState({ submitting: true })
         const uuid = UUIDGenerator.getRandomUUID()
@@ -60,8 +57,8 @@ export default class AddProject extends React.Component {
             const toUpload = {
                 projectId: val,
                 projectmanager: { [projectManager]: { isAllowed: true } },
-                teammembers: {},
-                teamleads: {},
+                teammembers: null,
+                teamleads: null,
                 projectTitle: this.state.projectTitle,
             }
             const projectRef = firebase.database().ref('Projects').child(val)
@@ -92,6 +89,7 @@ export default class AddProject extends React.Component {
     }
     handlePickImage() {
         ImagePicker.showImagePicker(options, response => {
+            console.log(response)
             if (response.didCancel) {
                 alert('You cancelled image picker 😟');
             } else if (response.error) {
