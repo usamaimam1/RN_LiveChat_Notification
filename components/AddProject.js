@@ -125,7 +125,9 @@ export default class AddProject extends React.Component {
                     <KeyboardAwareScrollView>
                     <Header transparent>
                         <Left>
-                            <Button transparent>
+                            <Button transparent onPress={()=>{
+                                this.props.navigation.navigate('Dashboard')
+                            }}>
                                 <Icon name="arrow-back" style={{ color: 'blue' }} />
                             </Button>
                         </Left>

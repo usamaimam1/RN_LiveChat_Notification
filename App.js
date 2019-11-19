@@ -14,6 +14,7 @@ import ForgotPassword from './components/ForgotPassword';
 import ChangePassword from './components/ChangePassword';
 import AddProject from './components/AddProject'
 import ProjectScreen from './components/ProjectScreen'
+import AddUser from './components/AddUser'
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Login},
@@ -22,7 +23,8 @@ const MainNavigator = createStackNavigator({
   ForgotPassword:{screen:ForgotPassword,params:{code:null}},
   ChangePassword:{screen:ChangePassword},
   AddProject:{screen:AddProject},
-  ProjectScreen:{screen:ProjectScreen}
+  ProjectScreen:{screen:ProjectScreen},
+  AddUser:{screen:AddUser}
 });
 
 const App = createAppContainer(MainNavigator);

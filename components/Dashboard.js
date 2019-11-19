@@ -55,7 +55,7 @@ export default class Dashboard extends React.Component {
             active: null,
             myProjects: [],
             projectDetails: [],
-            refresh:null
+            refresh: null
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
@@ -85,7 +85,7 @@ export default class Dashboard extends React.Component {
                 return (
                     data._value[projectId].projectmanager[User.uid] ||
                     (data._value[projectId].teamleads ? data._value[projectId].teamleads[User.uid] : false) ||
-                    (data._value[projectId].teammembers ? data._value[projectId].teammembers[User.uid]:false)
+                    (data._value[projectId].teammembers ? data._value[projectId].teammembers[User.uid] : false)
                 )
             })
             res.forEach(id => {
@@ -140,7 +140,22 @@ export default class Dashboard extends React.Component {
                     style={{ width: width, height: height }}>
                     <Header transparent>
                         <Left>
-                            <Button transparent>
+                            <Button transparent onPress={() => {
+                                Alert.alert(
+                                    'Log Out!',
+                                    'Are you sure to want to Log Out ?',
+                                    [
+                                        {text: 'Cancel',onPress: () => console.log('Cancel Pressed'),style: 'cancel'},
+                                        {text: 'OK',onPress: () => {
+                                                firebase.auth().signOut()
+                                                .then(()=>{console.log("Logged Out")})
+                                                .catch((err)=>{console.log(err.message)})
+                                            }
+                                        },
+                                    ],
+                                    { cancelable: true },
+                                )
+                            }}>
                                 <Icon name="arrow-back" style={{ color: 'blue' }} />
                             </Button>
                         </Left>
@@ -170,7 +185,7 @@ export default class Dashboard extends React.Component {
                             {this.state.projectDetails.map(proj => {
                                 return (
                                     <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                        this.props.navigation.navigate('ProjectScreen',{projectId:proj.projectId})
+                                        this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
                                     }}>
                                         <Left>
                                             <Thumbnail square source={{ uri: proj.projectThumbnail }} />
@@ -181,32 +196,32 @@ export default class Dashboard extends React.Component {
                                         </Body>
                                         <Right>
                                             {this.state.userData.adminaccess ?
-                                            <Button transparent onPress={() => {
-                                                Alert.alert(
-                                                    'Warning',
-                                                    'Are you sure to want to delete this project?',
-                                                    [
-                                                        {
-                                                            text: 'Cancel',
-                                                            onPress: () => console.log('Cancel Pressed'),
-                                                            style: 'cancel',
-                                                        },
-                                                        {
-                                                            text: 'OK',
-                                                            onPress:()=>{
-                                                                const ref = firebase.database().ref('Projects').child(proj.projectId)
-                                                                ref.remove().then(()=>{
-                                                                    console.log("Remove Successful!")
-                                                                    this.setState({refresh:null})
-                                                                })
-                                                            }
-                                                        },
-                                                    ],
-                                                    { cancelable: true },
-                                                );
-                                            }} >
-                                                <Icon name="cross" type="Entypo" />
-                                            </Button>:null}
+                                                <Button transparent onPress={() => {
+                                                    Alert.alert(
+                                                        'Warning',
+                                                        'Are you sure to want to delete this project?',
+                                                        [
+                                                            {
+                                                                text: 'Cancel',
+                                                                onPress: () => console.log('Cancel Pressed'),
+                                                                style: 'cancel',
+                                                            },
+                                                            {
+                                                                text: 'OK',
+                                                                onPress: () => {
+                                                                    const ref = firebase.database().ref('Projects').child(proj.projectId)
+                                                                    ref.remove().then(() => {
+                                                                        console.log("Remove Successful!")
+                                                                        this.setState({ refresh: null })
+                                                                    })
+                                                                }
+                                                            },
+                                                        ],
+                                                        { cancelable: true },
+                                                    );
+                                                }} >
+                                                    <Icon name="cross" type="Entypo" />
+                                                </Button> : null}
                                         </Right>
                                     </ListItem>
                                 )
