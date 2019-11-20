@@ -31,15 +31,6 @@ const options = {
     }
 };
 
-function Item({ body, poet }) {
-    return (
-        <View style={styles.item}>
-            <Text style={styles.body}>{body[0]}</Text>
-            <Text style={styles.body}>{body[1]}</Text>
-            <Text style={styles.poet}>{poet}</Text>
-        </View>
-    );
-}
 
 export default class Dashboard extends React.Component {
     static navigationOptions = {
@@ -145,11 +136,12 @@ export default class Dashboard extends React.Component {
                                     'Log Out!',
                                     'Are you sure to want to Log Out ?',
                                     [
-                                        {text: 'Cancel',onPress: () => console.log('Cancel Pressed'),style: 'cancel'},
-                                        {text: 'OK',onPress: () => {
+                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                        {
+                                            text: 'OK', onPress: () => {
                                                 firebase.auth().signOut()
-                                                .then(()=>{console.log("Logged Out")})
-                                                .catch((err)=>{console.log(err.message)})
+                                                    .then(() => { console.log("Logged Out") })
+                                                    .catch((err) => { console.log(err.message) })
                                             }
                                         },
                                     ],
@@ -235,7 +227,9 @@ export default class Dashboard extends React.Component {
                                 <Icon name="message1" type="AntDesign" />
                                 <Text>Messages</Text>
                             </Button>
-                            <Button vertical>
+                            <Button vertical onPress={() => {
+                                this.props.navigation.navigate('UserProfile',{userData:this.state.userData})
+                            }}>
                                 <Icon name="user" type="AntDesign" />
                                 <Text>User</Text>
                             </Button>

@@ -26,7 +26,7 @@ export default class ProjectScreen extends React.Component {
     }
 
     render() {
-        const icon = <Icon name="menu" />
+        const icon = <Icon name="menu" style={{color:'blue'}} />
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
