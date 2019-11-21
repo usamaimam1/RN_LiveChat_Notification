@@ -51,12 +51,12 @@ export default class ProjectScreen extends React.Component {
                                         customButton={icon}
                                         destructiveIndex={1}
                                         options={["View Team", "Delete Project", "Cancel"]}
-                                        actions={[() => { }, () => { }, () => { }]} />
+                                        actions={[() => {this.props.navigation.navigate('ViewUsers',{projectId:this.props.navigation.state.params.projectId}) }, () => { }, () => { }]} />
                                     : <OptionsMenu
                                         customButton={icon}
                                         destructiveIndex={1}
                                         options={["View Team", "Delete Project"]}
-                                        actions={[() => { }, () => { }]} />
+                                        actions={[() => {this.props.navigation.navigate('ViewUsers',{projectId:this.props.navigation.state.params.projectId}) }, () => { }]} />
                                 }
                             </Button>
                         </Right>

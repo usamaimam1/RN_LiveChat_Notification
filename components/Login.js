@@ -17,6 +17,7 @@ import {
 import { Toast, Root, Container, Spinner } from 'native-base'
 import firebase from 'react-native-firebase';
 import * as Progress from 'react-native-progress'
+import { cloneNode } from '@babel/types';
 
 export default class Login extends React.Component {
     static navigationOptions = {

@@ -49,7 +49,7 @@ export default class UserProfile extends React.Component {
                                 if (key == "profilepic" || key == "uid")
                                     return null
                                 return (
-                                    <CardItem footer>
+                                    <CardItem key={key} footer>
                                         <Left>
                                             <Text>{key}</Text>
                                         </Left>

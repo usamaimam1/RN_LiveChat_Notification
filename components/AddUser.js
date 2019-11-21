@@ -4,7 +4,7 @@ import {
     List, ListItem, Left, Right, Body, Thumbnail, Title, Subtitle
 } from 'native-base'
 import firebase from 'react-native-firebase'
-import { ImageBackground, Dimensions } from 'react-native'
+import { ImageBackground, Dimensions, Alert } from 'react-native'
 export default class AddUser extends React.Component {
     static navigationOptions = {
         header: null
@@ -12,15 +12,25 @@ export default class AddUser extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            projectId:this.props.navigation.state.params.projectId,
+            projectId: this.props.navigation.state.params.projectId,
             searchString: '',
             ids: [],
-            results: []
+            results: [],
+            projectData: null
         }
         this.handleSearch = this.handleSearch.bind(this)
+        this.evalMemberShip = this.evalMemberShip.bind(this)
     }
     componentDidMount() {
-
+        const projectRef = firebase.database().ref('Projects').child(this.state.projectId).on('value', data => {
+            this.setState({projectData:data._value})
+        })
+    }
+    evalMemberShip(id) {
+        const isProjectManager = this.state.projectData.projectmanager[id]
+        const isTeamLead = this.state.projectData.teamleads[id]
+        const isTeamMember = this.state.projectData.teammembers[id]
+        return (isProjectManager || isTeamLead || isTeamMember)
     }
     handleSearch() {
         this.setState({ ids: [], results: [] })
@@ -70,16 +80,33 @@ export default class AddUser extends React.Component {
                                             </Left>
                                             <Body>
                                                 <Title style={{ color: 'black' }}>{this.state.results[id].fullName}</Title>
-                                                <Subtitle style={{ color: 'grey' }}>Employee</Subtitle>
+                                                <Subtitle style={{ color: 'grey' }}>{this.state.results[id].adminaccess ? 'Admin':'Employee'}</Subtitle>
                                             </Body>
                                             <Right>
-                                                <Button transparent onPress={()=>{
-                                                    firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({isAllowed:true},()=>{
-                                                        console.log("Team Member Added!")
-                                                    })
-                                                }}>
-                                                <Icon name="add" style={{ color: 'blue' }} />
-                                                </Button>
+                                                {this.evalMemberShip(id) ?
+                                                    <Button transparent>
+                                                        <Icon name='check' type='AntDesign' style={{color:'blue'}} />
+                                                    </Button> :
+                                                    <Button transparent onPress={() => {
+                                                        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true,fullName:this.state.results[id].fullName,profilepic:this.state.results[id].profilepic,uid:id}, () => {
+                                                            Alert.alert(
+                                                                'Success!',
+                                                                'User has been added successfully!',
+                                                                [
+                                                                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                                                    {
+                                                                        text: 'OK', onPress: () => {
+                                                                            this.setState({ ids: [], results: [] })
+                                                                        }
+                                                                    },
+                                                                ],
+                                                                { cancelable: true },
+                                                            )
+                                                        })
+                                                    }}>
+                                                        <Icon name="add" style={{ color: 'blue' }} />
+                                                    </Button>
+                                                    }
                                             </Right>
                                         </ListItem>
                                     )
@@ -88,9 +115,9 @@ export default class AddUser extends React.Component {
                         </List>
                     </Content>
                     <Footer />
-                    </ImageBackground>
+                </ImageBackground>
             </Container>
-                )
-            }
-        
+        )
+    }
+
 }
