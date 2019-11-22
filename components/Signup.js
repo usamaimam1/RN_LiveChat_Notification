@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet,Platform,
-    Image,Text,View,ScrollView,ImageBackground,
-    Dimensions,TextInput,Button,ToastAndroid,KeyboardAvoidingView,
+import {
+    StyleSheet, Platform,
+    Image, Text, View, ScrollView, ImageBackground,
+    Dimensions, TextInput, Button, ToastAndroid, KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker'
@@ -90,7 +91,7 @@ export default class SignUp extends React.Component {
                                     buttonText: 'OK',
                                     duration: 2000
                                 })
-                                this.setState({showActivity:false})
+                                this.setState({ showActivity: false })
                             });
                     })
                     .catch(error => {
@@ -129,18 +130,18 @@ export default class SignUp extends React.Component {
                 alert('And error occured: ', response.error);
             } else {
                 const source = { uri: response.uri };
-                ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG',99).then((output) => {
-                    this.setState({imgSource:{uri:output.uri}})
+                ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99).then((output) => {
+                    this.setState({ imgSource: { uri: output.uri } })
                     console.log(output.size)
                     // response.uri is the URI of the new image that can now be displayed, uploaded...
                     // response.path is the path of the new image
                     // response.name is the name of the new image with the extension
                     // response.size is the size of the new image
-                  }).catch((err) => {
-                      console.log(err.message)
+                }).catch((err) => {
+                    console.log(err.message)
                     // Oops, something went wrong. Check that the filename is correct and
                     // inspect err to get more details.
-                  });
+                });
             }
         });
     }
@@ -160,6 +161,13 @@ export default class SignUp extends React.Component {
                         <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}></TextInput>
                         <TextInput placeholder="Pick An Image" textContentType="URL" style={styles.Text} onFocus={this.handlePickImage} secureTextEntry={false} value={this.state.imgSource ? this.state.imgSource.uri : null} ></TextInput>
                     </View>
+                    {
+                        this.state.imgSource ?
+                            <Image source={this.state.imgSource} style={{width:200,height:200,alignSelf:'center'}} >
+                            </Image>:null
+                    }
+                    <Image>
+                    </Image>
                     <View style={styles.signinButton}>
                         <Button title={"Sign Up"} onPress={() => {
                             this.handleSignUp()

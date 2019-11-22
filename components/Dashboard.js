@@ -202,6 +202,12 @@ export default class Dashboard extends React.Component {
                                                                 text: 'OK',
                                                                 onPress: () => {
                                                                     const ref = firebase.database().ref('Projects').child(proj.projectId)
+                                                                    const projectThumbnail = proj.projectId
+                                                                    firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => {
+                                                                        console.log('Project Thumbnail Removed From Storage')
+                                                                    }).catch(err => {
+                                                                        console.log(err.message)
+                                                                    })
                                                                     ref.remove().then(() => {
                                                                         console.log("Remove Successful!")
                                                                         this.setState({ refresh: null })
@@ -227,13 +233,13 @@ export default class Dashboard extends React.Component {
                                 <Icon name="message1" type="AntDesign" />
                                 <Text>Messages</Text>
                             </Button>
-                            <Button vertical onPress={() => {
-                                this.props.navigation.navigate('UserProfile',{userData:this.state.userData})
+                            <Button vertical  onPress={() => {
+                                this.props.navigation.navigate('UserProfile', { userData: this.state.userData })
                             }}>
                                 <Icon name="user" type="AntDesign" />
                                 <Text>User</Text>
                             </Button>
-                            <Button active badge vertical>
+                            <Button badge vertical >
                                 <Badge ><Text>51</Text></Badge>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Issues</Text>

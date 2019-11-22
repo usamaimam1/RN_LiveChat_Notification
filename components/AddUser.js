@@ -23,13 +23,13 @@ export default class AddUser extends React.Component {
     }
     componentDidMount() {
         const projectRef = firebase.database().ref('Projects').child(this.state.projectId).on('value', data => {
-            this.setState({projectData:data._value})
+            this.setState({ projectData: data._value })
         })
     }
     evalMemberShip(id) {
         const isProjectManager = this.state.projectData.projectmanager[id]
-        const isTeamLead = this.state.projectData.teamleads[id]
-        const isTeamMember = this.state.projectData.teammembers[id]
+        const isTeamLead = this.state.projectData.teamleads ? this.state.projectData.teamleads[id] : false
+        const isTeamMember = this.state.projectData.teammembers ? this.state.projectData.teammembers[id] : false
         return (isProjectManager || isTeamLead || isTeamMember)
     }
     handleSearch() {
@@ -80,15 +80,14 @@ export default class AddUser extends React.Component {
                                             </Left>
                                             <Body>
                                                 <Title style={{ color: 'black' }}>{this.state.results[id].fullName}</Title>
-                                                <Subtitle style={{ color: 'grey' }}>{this.state.results[id].adminaccess ? 'Admin':'Employee'}</Subtitle>
+                                                <Subtitle style={{ color: 'grey' }}>{this.state.results[id].adminaccess ? 'Admin' : 'Employee'}</Subtitle>
                                             </Body>
                                             <Right>
                                                 {this.evalMemberShip(id) ?
-                                                    <Button transparent>
-                                                        <Icon name='check' type='AntDesign' style={{color:'blue'}} />
-                                                    </Button> :
-                                                    <Button transparent onPress={() => {
-                                                        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true,fullName:this.state.results[id].fullName,profilepic:this.state.results[id].profilepic,uid:id}, () => {
+                                                    <Icon name='check' type='AntDesign' style={{ color: 'blue' }} />
+                                                    :
+                                                    <Icon name="add" style={{ color: 'blue' }} onPress={() => {
+                                                        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true, fullName: this.state.results[id].fullName, profilepic: this.state.results[id].profilepic, uid: id }, () => {
                                                             Alert.alert(
                                                                 'Success!',
                                                                 'User has been added successfully!',
@@ -103,10 +102,8 @@ export default class AddUser extends React.Component {
                                                                 { cancelable: true },
                                                             )
                                                         })
-                                                    }}>
-                                                        <Icon name="add" style={{ color: 'blue' }} />
-                                                    </Button>
-                                                    }
+                                                    }} />
+                                                }
                                             </Right>
                                         </ListItem>
                                     )
