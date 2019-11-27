@@ -125,7 +125,7 @@ export default class AddProject extends React.Component {
                     <Spinner />
                 </View> :
                 <Container style={{ flex: 1, height: Dimensions.get("window").height }} keyboardShouldPersistTaps="always">
-                    <KeyboardAwareScrollView>
+                    <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
                         <Header transparent>
                             <Left>
                                 <Button transparent onPress={() => {

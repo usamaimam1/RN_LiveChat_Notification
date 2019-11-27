@@ -18,6 +18,7 @@ import AddUser from './components/AddUser'
 import UserProfile from './components/UserProfile'
 import ViewUsers from './components/ViewUsers'
 import AddIssue from './components/AddIssue'
+import IssueScreen from './components/IssueScreen'
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Login},
@@ -30,7 +31,8 @@ const MainNavigator = createStackNavigator({
   AddUser:{screen:AddUser},
   UserProfile:{screen:UserProfile},
   ViewUsers:{screen:ViewUsers},
-  AddIssue:{screen:AddIssue}
+  AddIssue:{screen:AddIssue},
+  IssueScreen:{screen:IssueScreen}
 });
 
 const App = createAppContainer(MainNavigator);

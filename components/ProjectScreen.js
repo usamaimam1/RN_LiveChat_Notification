@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Container, Content, Header, Button, Picker, Toast,
+    Container, Content, Header, Button, Picker, Toast, ListItem,
     Footer, Icon, Body, Left, Right, Title, SubTitle, Badge, FooterTab
 } from 'native-base'
 import { SafeAreaView, ImageBackground, Dimensions, Text, Alert } from 'react-native'
@@ -16,7 +16,8 @@ export default class ProjectScreen extends React.Component {
             selected: '',
             project: null,
             viewType: 'Employee',
-            userData: null
+            userData: null,
+            issues: null
         }
         firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', data => {
             this.setState({ userData: data._value })
@@ -33,8 +34,8 @@ export default class ProjectScreen extends React.Component {
                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                     {
                         text: 'OK', onPress: () => {
-                            firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).remove(()=>{
-                                firebase.storage().ref('projectThumbnails/'+this.props.navigation.state.params.projectId).delete().then(()=>{
+                            firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).remove(() => {
+                                firebase.storage().ref('projectThumbnails/' + this.props.navigation.state.params.projectId).delete().then(() => {
                                     console.log('Image Deleted from Storage')
                                 })
                             })
@@ -48,8 +49,8 @@ export default class ProjectScreen extends React.Component {
     componentDidMount() {
         console.log(this.props.navigation.state.params.projectId)
         const funcRef = firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).on('value', data => {
-            if(!data._value){
-                this.setState({project:[]})
+            if (!data._value) {
+                this.setState({ project: [] })
                 this.props.navigation.navigate('Dashboard')
                 return
             }
@@ -61,10 +62,16 @@ export default class ProjectScreen extends React.Component {
             else if (isTeamLead)
                 this.setState({ viewType: 'TeamLead' })
             this.setState({ project: data._value })
+            const projectIssues = data._value.issues ? Object.keys(data._value.issues) : []
+            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).once('value', issues => {
+                this.setState({ issues: issues._value })
+                console.log(issues._value)
+            })
         })
     }
 
     render() {
+        console.log(this.state.issues)
         const icon = <Icon name="menu" style={{ color: 'blue' }} />
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
@@ -100,7 +107,27 @@ export default class ProjectScreen extends React.Component {
                             </Button>
                         </Right>
                     </Header>
-                    <Content />
+                    <Content>
+                        {
+                            this.state.issues ? Object.keys(this.state.issues).map(issueKey => {
+                                return (
+                                    <ListItem key={issueKey} icon>
+                                        <Left>
+                                            <Button style={{ backgroundColor: this.state.issues[issueKey].issuePriority === 'Critical' ? 'red':'green' }}>
+                                                <Icon active name={this.state.issues[issueKey].issueStatus === "Opened" ? "issue-opened":"issue-closed"} type='Octicons' />
+                                            </Button>
+                                        </Left>
+                                        <Body>
+                                            <Text>{this.state.issues[issueKey].issueTitle}</Text>
+                                        </Body>
+                                        <Right>
+                                            <Icon active name="arrow-forward" style={{color:'blue'}} onPress={()=>{this.props.navigation.navigate('IssueScreen',{projectId:this.props.navigation.state.params.projectId,IssueId:issueKey})}} />
+                                        </Right>
+                                    </ListItem>
+                                )
+                            }) : null
+                        }
+                    </Content>
                     <Footer>
                         <FooterTab>
                             <Button badge vertical>
@@ -124,7 +151,7 @@ export default class ProjectScreen extends React.Component {
                                     <Icon name="adduser" type="AntDesign" />
                                     <Text>Add User</Text>
                                 </Button> : null}
-                            {this.state.viewType === 'TeamLead' || this.state.viewType === 'ProjectManager' ? <Button onPress={()=>{this.props.navigation.navigate('AddIssue',{projectId:this.props.navigation.state.params.projectId})}}>
+                            {this.state.viewType === 'TeamLead' || this.state.viewType === 'ProjectManager' ? <Button onPress={() => { this.props.navigation.navigate('AddIssue', { projectId: this.props.navigation.state.params.projectId }) }}>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Add Issues</Text>
                             </Button> : null}

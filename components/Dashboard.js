@@ -46,7 +46,8 @@ export default class Dashboard extends React.Component {
             active: null,
             myProjects: [],
             projectDetails: [],
-            refresh: null
+            refresh: null,
+            issueCount :0
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
@@ -69,7 +70,7 @@ export default class Dashboard extends React.Component {
                 this.setState({ projectDetails: [] })
                 return
             }
-            this.setState({ projectDetails: [] })
+            this.setState({ projectDetails: [],issueCount:0 })
             const projectIds = Object.keys(data._value)
             // console.log(Object.keys(data._value))
             const res = projectIds.filter(projectId => {
@@ -79,9 +80,12 @@ export default class Dashboard extends React.Component {
                     (data._value[projectId].teammembers ? data._value[projectId].teammembers[User.uid] : false)
                 )
             })
+            let issueCount = 0
             res.forEach(id => {
+                issueCount += Object.keys(data._value[id].issues ? data._value[id].issues:{}).length
                 this.setState({ projectDetails: [...this.state.projectDetails, data._value[id]] })
             })
+            this.setState({issueCount:issueCount})
         })
     }
     formatDate(date) {
@@ -240,7 +244,7 @@ export default class Dashboard extends React.Component {
                                 <Text>User</Text>
                             </Button>
                             <Button badge vertical >
-                                <Badge ><Text>51</Text></Badge>
+                                <Badge ><Text>{this.state.issueCount}</Text></Badge>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Issues</Text>
                             </Button>

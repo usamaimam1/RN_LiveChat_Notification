@@ -8,6 +8,7 @@ import {
 import ImagePicker from 'react-native-image-picker'
 import ImageResizer from 'react-native-image-resizer'
 import { Toast, Root, Container, Spinner } from 'native-base'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import firebase from 'react-native-firebase'
 import * as Progress from 'react-native-progress'
 
@@ -148,38 +149,40 @@ export default class SignUp extends React.Component {
     render() {
         const { navigate } = this.props.navigation
         // console.log(this.state)
-        const contentToRender = (<ImageBackground style={styles.background} source={require('../assets/splash-bg.jpg')}>
-            <View style={{ flex: 1 }}>
-                <View style={styles.logo} >
-                    <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
-                </View>
-                <View style={styles.form} >
-                    <View style={styles.inputContainer}>
-                        <TextInput placeholder="Enter Full Name : " textContentType="name" style={styles.Text} onChangeText={this.handlefullnamechange} value={this.state.fullName}></TextInput>
-                        <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail}></TextInput>
-                        <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}></TextInput>
-                        <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}></TextInput>
-                        <TextInput placeholder="Pick An Image" textContentType="URL" style={styles.Text} onFocus={this.handlePickImage} secureTextEntry={false} value={this.state.imgSource ? this.state.imgSource.uri : null} ></TextInput>
+        const contentToRender = (
+            <KeyboardAwareScrollView>
+                <ImageBackground style={styles.background} source={require('../assets/splash-bg.jpg')}>
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.logo} >
+                            <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
+                        </View>
+                        <View style={styles.form} >
+                            <View style={styles.inputContainer}>
+                                <TextInput placeholder="Enter Full Name : " textContentType="name" style={styles.Text} onChangeText={this.handlefullnamechange} value={this.state.fullName}></TextInput>
+                                <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail}></TextInput>
+                                <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}></TextInput>
+                                <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}></TextInput>
+                                <TextInput placeholder="Pick An Image" textContentType="URL" style={styles.Text} onFocus={this.handlePickImage} secureTextEntry={false} value={this.state.imgSource ? this.state.imgSource.uri : null} ></TextInput>
+                            </View>
+                            <View style={styles.signinButton}>
+                                <Button title={"Sign Up"} onPress={() => {
+                                    this.handleSignUp()
+                                }}> </Button>
+                            </View>
+                            <View style={styles.SignupText}>
+                                <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
+                                <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
+                            </View>
+                            {
+                                this.state.imgSource ?
+                                    <Image source={this.state.imgSource} style={{ width: 200, height: 200, alignSelf: 'center' }} >
+                                    </Image> : null
+                            }
+                        </View>
                     </View>
-                    {
-                        this.state.imgSource ?
-                            <Image source={this.state.imgSource} style={{width:200,height:200,alignSelf:'center'}} >
-                            </Image>:null
-                    }
-                    <Image>
-                    </Image>
-                    <View style={styles.signinButton}>
-                        <Button title={"Sign Up"} onPress={() => {
-                            this.handleSignUp()
-                        }}> </Button>
-                    </View>
-                    <View style={styles.SignupText}>
-                        <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
-                        <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
-                    </View>
-                </View>
-            </View>
-        </ImageBackground>)
+                </ImageBackground>
+            </KeyboardAwareScrollView>
+        )
         return (
             <Root>{
                 this.state.showActivity ?
