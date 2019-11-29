@@ -63,7 +63,7 @@ export default class ProjectScreen extends React.Component {
                 this.setState({ viewType: 'TeamLead' })
             this.setState({ project: data._value })
             const projectIssues = data._value.issues ? Object.keys(data._value.issues) : []
-            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).once('value', issues => {
+            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).on('value', issues => {
                 this.setState({ issues: issues._value })
                 console.log(issues._value)
             })
