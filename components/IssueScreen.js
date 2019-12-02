@@ -1,10 +1,12 @@
 import React from 'react'
-import { Container, Content, Header, Footer, Body, Left, Right, Icon, Button, Title, Item, Input, Toast, List, Thumbnail, ListItem } from 'native-base'
+import { Container, Content, Header, Footer, Body, Left, Right, Icon, Button, Title, Item, Input, Toast, List, Thumbnail, ListItem, StyleProvider } from 'native-base'
 import { Text, View, Image, Dimensions, Platfrom, ImageBackground, FlatList } from 'react-native'
 import OptionsMenu from 'react-native-options-menu'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import firebase from 'react-native-firebase'
-import { declareExportDeclaration } from '@babel/types'
+import getTheme from '../native-base-theme/components'
+import material from '../native-base-theme/variables/material'
+// import { declareExportDeclaration } from '@babel/types'
 export default class IssueScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -49,7 +51,7 @@ export default class IssueScreen extends React.Component {
         //     // console.log(sortedArr)
         //     this.setState({ messagesData: Arr })
         // })
-        firebase.database().ref('Messages').orderByChild('IssueId').equalTo(this.props.navigation.state.params.IssueId).on('child_added', data => {
+        firebase.database().ref('Messages').orderByChild('IssueId').equalTo(this.props.navigation.state.params.IssueId).limitToLast(20).on('child_added', data => {
             console.log(data._value)
             if (!data._value) return
             this.setState({ messagesData: [...this.state.messagesData, data._value] })
@@ -117,7 +119,7 @@ export default class IssueScreen extends React.Component {
                 sender: firebase.auth().currentUser.uid,
                 sentTime: Date.now()
             }
-            this.setState({messageBody:null})
+            this.setState({ messageBody: null })
             firebase.database().ref('Messages').push(message, (err) => {
                 console.log(err)
             })
@@ -137,77 +139,79 @@ export default class IssueScreen extends React.Component {
         console.log(this.state)
         return (
             <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
-                <Container>
-                    <ImageBackground source={require('../assets/splash-bg.jpg')}
-                        style={{ width: width, height: height }}>
-                        <Header transparent>
-                            <Left>
-                                <Button transparent onPress={() => { this.props.navigation.pop() }}>
-                                    <Icon name='arrow-back' style={{ color: 'blue' }} />
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Title style={{ color: 'black' }}>{this.state.issueData ? this.state.issueData.issueTitle : 'Issue'}</Title>
-                            </Body>
-                            <Right>
-                                {this.state.userData ?
-                                    this.state.userData.adminaccess ?
-                                        Platform.OS == "ios" ?
-                                            <OptionsMenu
-                                                customButton={<Icon name="menu" style={{ color: 'blue' }} />}
-                                                destructiveIndex={1}
-                                                options={[`Mark as ${this.state.issueStatus === "Opened" ? "Closed" : "Opened"}`, `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`, "Cancel"]}
-                                                actions={[() => { this.markClosed() }, () => { this.changePriority() }, () => { }]} />
-                                            : <OptionsMenu
-                                                customButton={<Icon name="menu" style={{ color: 'blue' }} />}
-                                                destructiveIndex={1}
-                                                options={[`Mark as ${this.state.issueStatus === "Opened" ? "Closed" : "Opened"}`, `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`]}
-                                                actions={[() => { this.markClosed() }, () => { this.changePriority() }]} />
-                                        : null : null
-                                }
-
-                            </Right>
-                        </Header>
-                        <Content ref={(c) => { this._scroll = c }} removeClippedSubviews onContentSizeChange={(w,h)=>{
-                            this._scroll._root.scrollToEnd({animated:false})
-                        }}>
-                            <List >
-                                {this.state.messagesData ? this.state.messagesData.map(message => {
-                                    return (
-                                        <ListItem avatar key={JSON.stringify(message.sentTime)}>
-                                            <Left>
-                                                <Thumbnail source={{ uri: this.fetchThumbnail(message.sender) }} style={{ width: 30, height: 30 }} />
-                                            </Left>
-                                            <Body>
-                                                {firebase.auth().currentUser.uid === message.sender ?
-                                                    <Item rounded success style={{ minHeight: 30, alignItems: 'center', justifyContent: 'flex-end', paddingRight: 20, borderColor: 'black', backgroundColor: 'lightgreen' }}>
-                                                        <Text style={{ color: 'black' }}>{message.messageBody}</Text>
-                                                    </Item> :
-                                                    <Item rounded style={{ minHeight: 30, alignItems: 'center', justifyContent: 'flex-start', paddingLeft: 20, borderColor: 'black', backgroundColor: 'lightblue' }}>
-                                                        <Text note style={{ color: 'black' }}>{message.messageBody}</Text>
-                                                    </Item>
-                                                }
-
-                                            </Body>
-                                            <Right style={{ alignItems: 'flex-end', justifyContent: 'center', paddingLeft: 5 }}>
-                                                <Text style={{ fontSize: 11 }}>{this.formatDate(new Date(message.sentTime))}</Text>
-                                            </Right>
-                                        </ListItem>)
-                                }) : null}
-                            </List>
-                        </Content>
-                        <Footer style={{ backgroundColor: 'white' }}>
-                            <Body>
-                                <Item rounded>
-                                    <Input placeholder='Your Message' value={this.state.messageBody} onChangeText={(val) => { this.setState({ messageBody: val }) }} />
-                                    <Button transparent onPress={() => { this.handleSendMessage() }}>
-                                        <Icon name="paper-plane" type="Entypo"></Icon>
+                <StyleProvider style={getTheme(material)} >
+                    <Container>
+                        <ImageBackground source={require('../assets/splash-bg.jpg')}
+                            style={{ width: width, height: height }}>
+                            <Header transparent>
+                                <Left>
+                                    <Button transparent onPress={() => { this.props.navigation.pop() }}>
+                                        <Icon name='arrow-back' style={{ color: 'blue' }} />
                                     </Button>
-                                </Item>
-                            </Body>
-                        </Footer>
-                    </ImageBackground>
-                </Container >
+                                </Left>
+                                <Body>
+                                    <Title style={{ color: 'black' }}>{this.state.issueData ? this.state.issueData.issueTitle : 'Issue'}</Title>
+                                </Body>
+                                <Right>
+                                    {this.state.userData ?
+                                        this.state.userData.adminaccess ?
+                                            Platform.OS == "ios" ?
+                                                <OptionsMenu
+                                                    customButton={<Icon name="menu" style={{ color: 'blue' }} />}
+                                                    destructiveIndex={1}
+                                                    options={[`Mark as ${this.state.issueStatus === "Opened" ? "Closed" : "Opened"}`, `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`, "Cancel"]}
+                                                    actions={[() => { this.markClosed() }, () => { this.changePriority() }, () => { }]} />
+                                                : <OptionsMenu
+                                                    customButton={<Icon name="menu" style={{ color: 'blue' }} />}
+                                                    destructiveIndex={1}
+                                                    options={[`Mark as ${this.state.issueStatus === "Opened" ? "Closed" : "Opened"}`, `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`]}
+                                                    actions={[() => { this.markClosed() }, () => { this.changePriority() }]} />
+                                            : null : null
+                                    }
+
+                                </Right>
+                            </Header>
+                            <Content ref={(c) => { this._scroll = c }} removeClippedSubviews onContentSizeChange={(w, h) => {
+                                this._scroll._root.scrollToEnd({ animated: false })
+                            }}>
+                                <List >
+                                    {this.state.messagesData ? this.state.messagesData.map(message => {
+                                        return (
+                                            <ListItem avatar key={JSON.stringify(message.sentTime)}>
+                                                <Left>
+                                                    <Thumbnail source={{ uri: this.fetchThumbnail(message.sender) }} style={{ width: 30, height: 30 }} />
+                                                </Left>
+                                                <Body>
+                                                    {firebase.auth().currentUser.uid === message.sender ?
+                                                        <Item rounded success style={{ minHeight: 30, alignItems: 'center', justifyContent: 'flex-end', paddingRight: 20, borderColor: 'black', backgroundColor: 'lightgreen' }}>
+                                                            <Text style={{ color: 'black' }}>{message.messageBody}</Text>
+                                                        </Item> :
+                                                        <Item rounded style={{ minHeight: 30, alignItems: 'center', justifyContent: 'flex-start', paddingLeft: 20, borderColor: 'black', backgroundColor: 'lightblue' }}>
+                                                            <Text note style={{ color: 'black' }}>{message.messageBody}</Text>
+                                                        </Item>
+                                                    }
+
+                                                </Body>
+                                                <Right style={{ alignItems: 'flex-end', justifyContent: 'center', paddingLeft: 5 }}>
+                                                    <Text style={{ fontSize: 11 }}>{this.formatDate(new Date(message.sentTime))}</Text>
+                                                </Right>
+                                            </ListItem>)
+                                    }) : null}
+                                </List>
+                            </Content>
+                            <Footer style={{ backgroundColor: 'white' }}>
+                                <Body>
+                                    <Item rounded>
+                                        <Input placeholder='Your Message' value={this.state.messageBody} onChangeText={(val) => { this.setState({ messageBody: val }) }} />
+                                        <Button transparent onPress={() => { this.handleSendMessage() }}>
+                                            <Icon name="paper-plane" type="Entypo"></Icon>
+                                        </Button>
+                                    </Item>
+                                </Body>
+                            </Footer>
+                        </ImageBackground>
+                    </Container >
+                </StyleProvider>
             </KeyboardAwareScrollView>
         )
     }

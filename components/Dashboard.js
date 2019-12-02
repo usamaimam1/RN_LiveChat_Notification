@@ -13,7 +13,9 @@ import {
     Alert
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail } from 'native-base'
+import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail,StyleProvider } from 'native-base'
+import getTheme from '../native-base-theme/components';
+import material from '../native-base-theme/variables/material';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import OptionsMenu from 'react-native-options-menu'
