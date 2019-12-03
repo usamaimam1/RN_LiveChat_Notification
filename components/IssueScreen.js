@@ -17,6 +17,7 @@ import {
   Thumbnail,
   ListItem,
   StyleProvider,
+  Root
 } from 'native-base';
 import {
   Text,
@@ -82,24 +83,21 @@ export default class IssueScreen extends React.Component {
     firebase
       .database()
       .ref('Messages')
-      .orderByChild('IssueId')
-      .equalTo(this.props.navigation.state.params.IssueId)
+      .child(this.props.navigation.state.params.projectId)
+      .child(this.props.navigation.state.params.IssueId)
+      .orderByChild('sentTime')
+      .endAt(Date.now())
       .limitToLast(20)
       .once('value', data => {
-        if (!data._value) {
-          this.setState({ messagesData: [], initFetchLength: 0 });
-          this.setupChildListener()
-          return;
-        }
-        const Arr = Object.keys(data._value).map(k => {
+        const Arr = Object.keys(data._value ? data._value : []).map(k => {
           return data._value[k];
         });
-        const sortedArr = Arr.sort((a, b) => {
-          if (a.sentTime < b.sentTime) return -1;
-          if (a.sentTime > b.sentTime) return 1;
-          return 0;
-        });
-        this.setState({ messagesData: Arr, initFetchLength: 0 });
+        const sortArr = Arr.sort((a, b) => {
+          if (a.sentTime < b.sentTime) return -1
+          else if (a.sentTime > b.sentTime) return 1
+          else return 0
+        })
+        this.setState({ messagesData: [...this.state.messagesData, ...sortArr] })
         this.setupChildListener()
       });
 
@@ -115,19 +113,23 @@ export default class IssueScreen extends React.Component {
     firebase
       .database()
       .ref('Messages')
-      .orderByChild('IssueId')
-      .equalTo(this.props.navigation.state.params.IssueId)
-      .limitToLast(1)
+      .child(this.props.navigation.state.params.projectId)
+      .child(this.props.navigation.state.params.IssueId)
+      .orderByChild('sentTime')
+      .startAt(this.state.messagesData.length === 0 ? Date.now() : this.state.messagesData[this.state.messagesData.length - 1].sentTime)
       .on('child_added', data => {
-        console.log(data._value);
-        if (!data._value) return;
-        if (this.state.preLoad) {
-          this.setState({ preLoad: false })
+        const mostRecentmessage = this.state.messagesData[this.state.messagesData.length - 1]
+        const currentMessage = data._value
+        if (currentMessage.sentTime === mostRecentmessage.sentTime && currentMessage.messageBody === mostRecentmessage.messageBody && currentMessage.sender === mostRecentmessage.sender) {
           return
+        } else {
+          if (this.state.currentPosition !== "Bottom") {
+            if (currentMessage.sender !== firebase.auth().currentUser.uid) {
+              Toast.show({ text: 'New Messages Arrived', buttonText: 'Ok' })
+            }
+          }
+          this.setState({ messagesData: [...this.state.messagesData, data._value] })
         }
-        this.setState({
-          messagesData: [...this.state.messagesData, data._value],
-        });
       });
   }
   formatDate(date) {
@@ -229,8 +231,6 @@ export default class IssueScreen extends React.Component {
   handleSendMessage() {
     if (this.state.messageBody) {
       const message = {
-        projectId: this.props.navigation.state.params.projectId,
-        IssueId: this.props.navigation.state.params.IssueId,
         messageBody: this.state.messageBody,
         sender: firebase.auth().currentUser.uid,
         sentTime: Date.now(),
@@ -239,6 +239,8 @@ export default class IssueScreen extends React.Component {
       firebase
         .database()
         .ref('Messages')
+        .child(this.props.navigation.state.params.projectId)
+        .child(this.props.navigation.state.params.IssueId)
         .push(message, err => {
           console.log(err);
         })
@@ -255,230 +257,206 @@ export default class IssueScreen extends React.Component {
     const height = Dimensions.get('window').height;
     console.log(this.state.currentPosition);
     return (
-      <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
-        <StyleProvider style={getTheme(material)}>
-          <Container>
-            <ImageBackground
-              source={require('../assets/splash-bg.jpg')}
-              style={{ width: width, height: height }}>
-              <Header transparent>
-                <Left>
-                  <Button
-                    transparent
-                    onPress={() => {
+      <Root>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
+          <StyleProvider style={getTheme(material)}>
+            <Container>
+              <ImageBackground
+                source={require('../assets/splash-bg.jpg')}
+                style={{ width: width, height: height }}>
+                <Header transparent>
+                  <Left>
+                    <Button transparent onPress={() => {
                       this.props.navigation.pop();
                     }}>
-                    <Icon name="arrow-back" style={{ color: 'blue' }} />
-                  </Button>
-                </Left>
-                <Body>
-                  <Title style={{ color: 'black' }}>
-                    {this.state.issueData
-                      ? this.state.issueData.issueTitle
-                      : 'Issue'}
-                  </Title>
-                </Body>
-                <Right>
-                  {this.state.userData ? (
-                    this.state.userData.adminaccess ? (
-                      Platform.OS == 'ios' ? (
-                        <OptionsMenu
-                          customButton={
-                            <Icon name="menu" style={{ color: 'blue' }} />
-                          }
-                          destructiveIndex={1}
-                          options={[
-                            `Mark as ${
-                            this.state.issueStatus === 'Opened'
-                              ? 'Closed'
-                              : 'Opened'
-                            }`,
-                            `Change Issue Priority to ${
-                            this.state.issuePriority === 'Critical'
-                              ? 'Normal'
-                              : 'Critical'
-                            }`,
-                            'Cancel',
-                          ]}
-                          actions={[
-                            () => {
-                              this.markClosed();
-                            },
-                            () => {
-                              this.changePriority();
-                            },
-                            () => { },
-                          ]}
-                        />
-                      ) : (
+                      <Icon name="arrow-back" style={{ color: 'blue' }} />
+                    </Button>
+                  </Left>
+                  <Body>
+                    <Title style={{ color: 'black' }}>
+                      {this.state.issueData
+                        ? this.state.issueData.issueTitle
+                        : 'Issue'}
+                    </Title>
+                  </Body>
+                  <Right>
+                    {this.state.userData ? (
+                      this.state.userData.adminaccess ? (
+                        Platform.OS == 'ios' ? (
                           <OptionsMenu
                             customButton={
                               <Icon name="menu" style={{ color: 'blue' }} />
                             }
                             destructiveIndex={1}
-                            options={[
-                              `Mark as ${
-                              this.state.issueStatus === 'Opened'
-                                ? 'Closed'
-                                : 'Opened'
-                              }`,
-                              `Change Issue Priority to ${
-                              this.state.issuePriority === 'Critical'
-                                ? 'Normal'
-                                : 'Critical'
-                              }`,
+                            options={[`Mark as ${this.state.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
+                            `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`,
+                              'Cancel',
                             ]}
-                            actions={[
-                              () => {
-                                this.markClosed();
-                              },
-                              () => {
-                                this.changePriority();
-                              },
-                            ]}
+                            actions={[() => { this.markClosed(); },
+                            () => { this.changePriority(); },
+                            () => { }]}
                           />
-                        )
-                    ) : null
-                  ) : null}
-                </Right>
-              </Header>
-              <Content
-                ref={c => {
-                  this._scroll = c;
-                }}
-                removeClippedSubviews
-                onScroll={event => {
-                  // console.log(event.nativeEvent)
-                  const Bottom = this.isCloseToBottom(event.nativeEvent)
-                  const Top = this.isCloseToTop(event.nativeEvent)
-                  if (Top) {
-                    if (this.state.fetchingPrevious) {
-                      return
-                    }
-                    this.setState({ currentPosition: 'Top', fetchingPrevious: true })
-                    firebase.database().ref('Messages').orderByChild('IssueId').equalTo(this.props.navigation.state.params.IssueId).limitToLast(this.state.messagesData.length + 20).once('value', data => {
-                      if (data._value) {
-                        const Arr = Object.keys(data._value).map(messageid => data._value[messageid])
-                        const sortedArr = Arr.sort((a, b) => {
-                          if (a.sentTime < b.sentTime) return -1;
-                          if (a.sentTime > b.sentTime) return 1;
-                          return 0;
-                        });
-                        const limit = Arr.length - this.state.messagesData.length
-                        console.log(`Loading ${limit} previous messages`)
-                        if (limit < 0) {
-                          this.setState({ currentPosition: 'Arbitrary', fetchingPrevious: false })
-                          return
-                        }
-                        const target = sortedArr.slice(0, limit)
-                        target.map(x => console.log(this.formatDate(new Date(x.sentTime))))
-                        this.setState({ messagesData: [...target, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
-                      }
-                    })
-                  } else if (Bottom) {
-                    this.setState({ currentPosition: 'Bottom' })
-                  } else {
-                    // this.setState({ currentPosition: 'Arbitrary' })
-                  }
-                }}
-                onContentSizeChange={(w, h) => {
-                  console.log(w);
-                  console.log(h);
-                  if (this.state.currentPosition === 'Bottom') {
-                    this._scroll._root.scrollToEnd({ animated: true });
-                  }
-                }}>
-                <List >
-                  {this.state.messagesData
-                    ? this.state.messagesData.map(message => {
-                      return (
-                        <ListItem
-                          avatar
-                          key={JSON.stringify(message.sentTime)}
-                          ref={c => { this._listitem = c }}>
-                          <Left>
-                            <Thumbnail
-                              source={{
-                                uri: this.fetchThumbnail(message.sender),
-                              }}
-                              style={{ width: 30, height: 30 }}
+                        ) : (
+                            <OptionsMenu
+                              customButton={
+                                <Icon name="menu" style={{ color: 'blue' }} />
+                              }
+                              destructiveIndex={1}
+                              options={[
+                                `Mark as ${
+                                this.state.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
+                                `Change Issue Priority to ${this.state.issuePriority === 'Critical'
+                                  ? 'Normal' : 'Critical'}`,
+                              ]}
+                              actions={[
+                                () => { this.markClosed(); },
+                                () => { this.changePriority(); },
+                              ]}
                             />
-                          </Left>
-                          <Body>
-                            {firebase.auth().currentUser.uid ===
-                              message.sender ? (
-                                <Item
-                                  rounded
-                                  success
-                                  style={{
-                                    minHeight: 30,
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                    paddingRight: 20,
-                                    borderColor: 'black',
-                                    backgroundColor: 'lightgreen',
-                                  }}>
-                                  <Text style={{ color: 'black' }}>
-                                    {message.messageBody}
-                                  </Text>
-                                </Item>
-                              ) : (
-                                <Item
-                                  rounded
-                                  style={{
-                                    minHeight: 30,
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-start',
-                                    paddingLeft: 20,
-                                    borderColor: 'black',
-                                    backgroundColor: 'lightblue',
-                                  }}>
-                                  <Text note style={{ color: 'black' }}>
-                                    {message.messageBody}
-                                  </Text>
-                                </Item>
-                              )}
-                          </Body>
-                          <Right
-                            style={{
-                              alignItems: 'flex-end',
-                              justifyContent: 'center',
-                              paddingLeft: 5,
-                            }}>
-                            <Text style={{ fontSize: 11 }}>
-                              {this.formatDate(new Date(message.sentTime))}
-                            </Text>
-                          </Right>
-                        </ListItem>
-                      );
-                    })
-                    : null}
-                </List>
-              </Content>
-              <Footer style={{ backgroundColor: 'white' }}>
-                <Body>
-                  <Item rounded>
-                    <Input
-                      placeholder="Your Message"
-                      value={this.state.messageBody}
-                      onChangeText={val => {
-                        this.setState({ messageBody: val });
-                      }}
-                    />
-                    <Button
-                      transparent
-                      onPress={() => {
-                        this.handleSendMessage();
-                      }}>
-                      <Icon name="paper-plane" type="Entypo"></Icon>
-                    </Button>
-                  </Item>
-                </Body>
-              </Footer>
-            </ImageBackground>
-          </Container>
-        </StyleProvider>
-      </KeyboardAwareScrollView >
+                          )
+                      ) : null
+                    ) : null}
+                  </Right>
+                </Header>
+                <Content
+                  ref={c => {
+                    this._scroll = c;
+                  }}
+                  removeClippedSubviews
+                  onScroll={event => {
+                    const Bottom = this.isCloseToBottom(event.nativeEvent)
+                    const Top = this.isCloseToTop(event.nativeEvent)
+                    if (Top) {
+                      if (this.state.fetchingPrevious) {
+                        return
+                      }
+                      this.setState({ currentPosition: 'Top', fetchingPrevious: true })
+                      firebase.database().ref('Messages')
+                        .child(this.props.navigation.state.params.projectId)
+                        .child(this.props.navigation.state.params.IssueId)
+                        .orderByChild('sentTime')
+                        .endAt(this.state.messagesData[0].sentTime)
+                        .limitToLast(20).once('value', data => {
+                          if (data._value) {
+                            const Arr = Object.keys(data._value).map(messageid => data._value[messageid])
+                            const sortedArr = Arr.sort((a, b) => {
+                              if (a.sentTime < b.sentTime) return -1;
+                              if (a.sentTime > b.sentTime) return 1;
+                              return 0;
+                            });
+                            sortedArr.pop()
+                            console.log(`Fetching ${sortedArr.length} old messages`)
+                            this.setState({ messagesData: [...sortedArr, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
+                          } else {
+                            console.log('Nothing more left to fetch')
+                            this.setState({ currentPosition: 'Top', fetchingPrevious: false })
+                          }
+                        })
+                    } else if (Bottom) {
+                      this.setState({ currentPosition: 'Bottom' })
+                    } else {
+                      // this.setState({ currentPosition: 'Arbitrary' })
+                    }
+                  }}
+                  onContentSizeChange={(w, h) => {
+                    console.log(w);
+                    console.log(h);
+                    if (this.state.currentPosition === 'Bottom') {
+                      this._scroll._root.scrollToEnd({ animated: true });
+                    }
+                  }}>
+                  <List >
+                    {this.state.messagesData
+                      ? this.state.messagesData.map(message => {
+                        return (
+                          <ListItem
+                            avatar
+                            key={JSON.stringify(message.sentTime)}
+                            ref={c => { this._listitem = c }}>
+                            <Left>
+                              <Thumbnail
+                                source={{
+                                  uri: this.fetchThumbnail(message.sender),
+                                }}
+                                style={{ width: 30, height: 30 }}
+                              />
+                            </Left>
+                            <Body>
+                              {firebase.auth().currentUser.uid ===
+                                message.sender ? (
+                                  <Item
+                                    rounded
+                                    success
+                                    style={{
+                                      minHeight: 30,
+                                      alignItems: 'center',
+                                      justifyContent: 'flex-end',
+                                      paddingRight: 20,
+                                      borderColor: 'black',
+                                      backgroundColor: 'lightgreen',
+                                    }}>
+                                    <Text style={{ color: 'black' }}>
+                                      {message.messageBody}
+                                    </Text>
+                                  </Item>
+                                ) : (
+                                  <Item
+                                    rounded
+                                    style={{
+                                      minHeight: 30,
+                                      alignItems: 'center',
+                                      justifyContent: 'flex-start',
+                                      paddingLeft: 20,
+                                      borderColor: 'black',
+                                      backgroundColor: 'lightblue',
+                                    }}>
+                                    <Text note style={{ color: 'black' }}>
+                                      {message.messageBody}
+                                    </Text>
+                                  </Item>
+                                )}
+                            </Body>
+                            <Right
+                              style={{
+                                alignItems: 'flex-end',
+                                justifyContent: 'center',
+                                paddingLeft: 5,
+                              }}>
+                              <Text style={{ fontSize: 11 }}>
+                                {this.formatDate(new Date(message.sentTime))}
+                              </Text>
+                            </Right>
+                          </ListItem>
+                        );
+                      })
+                      : null}
+                  </List>
+                </Content>
+                <Footer style={{ backgroundColor: 'white' }}>
+                  <Body>
+                    <Item rounded>
+                      <Input
+                        placeholder="Your Message"
+                        value={this.state.messageBody}
+                        onChangeText={val => {
+                          this.setState({ messageBody: val });
+                        }}
+                      />
+                      <Button
+                        transparent
+                        onPress={() => {
+                          this.handleSendMessage();
+                        }}>
+                        <Icon name="paper-plane" type="Entypo"></Icon>
+                      </Button>
+                    </Item>
+                  </Body>
+                </Footer>
+              </ImageBackground>
+            </Container>
+          </StyleProvider>
+        </KeyboardAwareScrollView >
+      </Root>
     );
   }
 }
