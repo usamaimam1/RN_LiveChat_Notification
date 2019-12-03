@@ -45,6 +45,8 @@ export default class IssueScreen extends React.Component {
     this.fetchThumbnail = this.fetchThumbnail.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.setupChildListener = this.setupChildListener.bind(this)
+    this.isCloseToBottom = this.isCloseToBottom.bind(this)
+    this.isCloseToTop = this.isCloseToTop.bind(this)
     this.state = {
       issueData: null,
       userData: null,
@@ -52,6 +54,9 @@ export default class IssueScreen extends React.Component {
       messagesData: [],
       messageBody: null,
       initFetchLength: 0,
+      preLoad: true,
+      currentPosition: 'Bottom',
+      fetchingPrevious: false
     };
     firebase
       .database()
@@ -99,24 +104,30 @@ export default class IssueScreen extends React.Component {
       });
 
   }
+  isCloseToBottom(nativeEvent) {
+    const paddingToBottom = 20;
+    return nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height - paddingToBottom
+  };
+  isCloseToTop(nativeEvent) {
+    return nativeEvent.contentOffset.y === 0
+  }
   setupChildListener() {
     firebase
       .database()
       .ref('Messages')
       .orderByChild('IssueId')
       .equalTo(this.props.navigation.state.params.IssueId)
-      .limitToLast(20)
+      .limitToLast(1)
       .on('child_added', data => {
         console.log(data._value);
         if (!data._value) return;
-        else {
-          this.setState({ initFetchLength: this.state.initFetchLength + 1 })
+        if (this.state.preLoad) {
+          this.setState({ preLoad: false })
+          return
         }
-        if (this.state.initFetchLength > this.state.messagesData.length) {
-          this.setState({
-            messagesData: [...this.state.messagesData, data._value],
-          });
-        }
+        this.setState({
+          messagesData: [...this.state.messagesData, data._value],
+        });
       });
   }
   formatDate(date) {
@@ -181,11 +192,7 @@ export default class IssueScreen extends React.Component {
   markClosed() {
     if (this.state.issueData.issueStatus === 'Opened') {
       firebase
-        .database()
-        .ref('Issues')
-        .child(this.props.navigation.state.params.IssueId)
-        .child('issueStatus')
-        .set('Closed');
+        .database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issueStatus').set('Closed');
     } else {
       firebase
         .database()
@@ -234,7 +241,7 @@ export default class IssueScreen extends React.Component {
         .ref('Messages')
         .push(message, err => {
           console.log(err);
-        });
+        })
     } else {
       Toast.show({ text: 'Please Enter A Message First', buttonText: 'Ok' });
     }
@@ -246,7 +253,7 @@ export default class IssueScreen extends React.Component {
   render() {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
-    console.log(this.state);
+    console.log(this.state.currentPosition);
     return (
       <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
         <StyleProvider style={getTheme(material)}>
@@ -340,18 +347,55 @@ export default class IssueScreen extends React.Component {
                   this._scroll = c;
                 }}
                 removeClippedSubviews
+                onScroll={event => {
+                  // console.log(event.nativeEvent)
+                  const Bottom = this.isCloseToBottom(event.nativeEvent)
+                  const Top = this.isCloseToTop(event.nativeEvent)
+                  if (Top) {
+                    if (this.state.fetchingPrevious) {
+                      return
+                    }
+                    this.setState({ currentPosition: 'Top', fetchingPrevious: true })
+                    firebase.database().ref('Messages').orderByChild('IssueId').equalTo(this.props.navigation.state.params.IssueId).limitToLast(this.state.messagesData.length + 20).once('value', data => {
+                      if (data._value) {
+                        const Arr = Object.keys(data._value).map(messageid => data._value[messageid])
+                        const sortedArr = Arr.sort((a, b) => {
+                          if (a.sentTime < b.sentTime) return -1;
+                          if (a.sentTime > b.sentTime) return 1;
+                          return 0;
+                        });
+                        const limit = Arr.length - this.state.messagesData.length
+                        console.log(`Loading ${limit} previous messages`)
+                        if (limit < 0) {
+                          this.setState({ currentPosition: 'Arbitrary', fetchingPrevious: false })
+                          return
+                        }
+                        const target = sortedArr.slice(0, limit)
+                        target.map(x => console.log(this.formatDate(new Date(x.sentTime))))
+                        this.setState({ messagesData: [...target, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
+                      }
+                    })
+                  } else if (Bottom) {
+                    this.setState({ currentPosition: 'Bottom' })
+                  } else {
+                    // this.setState({ currentPosition: 'Arbitrary' })
+                  }
+                }}
                 onContentSizeChange={(w, h) => {
                   console.log(w);
                   console.log(h);
-                  this._scroll._root.scrollToEnd({ animated: false });
+                  if (this.state.currentPosition === 'Bottom') {
+                    this._scroll._root.scrollToEnd({ animated: true });
+                  }
                 }}>
-                <List>
+                <List >
                   {this.state.messagesData
                     ? this.state.messagesData.map(message => {
                       return (
                         <ListItem
                           avatar
-                          key={JSON.stringify(message.sentTime)}>
+                          key={JSON.stringify(message.sentTime)}
+                          ref={c => { this._listitem = c }}>
                           <Left>
                             <Thumbnail
                               source={{
@@ -434,7 +478,7 @@ export default class IssueScreen extends React.Component {
             </ImageBackground>
           </Container>
         </StyleProvider>
-      </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView >
     );
   }
 }
