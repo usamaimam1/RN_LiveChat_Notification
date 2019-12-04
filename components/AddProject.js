@@ -142,7 +142,7 @@ export default class AddProject extends React.Component {
   }
   handlePickImage() {
     ImagePicker.showImagePicker(options, response => {
-      console.log(response);
+      // console.log(response);
       if (response.didCancel) {
         alert('You cancelled image picker 😟');
       } else if (response.error) {
@@ -152,7 +152,7 @@ export default class AddProject extends React.Component {
         ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99)
           .then(output => {
             this.setState({projectThumbnail: {uri: output.uri}});
-            console.log(output.size);
+            // console.log(output.size);
           })
           .catch(err => {
             console.log(err.message);
@@ -161,7 +161,7 @@ export default class AddProject extends React.Component {
     });
   }
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <Root>
         {this.state.submitting ? (

@@ -13,7 +13,7 @@ import {
     Alert
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail,StyleProvider } from 'native-base'
+import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail, StyleProvider } from 'native-base'
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
             myProjects: [],
             projectDetails: [],
             refresh: null,
-            issueCount :0
+            issueCount: 0
         }
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
@@ -60,19 +60,19 @@ export default class Dashboard extends React.Component {
         const User = firebase.auth().currentUser._user
         const ref = firebase.database().ref("users").child(User.uid)
         const funcref = ref.on('value', data => {
-            console.log(data)
+            // console.log(data)
             this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
             this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
         })
         const projRef = firebase.database().ref('Projects')
-        console.log(projRef)
+        // console.log(projRef)
         const projFunc = projRef.on('value', data => {
-            console.log('Project Changed')
+            // console.log('Project Changed')
             if (!data._value) {
                 this.setState({ projectDetails: [] })
                 return
             }
-            this.setState({ projectDetails: [],issueCount:0 })
+            this.setState({ projectDetails: [], issueCount: 0 })
             const projectIds = Object.keys(data._value)
             // console.log(Object.keys(data._value))
             const res = projectIds.filter(projectId => {
@@ -84,14 +84,14 @@ export default class Dashboard extends React.Component {
             })
             let issueCount = 0
             res.forEach(id => {
-                issueCount += Object.keys(data._value[id].issues ? data._value[id].issues:{}).length
+                issueCount += Object.keys(data._value[id].issues ? data._value[id].issues : {}).length
                 this.setState({ projectDetails: [...this.state.projectDetails, data._value[id]] })
             })
-            this.setState({issueCount:issueCount})
+            this.setState({ issueCount: issueCount })
         })
     }
     formatDate(date) {
-        console.log(date)
+        // console.log(date)
         var monthNames = [
             "JAN", "FEB", "MAR",
             "APR", "MAY", "JUNE", "JULY",
@@ -213,14 +213,27 @@ export default class Dashboard extends React.Component {
                                                                     const ref = firebase.database().ref('Projects').child(proj.projectId)
                                                                     const projectThumbnail = proj.projectId
                                                                     firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => {
-                                                                        console.log('Project Thumbnail Removed From Storage')
+                                                                        // console.log('Project Thumbnail Removed From Storage')
                                                                     }).catch(err => {
                                                                         console.log(err.message)
                                                                     })
                                                                     ref.remove().then(() => {
-                                                                        console.log("Remove Successful!")
+                                                                        // console.log("Remove Successful!")
                                                                         this.setState({ refresh: null })
                                                                     })
+                                                                    firebase.database().ref('Issues').orderByChild('projectId')
+                                                                        .equalTo(proj.projectId)
+                                                                        .once('value', data => {
+                                                                            data._childKeys.forEach(i => {
+                                                                                firebase
+                                                                                    .database()
+                                                                                    .ref('Issues')
+                                                                                    .child(i)
+                                                                                    .remove()
+                                                                            })
+                                                                        })
+                                                                    firebase.database().ref('Messages').child(proj.projectId)
+                                                                        .remove()
                                                                 }
                                                             },
                                                         ],
@@ -242,7 +255,7 @@ export default class Dashboard extends React.Component {
                                 <Icon name="message1" type="AntDesign" />
                                 <Text>Messages</Text>
                             </Button>
-                            <Button vertical  onPress={() => {
+                            <Button vertical onPress={() => {
                                 this.props.navigation.navigate('UserProfile', { userData: this.state.userData })
                             }}>
                                 <Icon name="user" type="AntDesign" />

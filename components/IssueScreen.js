@@ -27,6 +27,7 @@ import {
   Platfrom,
   ImageBackground,
   FlatList,
+  Alert
 } from 'react-native';
 import OptionsMenu from 'react-native-options-menu';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -48,6 +49,8 @@ export default class IssueScreen extends React.Component {
     this.setupChildListener = this.setupChildListener.bind(this)
     this.isCloseToBottom = this.isCloseToBottom.bind(this)
     this.isCloseToTop = this.isCloseToTop.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.fetchUserName = this.fetchUserName.bind(this)
     this.state = {
       issueData: null,
       userData: null,
@@ -57,7 +60,9 @@ export default class IssueScreen extends React.Component {
       initFetchLength: 0,
       preLoad: true,
       currentPosition: 'Bottom',
-      fetchingPrevious: false
+      fetchingPrevious: false,
+      Status: 'Member',
+      UserName: ''
     };
     firebase
       .database()
@@ -72,6 +77,15 @@ export default class IssueScreen extends React.Component {
       .child(this.props.navigation.state.params.projectId)
       .on('value', data => {
         this.setState({ ProjectData: data._value });
+        const isProjectManager = data._value.projectmanager ? data._value.projectmanager[firebase.auth().currentUser.uid] : false
+        const isTeamLead = data._value.teamleads ? data._value.teamleads[firebase.auth().currentUser.uid] : false
+        if (isProjectManager) {
+          this.setState({ Status: 'ProjectManager', UserName: data._value.projectmanager[firebase.auth().currentUser.uid].fullName })
+        } else if (isTeamLead) {
+          this.setState({ Status: 'TeamLead', UserName: data._value.teamleads[firebase.auth().currentUser.uid].fullName })
+        } else {
+          this.setState({ Status: 'Member', UserName: data._value.teammembers[firebase.auth().currentUser.uid].fullName })
+        }
       });
     firebase
       .database()
@@ -102,6 +116,48 @@ export default class IssueScreen extends React.Component {
       });
 
   }
+  fetchUserName(id) {
+    const isProjectManager = this.state.ProjectData.projectmanager ? this.state.ProjectData.projectmanager[id] : false
+    const isTeamLead = this.state.ProjectData.teamleads ? this.state.ProjectData.teamleads[id] : false
+    if (isProjectManager) {
+      return this.state.ProjectData.projectmanager[id].fullName
+    } else if (isTeamLead) {
+      return this.state.ProjectData.teamleads[id].fullName
+    } else {
+      return this.state.ProjectData.teammembers[id].fullName
+    }
+  }
+  handleDelete() {
+    const isProjectManager = this.state.ProjectData.projectmanager ? this.state.ProjectData.projectmanager[firebase.auth().currentUser.uid] : false
+    const isTeamLead = this.state.ProjectData.teamleads ? this.state.ProjectData.teamleads[firebase.auth().currentUser.uid] : false
+    if (isProjectManager || isTeamLead) {
+      Alert.alert(
+        'Warning',
+        'Are you sure to want to delete this Issue?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK', onPress: () => {
+              firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('issues').child(this.props.navigation.state.params.IssueId).remove()
+              firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).remove()
+              firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).child(this.props.navigation.state.params.IssueId).remove()
+              Toast.show({
+                text: 'Issue has been deleted Successfully', buttonText: 'Ok',
+              }).onClose(reason => {
+                // console.log(reason)
+                this.props.navigation.pop()
+              })
+            }
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+  }
   isCloseToBottom(nativeEvent) {
     const paddingToBottom = 20;
     return nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height - paddingToBottom
@@ -120,15 +176,20 @@ export default class IssueScreen extends React.Component {
       .on('child_added', data => {
         const mostRecentmessage = this.state.messagesData[this.state.messagesData.length - 1]
         const currentMessage = data._value
-        if (currentMessage.sentTime === mostRecentmessage.sentTime && currentMessage.messageBody === mostRecentmessage.messageBody && currentMessage.sender === mostRecentmessage.sender) {
-          return
-        } else {
-          if (this.state.currentPosition !== "Bottom") {
-            if (currentMessage.sender !== firebase.auth().currentUser.uid) {
-              Toast.show({ text: 'New Messages Arrived', buttonText: 'Ok' })
+        if (!mostRecentmessage) {
+          this.setState({ messagesData: [...this.state.messagesData, currentMessage] })
+        }
+        else if (currentMessage && mostRecentmessage) {
+          if (currentMessage.sentTime === mostRecentmessage.sentTime && currentMessage.messageBody === mostRecentmessage.messageBody && currentMessage.sender === mostRecentmessage.sender) {
+            return
+          } else {
+            if (this.state.currentPosition !== "Bottom") {
+              if (currentMessage.sender !== firebase.auth().currentUser.uid) {
+                Toast.show({ text: 'New Messages Arrived', buttonText: 'Ok' })
+              }
             }
+            this.setState({ messagesData: [...this.state.messagesData, data._value] })
           }
-          this.setState({ messagesData: [...this.state.messagesData, data._value] })
         }
       });
   }
@@ -255,7 +316,7 @@ export default class IssueScreen extends React.Component {
   render() {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
-    console.log(this.state.currentPosition);
+    // console.log(this.state.currentPosition);
     return (
       <Root>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
@@ -281,19 +342,21 @@ export default class IssueScreen extends React.Component {
                   </Body>
                   <Right>
                     {this.state.userData ? (
-                      this.state.userData.adminaccess ? (
+                      this.state.Status !== 'Member' ? (
                         Platform.OS == 'ios' ? (
                           <OptionsMenu
                             customButton={
                               <Icon name="menu" style={{ color: 'blue' }} />
                             }
-                            destructiveIndex={1}
-                            options={[`Mark as ${this.state.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
-                            `Change Issue Priority to ${this.state.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`,
+                            destructiveIndex={2}
+                            options={[`Mark as ${this.state.issueData.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
+                            `Change Issue Priority to ${this.state.issueData.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`,
+                              'Delete this Issue',
                               'Cancel',
                             ]}
                             actions={[() => { this.markClosed(); },
                             () => { this.changePriority(); },
+                            () => { this.handleDelete() },
                             () => { }]}
                           />
                         ) : (
@@ -301,16 +364,18 @@ export default class IssueScreen extends React.Component {
                               customButton={
                                 <Icon name="menu" style={{ color: 'blue' }} />
                               }
-                              destructiveIndex={1}
+                              destructiveIndex={2}
                               options={[
                                 `Mark as ${
-                                this.state.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
-                                `Change Issue Priority to ${this.state.issuePriority === 'Critical'
+                                this.state.issueData.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
+                                `Change Issue Priority to ${this.state.issueData.issuePriority === 'Critical'
                                   ? 'Normal' : 'Critical'}`,
+                                'Delete this Issue'
                               ]}
                               actions={[
                                 () => { this.markClosed(); },
                                 () => { this.changePriority(); },
+                                () => { this.handleDelete() }
                               ]}
                             />
                           )
@@ -321,7 +386,9 @@ export default class IssueScreen extends React.Component {
                 <Content
                   ref={c => {
                     this._scroll = c;
+                    // console.log(this._scroll ? this._scroll._root : null)
                   }}
+
                   removeClippedSubviews
                   onScroll={event => {
                     const Bottom = this.isCloseToBottom(event.nativeEvent)
@@ -345,10 +412,10 @@ export default class IssueScreen extends React.Component {
                               return 0;
                             });
                             sortedArr.pop()
-                            console.log(`Fetching ${sortedArr.length} old messages`)
+                            // console.log(`Fetching ${sortedArr.length} old messages`)
                             this.setState({ messagesData: [...sortedArr, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
                           } else {
-                            console.log('Nothing more left to fetch')
+                            // console.log('Nothing more left to fetch')
                             this.setState({ currentPosition: 'Top', fetchingPrevious: false })
                           }
                         })
@@ -359,8 +426,8 @@ export default class IssueScreen extends React.Component {
                     }
                   }}
                   onContentSizeChange={(w, h) => {
-                    console.log(w);
-                    console.log(h);
+                    // console.log(w);
+                    // console.log(h);
                     if (this.state.currentPosition === 'Bottom') {
                       this._scroll._root.scrollToEnd({ animated: true });
                     }
@@ -382,6 +449,8 @@ export default class IssueScreen extends React.Component {
                               />
                             </Left>
                             <Body>
+                              <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
+                                {this.fetchUserName(message.sender)}</Text>
                               {firebase.auth().currentUser.uid ===
                                 message.sender ? (
                                   <Item

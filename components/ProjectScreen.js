@@ -36,9 +36,15 @@ export default class ProjectScreen extends React.Component {
                         text: 'OK', onPress: () => {
                             firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).remove(() => {
                                 firebase.storage().ref('projectThumbnails/' + this.props.navigation.state.params.projectId).delete().then(() => {
-                                    console.log('Image Deleted from Storage')
+                                    // console.log('Image Deleted from Storage')
                                 })
                             })
+                            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).once('value', data => {
+                                data._childKeys.forEach(i => {
+                                    firebase.database().ref('Issues').child(i).remove()
+                                })
+                            })
+                            firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).remove
                         }
                     },
                 ],
@@ -47,7 +53,7 @@ export default class ProjectScreen extends React.Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.navigation.state.params.projectId)
+        // console.log(this.props.navigation.state.params.projectId)
         const funcRef = firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).on('value', data => {
             if (!data._value) {
                 this.setState({ project: [] })
@@ -65,13 +71,13 @@ export default class ProjectScreen extends React.Component {
             const projectIssues = data._value.issues ? Object.keys(data._value.issues) : []
             firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).on('value', issues => {
                 this.setState({ issues: issues._value })
-                console.log(issues._value)
+                // console.log(issues._value)
             })
         })
     }
 
     render() {
-        console.log(this.state.issues)
+        // console.log(this.state.issues)
         const icon = <Icon name="menu" style={{ color: 'blue' }} />
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
@@ -111,17 +117,19 @@ export default class ProjectScreen extends React.Component {
                         {
                             this.state.issues ? Object.keys(this.state.issues).map(issueKey => {
                                 return (
-                                    <ListItem key={issueKey} icon>
+                                    <ListItem key={issueKey} icon onPress={() => {
+                                        this.props.navigation.navigate('IssueScreen', { projectId: this.props.navigation.state.params.projectId, IssueId: issueKey })
+                                    }}>
                                         <Left>
-                                            <Button style={{ backgroundColor: this.state.issues[issueKey].issuePriority === 'Critical' ? 'red':'green' }}>
-                                                <Icon active name={this.state.issues[issueKey].issueStatus === "Opened" ? "issue-opened":"issue-closed"} type='Octicons' />
+                                            <Button style={{ backgroundColor: this.state.issues[issueKey].issuePriority === 'Critical' ? 'red' : 'green' }}>
+                                                <Icon active name={this.state.issues[issueKey].issueStatus === "Opened" ? "issue-opened" : "issue-closed"} type='Octicons' />
                                             </Button>
                                         </Left>
                                         <Body>
                                             <Text>{this.state.issues[issueKey].issueTitle}</Text>
                                         </Body>
                                         <Right>
-                                            <Icon active name="arrow-forward" style={{color:'blue'}} onPress={()=>{this.props.navigation.navigate('IssueScreen',{projectId:this.props.navigation.state.params.projectId,IssueId:issueKey})}} />
+                                            <Icon active name="arrow-forward" style={{ color: 'blue' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: this.props.navigation.state.params.projectId, IssueId: issueKey }) }} />
                                         </Right>
                                     </ListItem>
                                 )

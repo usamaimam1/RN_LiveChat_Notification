@@ -34,7 +34,7 @@ export default class AddUser extends React.Component {
     }
     handleSearch() {
         this.setState({ ids: [], results: [] })
-        console.log(this.state.searchString)
+        // console.log(this.state.searchString)
         const userRef = firebase.database().ref('users')
         userRef.orderByChild('fullName').startAt(this.state.searchString, 'fullName').endAt(this.state.searchString + "\uf8ff").once('value', data => {
             if (data._value)

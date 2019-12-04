@@ -19,7 +19,7 @@ export default class UserProfile extends React.Component {
 
     }
     render() {
-        console.log(this.state.userData)
+        // console.log(this.state.userData)
         return (
             <Container>
                 <Header transparent>
