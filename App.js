@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
 
-import {createAppContainer} from 'react-navigation'
-import {createStackNavigator} from 'react-navigation-stack'
-
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { Root } from 'native-base'
 
 import firebase from 'react-native-firebase';
 
@@ -21,18 +21,18 @@ import AddIssue from './components/AddIssue'
 import IssueScreen from './components/IssueScreen'
 
 const MainNavigator = createStackNavigator({
-  Home: {screen: Login},
-  SignUp: {screen: SignUp},
-  Dashboard:{screen:Dashboard},
-  ForgotPassword:{screen:ForgotPassword,params:{code:null}},
-  ChangePassword:{screen:ChangePassword},
-  AddProject:{screen:AddProject},
-  ProjectScreen:{screen:ProjectScreen},
-  AddUser:{screen:AddUser},
-  UserProfile:{screen:UserProfile},
-  ViewUsers:{screen:ViewUsers},
-  AddIssue:{screen:AddIssue},
-  IssueScreen:{screen:IssueScreen}
+  Home: { screen: Login },
+  SignUp: { screen: SignUp },
+  Dashboard: { screen: Dashboard },
+  ForgotPassword: { screen: ForgotPassword, params: { code: null } },
+  ChangePassword: { screen: ChangePassword },
+  AddProject: { screen: AddProject },
+  ProjectScreen: { screen: ProjectScreen },
+  AddUser: { screen: AddUser },
+  UserProfile: { screen: UserProfile },
+  ViewUsers: { screen: ViewUsers },
+  AddIssue: { screen: AddIssue },
+  IssueScreen: { screen: IssueScreen }
 });
 
 const App = createAppContainer(MainNavigator);

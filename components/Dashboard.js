@@ -10,10 +10,14 @@ import {
     SafeAreaView,
     FlatList,
     ImageBackground,
-    Alert
+    Alert,
+    BackHandler
 } from 'react-native'
 import firebase from 'react-native-firebase'
-import { Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body, Title, Subtitle, List, ListItem, Thumbnail, StyleProvider } from 'native-base'
+import {
+    Root, Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body,
+    Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch
+} from 'native-base'
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
@@ -24,6 +28,7 @@ import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer'
 import UUIDGenerator from 'react-native-uuid-generator';
 import { ScrollView } from 'react-native-gesture-handler';
+import SideBar from './SideBar'
 
 const options = {
     title: 'Select Image',
@@ -55,8 +60,12 @@ export default class Dashboard extends React.Component {
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.pickImage = this.pickImage.bind(this)
         this.formatDate = this.formatDate.bind(this)
+        this.handleBackPress = this.handleBackPress.bind(this)
+        this.closeDrawer = this.closeDrawer.bind(this)
+        this.openDrawer = this.openDrawer.bind(this)
     }
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
         const User = firebase.auth().currentUser._user
         const ref = firebase.database().ref("users").child(User.uid)
         const funcref = ref.on('value', data => {
@@ -89,6 +98,14 @@ export default class Dashboard extends React.Component {
             })
             this.setState({ issueCount: issueCount })
         })
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+    }
+    handleBackPress() {
+        // this.props.navigation.goBack(null)
+        Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })
+        return true
     }
     formatDate(date) {
         // console.log(date)
@@ -130,154 +147,168 @@ export default class Dashboard extends React.Component {
             }
         });
     };
+    openDrawer() {
+        this._drawer._root.open()
+    }
+    closeDrawer() {
+        this._drawer._root.close()
+    }
     render() {
         const { navigate } = this.props.navigation
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
-            <Container>
-                <ImageBackground source={require('../assets/splash-bg.jpg')}
-                    style={{ width: width, height: height }}>
-                    <Header transparent>
-                        <Left>
-                            <Button transparent onPress={() => {
-                                Alert.alert(
-                                    'Log Out!',
-                                    'Are you sure to want to Log Out ?',
-                                    [
-                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                        {
-                                            text: 'OK', onPress: () => {
-                                                firebase.auth().signOut()
-                                                    .then(() => { console.log("Logged Out") })
-                                                    .catch((err) => { console.log(err.message) })
-                                            }
-                                        },
-                                    ],
-                                    { cancelable: true },
-                                )
-                            }}>
-                                <Icon name="arrow-back" style={{ color: 'blue' }} />
-                            </Button>
-                        </Left>
-                        <Body style={{ alignSelf: 'center' }}>
-                            <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
-                            <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
-                        </Body>
-                        <Right>
-                            {Platform.OS == "ios" ?
-                                <OptionsMenu
-                                    button={this.state.iconSource}
-                                    buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                    destructiveIndex={1}
-                                    options={["Change Password", "Sign Out", "Cancel"]}
-                                    actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
-                                : <OptionsMenu
-                                    button={this.state.iconSource}
-                                    buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                    destructiveIndex={1}
-                                    options={["Change Password", "Sign Out"]}
-                                    actions={[this.handleChangePassword, this.handleSignOut]} />
-                            }
-                        </Right>
-                    </Header>
-                    <Content>
-                        <List>
-                            {this.state.projectDetails.map(proj => {
-                                return (
-                                    <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                        this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+            <Drawer
+                ref={ref => { this._drawer = ref }}
+                content={<SideBar imgSrc={this.state.iconSource} />}
+                onClose={() => { this.closeDrawer() }}>
+                <Root>
+                    <Container>
+                        <ImageBackground source={require('../assets/splash-bg.jpg')}
+                            style={{ width: width, height: height }}>
+                            <Header transparent>
+                                <Left>
+                                    <Button transparent onPress={() => {
+                                        this.openDrawer()
+                                        // Alert.alert(
+                                        //     'Log Out!',
+                                        //     'Are you sure to want to Log Out ?',
+                                        //     [
+                                        //         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                        //         {
+                                        //             text: 'OK', onPress: () => {
+                                        //                 firebase.auth().signOut()
+                                        //                     .then(() => { console.log("Logged Out") })
+                                        //                     .catch((err) => { console.log(err.message) })
+                                        //             }
+                                        //         },
+                                        //     ],
+                                        //     { cancelable: true },
+                                        // )
                                     }}>
-                                        <Left>
-                                            <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                        </Left>
-                                        <Body>
-                                            <Text>{proj.projectTitle}</Text>
-                                            <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                        </Body>
-                                        <Right>
-                                            {this.state.userData.adminaccess ?
-                                                <Button transparent onPress={() => {
-                                                    Alert.alert(
-                                                        'Warning',
-                                                        'Are you sure to want to delete this project?',
-                                                        [
-                                                            {
-                                                                text: 'Cancel',
-                                                                onPress: () => console.log('Cancel Pressed'),
-                                                                style: 'cancel',
-                                                            },
-                                                            {
-                                                                text: 'OK',
-                                                                onPress: () => {
-                                                                    const ref = firebase.database().ref('Projects').child(proj.projectId)
-                                                                    const projectThumbnail = proj.projectId
-                                                                    firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => {
-                                                                        // console.log('Project Thumbnail Removed From Storage')
-                                                                    }).catch(err => {
-                                                                        console.log(err.message)
-                                                                    })
-                                                                    ref.remove().then(() => {
-                                                                        // console.log("Remove Successful!")
-                                                                        this.setState({ refresh: null })
-                                                                    })
-                                                                    firebase.database().ref('Issues').orderByChild('projectId')
-                                                                        .equalTo(proj.projectId)
-                                                                        .once('value', data => {
-                                                                            data._childKeys.forEach(i => {
-                                                                                firebase
-                                                                                    .database()
-                                                                                    .ref('Issues')
-                                                                                    .child(i)
-                                                                                    .remove()
+                                        <Icon name="menu" style={{ color: 'blue' }} />
+                                    </Button>
+                                </Left>
+                                <Body style={{ alignSelf: 'center' }}>
+                                    <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
+                                    <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
+                                </Body>
+                                <Right>
+                                    {Platform.OS == "ios" ?
+                                        <OptionsMenu
+                                            button={this.state.iconSource}
+                                            buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
+                                            destructiveIndex={1}
+                                            options={["Change Password", "Sign Out", "Cancel"]}
+                                            actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
+                                        : <OptionsMenu
+                                            button={this.state.iconSource}
+                                            buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
+                                            destructiveIndex={1}
+                                            options={["Change Password", "Sign Out"]}
+                                            actions={[this.handleChangePassword, this.handleSignOut]} />
+                                    }
+                                </Right>
+                            </Header>
+                            <Content>
+                                <List>
+                                    {this.state.projectDetails.map(proj => {
+                                        return (
+                                            <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                                this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                            }}>
+                                                <Left>
+                                                    <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                                </Left>
+                                                <Body>
+                                                    <Text>{proj.projectTitle}</Text>
+                                                    <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                                </Body>
+                                                <Right>
+                                                    {this.state.userData.adminaccess ?
+                                                        <Button transparent onPress={() => {
+                                                            Alert.alert(
+                                                                'Warning',
+                                                                'Are you sure to want to delete this project?',
+                                                                [
+                                                                    {
+                                                                        text: 'Cancel',
+                                                                        onPress: () => console.log('Cancel Pressed'),
+                                                                        style: 'cancel',
+                                                                    },
+                                                                    {
+                                                                        text: 'OK',
+                                                                        onPress: () => {
+                                                                            const ref = firebase.database().ref('Projects').child(proj.projectId)
+                                                                            const projectThumbnail = proj.projectId
+                                                                            firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => {
+                                                                                // console.log('Project Thumbnail Removed From Storage')
+                                                                            }).catch(err => {
+                                                                                console.log(err.message)
                                                                             })
-                                                                        })
-                                                                    firebase.database().ref('Messages').child(proj.projectId)
-                                                                        .remove()
-                                                                }
-                                                            },
-                                                        ],
-                                                        { cancelable: true },
-                                                    );
-                                                }} >
-                                                    <Icon name="cross" type="Entypo" />
-                                                </Button> : null}
-                                        </Right>
-                                    </ListItem>
-                                )
-                            })}
-                        </List>
-                    </Content>
-                    <Footer>
-                        <FooterTab>
-                            <Button badge vertical>
-                                <Badge><Text>2</Text></Badge>
-                                <Icon name="message1" type="AntDesign" />
-                                <Text>Messages</Text>
-                            </Button>
-                            <Button vertical onPress={() => {
-                                this.props.navigation.navigate('UserProfile', { userData: this.state.userData })
-                            }}>
-                                <Icon name="user" type="AntDesign" />
-                                <Text>User</Text>
-                            </Button>
-                            <Button badge vertical >
-                                <Badge ><Text>{this.state.issueCount}</Text></Badge>
-                                <Icon name="issue-opened" type="Octicons" />
-                                <Text>Issues</Text>
-                            </Button>
-                            {this.state.userData ? this.state.userData.adminaccess ?
-                                <Button vertical onPress={() => {
-                                    this.props.navigation.navigate('AddProject')
-                                }}>
-                                    <Icon name="plus" type="AntDesign" />
-                                    <Text>Add Project</Text>
-                                </Button> : null : null
-                            }
-                        </FooterTab>
-                    </Footer>
-                </ImageBackground>
-            </Container>
+                                                                            ref.remove().then(() => {
+                                                                                // console.log("Remove Successful!")
+                                                                                this.setState({ refresh: null })
+                                                                            })
+                                                                            firebase.database().ref('Issues').orderByChild('projectId')
+                                                                                .equalTo(proj.projectId)
+                                                                                .once('value', data => {
+                                                                                    data._childKeys.forEach(i => {
+                                                                                        firebase
+                                                                                            .database()
+                                                                                            .ref('Issues')
+                                                                                            .child(i)
+                                                                                            .remove()
+                                                                                    })
+                                                                                })
+                                                                            firebase.database().ref('Messages').child(proj.projectId)
+                                                                                .remove()
+                                                                        }
+                                                                    },
+                                                                ],
+                                                                { cancelable: true },
+                                                            );
+                                                        }} >
+                                                            <Icon name="cross" type="Entypo" />
+                                                        </Button> : null}
+                                                </Right>
+                                            </ListItem>
+                                        )
+                                    })}
+                                </List>
+                            </Content>
+                            <Footer>
+                                <FooterTab>
+                                    <Button badge vertical>
+                                        <Badge><Text>{this.state.projectDetails.length}</Text></Badge>
+                                        <Icon name="project" type="Octicons" />
+                                        <Text>Projects</Text>
+                                    </Button>
+                                    <Button vertical onPress={() => {
+                                        this.props.navigation.navigate('UserProfile', { userData: this.state.userData })
+                                    }}>
+                                        <Icon name="user" type="AntDesign" />
+                                        <Text>User</Text>
+                                    </Button>
+                                    <Button badge vertical >
+                                        <Badge ><Text>{this.state.issueCount}</Text></Badge>
+                                        <Icon name="issue-opened" type="Octicons" />
+                                        <Text>Issues</Text>
+                                    </Button>
+                                    {this.state.userData ? this.state.userData.adminaccess ?
+                                        <Button vertical onPress={() => {
+                                            this.props.navigation.navigate('AddProject')
+                                        }}>
+                                            <Icon name="plus" type="AntDesign" />
+                                            <Text>Add Project</Text>
+                                        </Button> : null : null
+                                    }
+                                </FooterTab>
+                            </Footer>
+                        </ImageBackground>
+                    </Container>
+                </Root>
+            </Drawer>
         )
     }
 }
