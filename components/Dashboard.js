@@ -160,7 +160,12 @@ export default class Dashboard extends React.Component {
         return (
             <Drawer
                 ref={ref => { this._drawer = ref }}
-                content={<SideBar imgSrc={this.state.iconSource} />}
+                content={<SideBar
+                    imgSrc={this.state.iconSource}
+                    _userData={this.state.userData}
+                    _navigation={this.props.navigation}
+                    _onLogOut={this.handleSignOut}
+                    _onChangePassword={this.handleChangePassword} />}
                 onClose={() => { this.closeDrawer() }}>
                 <Root>
                     <Container>
@@ -170,21 +175,6 @@ export default class Dashboard extends React.Component {
                                 <Left>
                                     <Button transparent onPress={() => {
                                         this.openDrawer()
-                                        // Alert.alert(
-                                        //     'Log Out!',
-                                        //     'Are you sure to want to Log Out ?',
-                                        //     [
-                                        //         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                        //         {
-                                        //             text: 'OK', onPress: () => {
-                                        //                 firebase.auth().signOut()
-                                        //                     .then(() => { console.log("Logged Out") })
-                                        //                     .catch((err) => { console.log(err.message) })
-                                        //             }
-                                        //         },
-                                        //     ],
-                                        //     { cancelable: true },
-                                        // )
                                     }}>
                                         <Icon name="menu" style={{ color: 'blue' }} />
                                     </Button>
@@ -194,20 +184,7 @@ export default class Dashboard extends React.Component {
                                     <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
                                 </Body>
                                 <Right>
-                                    {Platform.OS == "ios" ?
-                                        <OptionsMenu
-                                            button={this.state.iconSource}
-                                            buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                            destructiveIndex={1}
-                                            options={["Change Password", "Sign Out", "Cancel"]}
-                                            actions={[this.handleChangePassword, this.handleSignOut, () => { }]} />
-                                        : <OptionsMenu
-                                            button={this.state.iconSource}
-                                            buttonStyle={{ width: 40, height: 40, borderRadius: 50 }}
-                                            destructiveIndex={1}
-                                            options={["Change Password", "Sign Out"]}
-                                            actions={[this.handleChangePassword, this.handleSignOut]} />
-                                    }
+
                                 </Right>
                             </Header>
                             <Content>
