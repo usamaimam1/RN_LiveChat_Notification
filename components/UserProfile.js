@@ -22,6 +22,8 @@ export default class UserProfile extends React.Component {
         super(props)
         this.state = {
             userData: this.props.navigation.state.params.userData,
+            projectDetails: this.props.navigation.state.params.projectDetails,
+            issueCount: this.props.navigation.state.params.issueCount,
             imagePicked: false,
             imageUploaded: false
         }
@@ -89,7 +91,7 @@ export default class UserProfile extends React.Component {
                     </Header>
                     <Content padder>
                         <Card>
-                            
+
                             <CardItem cardBody >
                                 <ImageBackground
                                     source={{
@@ -125,7 +127,7 @@ export default class UserProfile extends React.Component {
                                 </Right>
                             </CardItem>
 
-                             {/* Email Entry */}
+                            {/* Email Entry */}
                             <CardItem cardBody style={{ margin: 10 }}>
                                 <Left>
                                     <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}> Email : </Text>
@@ -157,30 +159,27 @@ export default class UserProfile extends React.Component {
                     </Content>
                     <Footer>
                         <FooterTab>
-                            <Button badge vertical>
-                                <Badge><Text>4</Text></Badge>
+                            <Button badge vertical onPress={() => { this.props.navigation.navigate('Dashboard') }}>
+                                <Badge><Text>{this.state.projectDetails.length}</Text></Badge>
                                 <Icon name="project" type="Octicons" />
                                 <Text>Projects</Text>
                             </Button>
-                            <Button active vertical onPress={() => {
-
-                            }}>
+                            <Button active vertical>
                                 <Icon name="user" type="AntDesign" />
                                 <Text>User</Text>
                             </Button>
-                            <Button badge vertical>
-                                <Badge ><Text>51</Text></Badge>
+                            <Button badge vertical onPress={() => {
+                                this.props.navigation.navigate('IssuesIndex', {
+                                    userData: this.state.userData,
+                                    projectDetails: this.state.projectDetails,
+                                    issueCount: this.state.issueCount
+                                })
+                            }}>
+                                <Badge ><Text>{this.state.issueCount}</Text></Badge>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Issues</Text>
                             </Button>
-                            {this.state.userData ? this.state.userData.adminaccess ?
-                                <Button vertical onPress={() => {
-                                    this.props.navigation.navigate('AddProject')
-                                }}>
-                                    <Icon name="plus" type="AntDesign" />
-                                    <Text>Add Project</Text>
-                                </Button> : null : null
-                            }
+
                         </FooterTab>
                     </Footer>
                 </ImageBackground>

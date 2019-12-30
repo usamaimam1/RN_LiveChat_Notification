@@ -51,7 +51,6 @@ export default class Dashboard extends React.Component {
             imgSource: null,
             iconSource: require('../assets/ReactNativeFirebase.png'),
             active: null,
-            myProjects: [],
             projectDetails: [],
             refresh: null,
             issueCount: 0
@@ -256,18 +255,28 @@ export default class Dashboard extends React.Component {
                             </Content>
                             <Footer>
                                 <FooterTab>
-                                    <Button badge vertical>
+                                    <Button active badge vertical>
                                         <Badge><Text>{this.state.projectDetails.length}</Text></Badge>
                                         <Icon name="project" type="Octicons" />
                                         <Text>Projects</Text>
                                     </Button>
                                     <Button vertical onPress={() => {
-                                        this.props.navigation.navigate('UserProfile', { userData: this.state.userData })
+                                        this.props.navigation.navigate('UserProfile', {
+                                            userData: this.state.userData,
+                                            projectDetails: this.state.projectDetails,
+                                            issueCount: this.state.issueCount
+                                        })
                                     }}>
                                         <Icon name="user" type="AntDesign" />
                                         <Text>User</Text>
                                     </Button>
-                                    <Button badge vertical >
+                                    <Button badge vertical onPress={() => {
+                                        this.props.navigation.navigate('IssuesIndex', {
+                                            userData: this.state.userData,
+                                            projectDetails: this.state.projectDetails,
+                                            issueCount: this.state.issueCount
+                                        })
+                                    }} >
                                         <Badge ><Text>{this.state.issueCount}</Text></Badge>
                                         <Icon name="issue-opened" type="Octicons" />
                                         <Text>Issues</Text>

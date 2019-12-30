@@ -58,7 +58,7 @@ export default class SideBar extends React.Component {
                         <Body>
                             <Text>Profile</Text>
                         </Body>
-                    </ListItem>
+                    </ListItem> 
                     {/* Projects Navigator */}
                     <ListItem icon onPress={() => { }}>
                         <Left>
