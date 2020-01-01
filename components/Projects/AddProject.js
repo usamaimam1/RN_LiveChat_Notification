@@ -190,7 +190,7 @@ export default class AddProject extends React.Component {
               </Header>
               <View style={{height: 300}}>
                 <Image
-                  source={require('../assets/ReactNativeFirebase.png')}
+                  source={require('../../assets/ReactNativeFirebase.png')}
                   style={{
                     width: Dimensions.get('window').width - 20,
                     margin: 10,

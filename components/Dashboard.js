@@ -45,6 +45,7 @@ export default class Dashboard extends React.Component {
     }
     constructor() {
         super()
+        this.User = firebase.auth().currentUser._user
         this.state = {
             userData: null,
             status: null,
@@ -55,6 +56,10 @@ export default class Dashboard extends React.Component {
             refresh: null,
             issueCount: 0
         }
+        this.enableAddandRemoveListeners = this.enableAddandRemoveListeners.bind(this)
+        this.disableAddandRemoveListeners = this.disableAddandRemoveListeners.bind(this)
+        this.preFetchFunc = this.preFetchFunc.bind(this)
+        this.filterRelevantProjects = this.filterRelevantProjects.bind(this)
         this.handleSignOut = this.handleSignOut.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.pickImage = this.pickImage.bind(this)
@@ -65,44 +70,60 @@ export default class Dashboard extends React.Component {
     }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
-        const User = firebase.auth().currentUser._user
-        const ref = firebase.database().ref("users").child(User.uid)
-        const funcref = ref.on('value', data => {
-            // console.log(data)
-            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
-            this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
-        })
+        this.preFetchFunc()
+        this.enableAddandRemoveListeners()
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+        this.disableAddandRemoveListeners()
+    }
+    filterRelevantProjects(project) {
+        const isProjectManager = project.projectmanager[this.User.uid] ? true : false
+        const isTeamLead = project.teamleads ? project.teamleads[this.User.uid] ? true : false : false
+        const isTeamMember = project.teammembers ? project.teammembers[this.User.uid] ? true : false : false
+        console.log(isProjectManager || isTeamLead || isTeamMember)
+        return isProjectManager || isTeamLead || isTeamMember
+    }
+    preFetchFunc() {
         const projRef = firebase.database().ref('Projects')
-        // console.log(projRef)
-        const projFunc = projRef.on('value', data => {
-            // console.log('Project Changed')
+        projRef.once('value').then(data => {
             if (!data._value) {
                 this.setState({ projectDetails: [] })
                 return
             }
-            this.setState({ projectDetails: [], issueCount: 0 })
-            const projectIds = Object.keys(data._value)
-            // console.log(Object.keys(data._value))
-            const res = projectIds.filter(projectId => {
-                return (
-                    data._value[projectId].projectmanager[User.uid] ||
-                    (data._value[projectId].teamleads ? data._value[projectId].teamleads[User.uid] : false) ||
-                    (data._value[projectId].teammembers ? data._value[projectId].teammembers[User.uid] : false)
-                )
-            })
-            let issueCount = 0
-            res.forEach(id => {
-                issueCount += Object.keys(data._value[id].issues ? data._value[id].issues : {}).length
-                this.setState({ projectDetails: [...this.state.projectDetails, data._value[id]] })
-            })
-            this.setState({ issueCount: issueCount })
+            console.log(data._value)
+            const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
+            console.log(ProjectVals)
+            const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
+            this.setState({ projectDetails: ProjectVals, issueCount: issueCount })
         })
     }
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+    enableAddandRemoveListeners() {
+        const ref = firebase.database().ref("users").child(this.User.uid)
+        this.userfuncref = ref.on('value', data => {
+            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
+            this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
+        })
+        this.projectchildaddedref = firebase.database().ref('Projects').on('child_added', data => {
+            if (data.val()) {
+                const isIncluded = this.state.projectDetails.filter(project => project.projectId === data.val().projectId)
+                if (isIncluded.length === 0 && this.filterRelevantProjects(data.val())) {
+                    this.setState({ projectDetails: [...this.state.projectDetails, data.val()] })
+                }
+            }
+        })
+        this.projectchildremoveref = firebase.database().ref('Projects').on('child_removed', data => {
+            if (data.val()) {
+                this.setState({ projectDetails: this.state.projectDetails.filter(project => project.projectId !== data.val().projectId) })
+            }
+        })
+    }
+    disableAddandRemoveListeners() {
+        off('value', this.userfuncref)
+        off('child_added', this.projectchildaddedref)
+        off('child_removed', this.projectchildremoveref)
     }
     handleBackPress() {
-        // this.props.navigation.goBack(null)
         Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })
         return true
     }
@@ -191,7 +212,11 @@ export default class Dashboard extends React.Component {
                                     {this.state.projectDetails.map(proj => {
                                         return (
                                             <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                                this.props.navigation.navigate('ProjectScreen', {
+                                                    projectId: proj.projectId,
+                                                    userData: this.state.userData,
+                                                    projectDetails: this.state.projectDetails,
+                                                })
                                             }}>
                                                 <Left>
                                                     <Thumbnail square source={{ uri: proj.projectThumbnail }} />
@@ -201,7 +226,7 @@ export default class Dashboard extends React.Component {
                                                     <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
                                                 </Body>
                                                 <Right>
-                                                    {this.state.userData.adminaccess ?
+                                                    {this.state.userData ? this.state.userData.adminaccess ?
                                                         <Button transparent onPress={() => {
                                                             Alert.alert(
                                                                 'Warning',
@@ -246,7 +271,7 @@ export default class Dashboard extends React.Component {
                                                             );
                                                         }} >
                                                             <Icon name="cross" type="Entypo" />
-                                                        </Button> : null}
+                                                        </Button> : null : null}
                                                 </Right>
                                             </ListItem>
                                         )

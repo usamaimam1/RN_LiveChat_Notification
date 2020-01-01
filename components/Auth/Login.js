@@ -105,10 +105,10 @@ export default class Login extends React.Component {
         const { navigate } = this.props.navigation
         const contentToRender = (<ImageBackground
             style={styles.background}
-            source={require('../assets/splash-bg.jpg')}>
+            source={require('../../assets/splash-bg.jpg')}>
             <View style={{ flex: 1 }}>
                 <View style={styles.logo} >
-                    <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
+                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
 
                     </Image>
                 </View>

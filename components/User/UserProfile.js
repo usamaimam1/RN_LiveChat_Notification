@@ -30,6 +30,15 @@ export default class UserProfile extends React.Component {
         this.handlePickImage = this.handlePickImage.bind(this)
         this.handleUpdate = this.handleUpdate.bind(this)
     }
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevProps.navigation.state.params)
+        console.log(this.props.navigation.state.params)
+    }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log(nextProps.navigation.state.params)
+        console.log(prevState)
+        return null
+    }
     componentDidMount() {
 
     }
@@ -69,11 +78,13 @@ export default class UserProfile extends React.Component {
         });
     }
     render() {
+        const { params } = this.props.navigation.state
+        console.log(params)
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
             <Container>
-                <ImageBackground source={require('../assets/splash-bg.jpg')}
+                <ImageBackground source={require('../../assets/splash-bg.jpg')}
                     style={{ width: width, height: height }}>
                     <Header transparent>
                         <Left>

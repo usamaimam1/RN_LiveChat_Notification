@@ -52,7 +52,7 @@ export default class AddIssue extends React.Component {
             <Root>
                 <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
                     <Container>
-                        <ImageBackground source={require('../assets/splash-bg.jpg')}
+                        <ImageBackground source={require('../../assets/splash-bg.jpg')}
                             style={{ width: width, height: height }}>
                             <Header transparent>
                                 <Left>
@@ -68,7 +68,7 @@ export default class AddIssue extends React.Component {
                             </Header>
                             <Content>
                                 <View style={{ height: 300 }} >
-                                    <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
+                                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
                                 </View>
                                 <View>
                                     <Form>

@@ -151,10 +151,10 @@ export default class SignUp extends React.Component {
         // console.log(this.state)
         const contentToRender = (
             <KeyboardAwareScrollView>
-                <ImageBackground style={styles.background} source={require('../assets/splash-bg.jpg')}>
+                <ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
                     <View style={{ flex: 1 }}>
                         <View style={styles.logo} >
-                            <Image source={require('../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
+                            <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
                         </View>
                         <View style={styles.form} >
                             <View style={styles.inputContainer}>

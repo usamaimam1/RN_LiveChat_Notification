@@ -46,7 +46,7 @@ export default class AddUser extends React.Component {
         const height = Dimensions.get("window").height
         return (
             <Container>
-                <ImageBackground source={require('../assets/splash-bg.jpg')}
+                <ImageBackground source={require('../../assets/splash-bg.jpg')}
                     style={{ width: width, height: height }}>
                     <Header searchBar rounded transparent>
                         <Left>

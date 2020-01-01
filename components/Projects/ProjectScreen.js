@@ -13,16 +13,62 @@ export default class ProjectScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            selected: '',
+            projectId: this.props.navigation.state.params.projectId,
             project: null,
             viewType: 'Employee',
-            userData: null,
+            projectDetails: this.props.navigation.state.params.projectDetails,
+            userData: this.props.navigation.state.params.userData,
             issues: null
         }
-        firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', data => {
-            this.setState({ userData: data._value })
-        })
         this.handleDelete = this.handleDelete.bind(this)
+        this.enableListeners = this.enableListeners.bind(this)
+        this.disableListeners = this.disableListeners.bind(this)
+        this.setViewType = this.setViewType.bind(this)
+        this.deleteProject = this.deleteProject.bind(this)
+    }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (prevState.userData !== nextProps.navigation.state.params.userData) {
+            if (prevState.projectDetails != nextProps.navigation.state.params.projectDetails) {
+                return ({
+                    userData: nextProps.navigation.state.params.userData,
+                    projectDetails: nextProps.navigation.state.params.projectDetails
+                })
+            }
+            return ({ userData: nextProps.navigation.state.params.userData })
+        }
+        return null
+    }
+    componentDidMount() {
+        this.enableListeners()
+    }
+    componentWillUnmount() {
+        this.disableListeners()
+    }
+    enableListeners() {
+        this._projectchangeslistener = firebase.database().ref('Projects').child(this.state.projectId).on('value', data => {
+            if (!data._value) {
+                this.setState({ project: [] })
+                this.props.navigation.navigate('Dashboard')
+                return
+            }
+            this.setViewType(data._value)
+        })
+        this._issueListener = firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.state.projectId).on('value', issues => {
+            this.setState({ issues: issues._value })
+        })
+    }
+    disableListeners() {
+        off('value', this._projectchangeslistener)
+        off('value', this._issueListener)
+    }
+    setViewType(project) {
+        const userUid = firebase.auth().currentUser.uid
+        const isProjectManager = project.projectmanager[userUid]
+        const isTeamLead = project.teamleads ? project.teamleads[userUid] : false
+        const isTeamMember = project.teammembers ? project.teammembers[userUid] : false
+        if (isProjectManager) this.setState({ viewType: 'ProjectManager' })
+        else if (isTeamLead) this.setState({ viewType: 'TeamLead' })
+        this.setState({ project: project })
     }
     handleDelete() {
         if (this.state.viewType !== 'ProjectManager') {
@@ -32,48 +78,27 @@ export default class ProjectScreen extends React.Component {
                 'Are you sure to want to delete this project?',
                 [
                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                    {
-                        text: 'OK', onPress: () => {
-                            firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).remove(() => {
-                                firebase.storage().ref('projectThumbnails/' + this.props.navigation.state.params.projectId).delete().then(() => {
-                                    // console.log('Image Deleted from Storage')
-                                })
-                            })
-                            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).once('value', data => {
-                                data._childKeys.forEach(i => {
-                                    firebase.database().ref('Issues').child(i).remove()
-                                })
-                            })
-                            firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).remove
-                        }
-                    },
+                    { text: 'OK', onPress: () => { this.deleteProject() } },
                 ],
                 { cancelable: true }
             )
         }
     }
-    componentDidMount() {
-        // console.log(this.props.navigation.state.params.projectId)
-        const funcRef = firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).on('value', data => {
-            if (!data._value) {
-                this.setState({ project: [] })
-                this.props.navigation.navigate('Dashboard')
-                return
-            }
-            const isProjectManager = data._value.projectmanager[firebase.auth().currentUser.uid]
-            const isTeamLead = data._value.teamleads ? data._value.teamleads[firebase.auth().currentUser.uid] : false
-            const isTeamMember = data._value.teammembers ? data._value.teammembers[firebase.auth().currentUser.uid] : false
-            if (isProjectManager)
-                this.setState({ viewType: 'ProjectManager' })
-            else if (isTeamLead)
-                this.setState({ viewType: 'TeamLead' })
-            this.setState({ project: data._value })
-            const projectIssues = data._value.issues ? Object.keys(data._value.issues) : []
-            firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.props.navigation.state.params.projectId).on('value', issues => {
-                this.setState({ issues: issues._value })
-                // console.log(issues._value)
+    deleteProject() {
+        // Delete Project Data and Image Thumbnail from Storage
+        firebase.database().ref('Projects').child(this.state.projectId).remove(() => {
+            firebase.storage().ref('projectThumbnails/' + this.state.projectId).delete().then(() => {
+
             })
         })
+        // Deletes Issues bind to that Project
+        firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.state.projectId).once('value', data => {
+            data._childKeys.forEach(i => {
+                firebase.database().ref('Issues').child(i).remove()
+            })
+        })
+        // Deletes Messages Bound to the Project
+        firebase.database().ref('Messages').child(this.state.projectId).remove()
     }
 
     render() {
@@ -83,7 +108,7 @@ export default class ProjectScreen extends React.Component {
         const height = Dimensions.get("window").height
         return (
             <Container>
-                <ImageBackground source={require('../assets/splash-bg.jpg')}
+                <ImageBackground source={require('../../assets/splash-bg.jpg')}
                     style={{ width: width, height: height }}>
                     <Header transparent>
                         <Left>
@@ -103,12 +128,12 @@ export default class ProjectScreen extends React.Component {
                                         customButton={icon}
                                         destructiveIndex={1}
                                         options={["View Team", "Delete Project", "Cancel"]}
-                                        actions={[() => { this.props.navigation.navigate('ViewUsers', { projectId: this.props.navigation.state.params.projectId }) }, () => { this.handleDelete() }, () => { }]} />
+                                        actions={[() => { this.props.navigation.navigate('ViewUsers', { projectId: this.state.projectId }) }, () => { this.handleDelete() }, () => { }]} />
                                     : <OptionsMenu
                                         customButton={icon}
                                         destructiveIndex={1}
                                         options={["View Team", "Delete Project"]}
-                                        actions={[() => { this.props.navigation.navigate('ViewUsers', { projectId: this.props.navigation.state.params.projectId }) }, () => { this.handleDelete() }]} />
+                                        actions={[() => { this.props.navigation.navigate('ViewUsers', { projectId: this.state.projectId }) }, () => { this.handleDelete() }]} />
                                 }
                             </Button>
                         </Right>
@@ -118,7 +143,7 @@ export default class ProjectScreen extends React.Component {
                             this.state.issues ? Object.keys(this.state.issues).map(issueKey => {
                                 return (
                                     <ListItem key={issueKey} icon onPress={() => {
-                                        this.props.navigation.navigate('IssueScreen', { projectId: this.props.navigation.state.params.projectId, IssueId: issueKey })
+                                        this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: issueKey })
                                     }}>
                                         <Left>
                                             <Button style={{ backgroundColor: this.state.issues[issueKey].issuePriority === 'Critical' ? 'red' : 'green' }}>
@@ -129,7 +154,7 @@ export default class ProjectScreen extends React.Component {
                                             <Text>{this.state.issues[issueKey].issueTitle}</Text>
                                         </Body>
                                         <Right>
-                                            <Icon active name="arrow-forward" style={{ color: 'blue' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: this.props.navigation.state.params.projectId, IssueId: issueKey }) }} />
+                                            <Icon active name="arrow-forward" style={{ color: 'blue' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: issueKey }) }} />
                                         </Right>
                                     </ListItem>
                                 )
@@ -155,11 +180,11 @@ export default class ProjectScreen extends React.Component {
                                 <Text>Issues</Text>
                             </Button>
                             {this.state.viewType === 'ProjectManager' ?
-                                <Button onPress={() => { this.props.navigation.navigate('AddUser', { projectId: this.props.navigation.state.params.projectId }) }}>
+                                <Button onPress={() => { this.props.navigation.navigate('AddUser', { projectId: this.state.projectId }) }}>
                                     <Icon name="adduser" type="AntDesign" />
                                     <Text>Add User</Text>
                                 </Button> : null}
-                            {this.state.viewType === 'TeamLead' || this.state.viewType === 'ProjectManager' ? <Button onPress={() => { this.props.navigation.navigate('AddIssue', { projectId: this.props.navigation.state.params.projectId }) }}>
+                            {this.state.viewType === 'TeamLead' || this.state.viewType === 'ProjectManager' ? <Button onPress={() => { this.props.navigation.navigate('AddIssue', { projectId: this.state.projectId }) }}>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Add Issues</Text>
                             </Button> : null}

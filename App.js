@@ -7,19 +7,19 @@ import { Root } from 'native-base'
 
 import firebase from 'react-native-firebase';
 
-import Login from './components/Login'
-import SignUp from './components/Signup'
+import Login from './components/Auth/Login'
+import SignUp from './components/Auth/Signup'
 import Dashboard from './components/Dashboard'
-import ForgotPassword from './components/ForgotPassword';
-import ChangePassword from './components/ChangePassword';
-import AddProject from './components/AddProject'
-import ProjectScreen from './components/ProjectScreen'
-import AddUser from './components/AddUser'
-import UserProfile from './components/UserProfile'
-import ViewUsers from './components/ViewUsers'
-import AddIssue from './components/AddIssue'
-import IssueScreen from './components/IssueScreen'
-import IssuesIndex from './components/IssuesIndex'
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ChangePassword from './components/Auth/ChangePassword';
+import AddProject from './components/Projects/AddProject'
+import ProjectScreen from './components/Projects/ProjectScreen'
+import AddUser from './components/User/AddUser'
+import UserProfile from './components/User/UserProfile'
+import ViewUsers from './components/User/ViewUsers'
+import AddIssue from './components/Issues/AddIssue'
+import IssueScreen from './components/Issues/IssueScreen'
+import IssuesIndex from './components/Issues/IssuesIndex'
 
 const MainNavigator = createStackNavigator({
   Home: { screen: Login },

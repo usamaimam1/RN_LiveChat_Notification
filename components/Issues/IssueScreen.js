@@ -32,8 +32,8 @@ import {
 import OptionsMenu from 'react-native-options-menu';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'react-native-firebase';
-import getTheme from '../native-base-theme/components';
-import material from '../native-base-theme/variables/material';
+import getTheme from '../../native-base-theme/components';
+import material from '../../native-base-theme/variables/material';
 // import { declareExportDeclaration } from '@babel/types'
 export default class IssueScreen extends React.Component {
   static navigationOptions = {
@@ -323,7 +323,7 @@ export default class IssueScreen extends React.Component {
           <StyleProvider style={getTheme(material)}>
             <Container>
               <ImageBackground
-                source={require('../assets/splash-bg.jpg')}
+                source={require('../../assets/splash-bg.jpg')}
                 style={{ width: width, height: height }}>
                 <Header transparent>
                   <Left>
