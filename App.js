@@ -4,7 +4,8 @@ import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-nativ
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { Root } from 'native-base'
-
+import {Provider} from 'react-redux'
+import store from './redux/store'
 import firebase from 'react-native-firebase';
 
 import Login from './components/Auth/Login'
@@ -37,8 +38,17 @@ const MainNavigator = createStackNavigator({
   IssuesIndex: { screen: IssuesIndex }
 });
 
-const App = createAppContainer(MainNavigator);
-export default App
+const Navigator = createAppContainer(MainNavigator);
+
+export default class App extends React.Component{
+  render(){
+    return(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    )
+  }
+}
 
 
 // export default class App extends React.Component{

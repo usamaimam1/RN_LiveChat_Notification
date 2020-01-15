@@ -29,7 +29,9 @@ import ImageResizer from 'react-native-image-resizer'
 import UUIDGenerator from 'react-native-uuid-generator';
 import { ScrollView } from 'react-native-gesture-handler';
 import SideBar from './SideBar'
-
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {SetUser, AddUser} from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -39,7 +41,7 @@ const options = {
 };
 
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -101,8 +103,12 @@ export default class Dashboard extends React.Component {
     enableAddandRemoveListeners() {
         const ref = firebase.database().ref("users").child(this.User.uid)
         this.userfuncref = ref.on('value', data => {
-            this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
-            this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
+            if(data.val()){
+                this.props.adduser(data._value)
+                this.props.setuser(data._value)
+                this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
+                this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
+            }
         })
         this.projectchildaddedref = firebase.database().ref('Projects').on('child_added', data => {
             if (data.val()) {
@@ -177,12 +183,13 @@ export default class Dashboard extends React.Component {
         const { navigate } = this.props.navigation
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
+        console.log(this.props)
         return (
             <Drawer
                 ref={ref => { this._drawer = ref }}
                 content={<SideBar
                     imgSrc={this.state.iconSource}
-                    _userData={this.state.userData}
+                    _userData={this.props.user}
                     _navigation={this.props.navigation}
                     _onLogOut={this.handleSignOut}
                     _onChangePassword={this.handleChangePassword} />}
@@ -323,6 +330,15 @@ export default class Dashboard extends React.Component {
         )
     }
 }
+const mapDispatchToProps = dispatch =>{
+  return{
+      adduser: function(user){dispatch(AddUser(user))},
+      setuser: function(user){dispatch(SetUser(user))}
+  }
+}
+const mapStateToProps = state =>{
+    return {user:state.userReducer.user}
+}
 const styles = StyleSheet.create({
     item: {
         flex: 1,
@@ -338,3 +354,4 @@ const styles = StyleSheet.create({
         flex: 1
     }
 })
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard)
