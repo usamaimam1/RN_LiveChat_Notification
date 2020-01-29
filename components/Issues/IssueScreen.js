@@ -1,33 +1,11 @@
 import React from 'react';
 import {
-  Container,
-  Content,
-  Header,
-  Footer,
-  Body,
-  Left,
-  Right,
-  Icon,
-  Button,
-  Title,
-  Item,
-  Input,
-  Toast,
-  List,
-  Thumbnail,
-  ListItem,
-  StyleProvider,
-  Root
+  Container, Content, Header, Footer, Body, Left, Right, Icon,
+  Button, Title, Item, Input, Toast, List, Thumbnail, ListItem, StyleProvider, Root
 } from 'native-base';
 import {
-  Text,
-  View,
-  Image,
-  Dimensions,
-  Platfrom,
-  ImageBackground,
-  FlatList,
-  Alert
+  Text, View, Image, Dimensions,
+  Platfrom, ImageBackground, FlatList, Alert
 } from 'react-native';
 import OptionsMenu from 'react-native-options-menu';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -64,41 +42,25 @@ export default class IssueScreen extends React.Component {
       Status: 'Member',
       UserName: ''
     };
-    firebase
-      .database()
-      .ref('Issues')
-      .child(this.props.navigation.state.params.IssueId)
-      .on('value', data => {
-        this.setState({ issueData: data._value });
-      });
-    firebase
-      .database()
-      .ref('Projects')
-      .child(this.props.navigation.state.params.projectId)
-      .on('value', data => {
-        this.setState({ ProjectData: data._value });
-        const isProjectManager = data._value.projectmanager ? data._value.projectmanager[firebase.auth().currentUser.uid] : false
-        const isTeamLead = data._value.teamleads ? data._value.teamleads[firebase.auth().currentUser.uid] : false
-        if (isProjectManager) {
-          this.setState({ Status: 'ProjectManager', UserName: data._value.projectmanager[firebase.auth().currentUser.uid].fullName })
-        } else if (isTeamLead) {
-          this.setState({ Status: 'TeamLead', UserName: data._value.teamleads[firebase.auth().currentUser.uid].fullName })
-        } else {
-          this.setState({ Status: 'Member', UserName: data._value.teammembers[firebase.auth().currentUser.uid].fullName })
-        }
-      });
-    firebase
-      .database()
-      .ref('users')
-      .child(firebase.auth().currentUser.uid)
-      .on('value', data => {
-        this.setState({ userData: data._value });
-      });
-    firebase
-      .database()
-      .ref('Messages')
-      .child(this.props.navigation.state.params.projectId)
-      .child(this.props.navigation.state.params.IssueId)
+    firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).on('value', data => {
+      this.setState({ issueData: data._value });
+    });
+    firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).on('value', data => {
+      this.setState({ ProjectData: data._value });
+      const isProjectManager = data._value.projectmanager ? data._value.projectmanager[firebase.auth().currentUser.uid] : false
+      const isTeamLead = data._value.teamleads ? data._value.teamleads[firebase.auth().currentUser.uid] : false
+      if (isProjectManager) {
+        this.setState({ Status: 'ProjectManager', UserName: data._value.projectmanager[firebase.auth().currentUser.uid].fullName })
+      } else if (isTeamLead) {
+        this.setState({ Status: 'TeamLead', UserName: data._value.teamleads[firebase.auth().currentUser.uid].fullName })
+      } else {
+        this.setState({ Status: 'Member', UserName: data._value.teammembers[firebase.auth().currentUser.uid].fullName })
+      }
+    });
+    firebase.database().ref('users').child(firebase.auth().currentUser.uid).on('value', data => {
+      this.setState({ userData: data._value });
+    });
+    firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).child(this.props.navigation.state.params.IssueId)
       .orderByChild('sentTime')
       .endAt(Date.now())
       .limitToLast(20)
@@ -166,11 +128,7 @@ export default class IssueScreen extends React.Component {
     return nativeEvent.contentOffset.y === 0
   }
   setupChildListener() {
-    firebase
-      .database()
-      .ref('Messages')
-      .child(this.props.navigation.state.params.projectId)
-      .child(this.props.navigation.state.params.IssueId)
+    firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).child(this.props.navigation.state.params.IssueId)
       .orderByChild('sentTime')
       .startAt(this.state.messagesData.length === 0 ? Date.now() : this.state.messagesData[this.state.messagesData.length - 1].sentTime)
       .on('child_added', data => {
@@ -194,20 +152,7 @@ export default class IssueScreen extends React.Component {
       });
   }
   formatDate(date) {
-    var monthNames = [
-      'JAN',
-      'FEB',
-      'MAR',
-      'APR',
-      'MAY',
-      'JUNE',
-      'JULY',
-      'AUG',
-      'SEP',
-      'OCT',
-      'NOV',
-      'DEC',
-    ];
+    var monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',];
     var day = date.getDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
@@ -257,35 +202,16 @@ export default class IssueScreen extends React.Component {
       firebase
         .database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issueStatus').set('Closed');
     } else {
-      firebase
-        .database()
-        .ref('Issues')
-        .child(this.props.navigation.state.params.IssueId)
-        .child('issueStatus')
-        .set('Opened');
+      firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issueStatus').set('Opened');
     }
   }
   changePriority() {
-    firebase
-      .database()
-      .ref('Issues')
-      .child(this.props.navigation.state.params.IssueId)
-      .child('issuePriority')
+    firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issuePriority')
       .once('value', data => {
         if (data._value === 'Critical') {
-          firebase
-            .database()
-            .ref('Issues')
-            .child(this.props.navigation.state.params.IssueId)
-            .child('issuePriority')
-            .set('Normal');
+          firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issuePriority').set('Normal');
         } else {
-          firebase
-            .database()
-            .ref('Issues')
-            .child(this.props.navigation.state.params.IssueId)
-            .child('issuePriority')
-            .set('Critical');
+          firebase.database().ref('Issues').child(this.props.navigation.state.params.IssueId).child('issuePriority').set('Critical');
         }
       });
   }
@@ -297,11 +223,7 @@ export default class IssueScreen extends React.Component {
         sentTime: Date.now(),
       };
       this.setState({ messageBody: null });
-      firebase
-        .database()
-        .ref('Messages')
-        .child(this.props.navigation.state.params.projectId)
-        .child(this.props.navigation.state.params.IssueId)
+      firebase.database().ref('Messages').child(this.props.navigation.state.params.projectId).child(this.props.navigation.state.params.IssueId)
         .push(message, err => {
           console.log(err);
         })

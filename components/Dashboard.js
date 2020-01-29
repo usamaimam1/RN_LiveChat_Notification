@@ -1,17 +1,6 @@
 import React from 'react'
 import {
-    Text,
-    View,
-    StyleSheet,
-    Image,
-    ToastAndroid,
-    Picker,
-    Dimensions,
-    SafeAreaView,
-    FlatList,
-    ImageBackground,
-    Alert,
-    BackHandler
+    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import {
@@ -31,7 +20,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject,DeleteProject } from '../redux/actions/index'
+import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -74,7 +63,6 @@ class Dashboard extends React.Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
         this.preFetchFunc()
-        this.enableAddandRemoveListeners()
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
@@ -89,44 +77,47 @@ class Dashboard extends React.Component {
     preFetchFunc() {
         const projRef = firebase.database().ref('Projects')
         projRef.once('value').then(data => {
-            if (!data._value) {
-                this.setState({ projectDetails: [] })
-                return
+            if (data._value) {
+                const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
+                this.props.addprojects(ProjectVals)
+                const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
+                this.setState({ issueCount: issueCount })
             }
-            const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
-            this.props.addprojects(ProjectVals)
-            const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
-            this.setState({ projectDetails: ProjectVals, issueCount: issueCount })
+            this.enableAddandRemoveListeners()
         })
     }
     enableAddandRemoveListeners() {
-        const ref = firebase.database().ref("users").child(this.User.uid)
-        this.userfuncref = ref.on('value', data => {
+        this._userRef = firebase.database().ref("users").child(this.User.uid)
+        this.userfuncref = this._userRef.on('value', data => {
             if (data.val()) {
                 this.props.adduser(data._value)
-                this.props.printuser()
-                this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
-                this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
+                this.setState({
+                    status: data._value.adminaccess ? 'Admin' : 'Employee',
+                    iconSource: { uri: data._value.profilepic, cache: 'force-cache' }
+                })
             }
         })
-        this.projectchildaddedref = firebase.database().ref('Projects').on('child_added', data => {
+        this._projectchildaddedref = firebase.database().ref('Projects')
+        this._projectchildaddedref.on('child_added', data => {
             if (data.val()) {
                 const isIncluded = this.props.projects.filter(project => project.projectId === data.val().projectId)
-                if (isIncluded.length === 0 && this.filterRelevantProjects(data.val())) {
+                const isRelevant = isIncluded.length === 0 ? this.filterRelevantProjects(data._value) : false
+                if (isRelevant) {
                     this.props.addproject(data._value)
                 }
             }
         })
-        this.projectchildremoveref = firebase.database().ref('Projects').on('child_removed', data => {
+        this.projectchildremoveref = firebase.database().ref('Projects')
+        this.projectchildremoveref.on('child_removed', data => {
             if (data.val()) {
                 this.props.deleteproject(data._value.projectId)
             }
         })
     }
     disableAddandRemoveListeners() {
-        off('value', this.userfuncref)
-        off('child_added', this.projectchildaddedref)
-        off('child_removed', this.projectchildremoveref)
+        this._userRef.off('value')
+        this._projectchildaddedref.off('child_added')
+        this.projectchildremoveref.off('child_removed')
     }
     handleBackPress() {
         Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })
@@ -134,10 +125,8 @@ class Dashboard extends React.Component {
     }
     formatDate(date) {
         var monthNames = [
-            "JAN", "FEB", "MAR",
-            "APR", "MAY", "JUNE", "JULY",
-            "AUG", "SEP", "OCT",
-            "NOV", "DEC"
+            "JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY",
+            "AUG", "SEP", "OCT", "NOV", "DEC"
         ];
 
         var day = date.getDate();
@@ -231,8 +220,6 @@ class Dashboard extends React.Component {
                                             <ListItem key={proj.projectId} thumbnail onPress={() => {
                                                 this.props.navigation.navigate('ProjectScreen', {
                                                     projectId: proj.projectId,
-                                                    userData: this.props.user,
-                                                    projectDetails: this.props.projects,
                                                 })
                                             }}>
                                                 <Left>
@@ -269,22 +256,12 @@ class Dashboard extends React.Component {
                                         <Text>Projects</Text>
                                     </Button>
                                     <Button vertical onPress={() => {
-                                        this.props.navigation.navigate('UserProfile', {
-                                            userData: this.props.user,
-                                            projectDetails: this.props.projects,
-                                            issueCount: this.state.issueCount
-                                        })
+                                        this.props.navigation.navigate('UserProfile')
                                     }}>
                                         <Icon name="user" type="AntDesign" />
                                         <Text>User</Text>
                                     </Button>
-                                    <Button badge vertical onPress={() => {
-                                        this.props.navigation.navigate('IssuesIndex', {
-                                            userData: this.props.user,
-                                            projectDetails: this.props.projects,
-                                            issueCount: this.state.issueCount
-                                        })
-                                    }} >
+                                    <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
                                         <Badge ><Text>{this.state.issueCount}</Text></Badge>
                                         <Icon name="issue-opened" type="Octicons" />
                                         <Text>Issues</Text>
@@ -302,7 +279,7 @@ class Dashboard extends React.Component {
                         </ImageBackground>
                     </Container>
                 </Root>
-            </Drawer>
+            </Drawer >
         )
     }
 }
