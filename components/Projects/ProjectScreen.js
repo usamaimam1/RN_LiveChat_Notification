@@ -6,7 +6,9 @@ import {
 import { SafeAreaView, ImageBackground, Dimensions, Text, Alert } from 'react-native'
 import OptionsMenu from 'react-native-options-menu'
 import firebase from 'react-native-firebase'
-export default class ProjectScreen extends React.Component {
+import { connect } from 'react-redux'
+import { SetProject } from '../../redux/actions'
+class ProjectScreen extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -14,7 +16,6 @@ export default class ProjectScreen extends React.Component {
         super(props)
         this.state = {
             projectId: this.props.navigation.state.params.projectId,
-            project: null,
             viewType: 'Employee',
             projectDetails: this.props.navigation.state.params.projectDetails,
             userData: this.props.navigation.state.params.userData,
@@ -25,18 +26,6 @@ export default class ProjectScreen extends React.Component {
         this.disableListeners = this.disableListeners.bind(this)
         this.setViewType = this.setViewType.bind(this)
         this.deleteProject = this.deleteProject.bind(this)
-    }
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (prevState.userData !== nextProps.navigation.state.params.userData) {
-            if (prevState.projectDetails != nextProps.navigation.state.params.projectDetails) {
-                return ({
-                    userData: nextProps.navigation.state.params.userData,
-                    projectDetails: nextProps.navigation.state.params.projectDetails
-                })
-            }
-            return ({ userData: nextProps.navigation.state.params.userData })
-        }
-        return null
     }
     componentDidMount() {
         this.enableListeners()
@@ -70,7 +59,9 @@ export default class ProjectScreen extends React.Component {
         const isTeamMember = project.teammembers ? project.teammembers[userUid] : false
         if (isProjectManager) this.setState({ viewType: 'ProjectManager' })
         else if (isTeamLead) this.setState({ viewType: 'TeamLead' })
-        this.setState({ project: project })
+        if (this.props.project !== project) {
+            this.props.setproject(project.projectId, project)
+        }
     }
     handleDelete() {
         if (this.state.viewType !== 'ProjectManager') {
@@ -121,7 +112,7 @@ export default class ProjectScreen extends React.Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title style={{ color: 'black', textAlign: 'center' }}>{this.state.project ? this.state.project.projectTitle : 'Project'}</Title>
+                            <Title style={{ color: 'black', textAlign: 'center' }}>{this.props.project ? this.props.project.projectTitle : 'Project'}</Title>
                         </Body>
                         <Right>
                             <Button transparent>
@@ -197,3 +188,16 @@ export default class ProjectScreen extends React.Component {
         )
     }
 }
+const mapStateToProps = state => {
+    const { activeProjectData } = state.projectReducer
+    return {
+        user: state.userReducer.user,
+        project: activeProjectData.length === 1 ? activeProjectData[0] : null
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        setproject: function (projectId, project) { dispatch(SetProject(projectId, project)) }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectScreen)

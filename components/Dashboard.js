@@ -20,7 +20,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject } from '../redux/actions/index'
+import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -107,17 +107,24 @@ class Dashboard extends React.Component {
                 }
             }
         })
-        this.projectchildremoveref = firebase.database().ref('Projects')
-        this.projectchildremoveref.on('child_removed', data => {
+        this._projectchildremoveref = firebase.database().ref('Projects')
+        this._projectchildremoveref.on('child_removed', data => {
             if (data.val()) {
                 this.props.deleteproject(data._value.projectId)
+            }
+        })
+        this._issuesAddandRemove = firebase.database().ref('Issues')
+        this._issuesAddandRemove.on('value', data => {
+            if (data._value) {
+                this.props.addIssues(Object.keys(data._value).map(_key => data._value[_key]))
             }
         })
     }
     disableAddandRemoveListeners() {
         this._userRef.off('value')
         this._projectchildaddedref.off('child_added')
-        this.projectchildremoveref.off('child_removed')
+        this._projectchildremoveref.off('child_removed')
+        this._issuesAddandRemove.off('value')
     }
     handleBackPress() {
         Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })
@@ -218,9 +225,8 @@ class Dashboard extends React.Component {
                                     {this.props.projects.map(proj => {
                                         return (
                                             <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                this.props.navigation.navigate('ProjectScreen', {
-                                                    projectId: proj.projectId,
-                                                })
+                                                this.props.setActiveProjectId(proj.projectId)
+                                                this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
                                             }}>
                                                 <Left>
                                                     <Thumbnail square source={{ uri: proj.projectThumbnail }} />
@@ -291,7 +297,9 @@ const mapDispatchToProps = dispatch => {
         addprojects: function (projects) { dispatch(AddProjects(projects)) },
         printprojects: function () { dispatch(PrintProjects()) },
         addproject: function (project) { dispatch(AddProject(project)) },
-        deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) }
+        deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) },
+        setActiveProjectId: function (projectId) { dispatch(SetActiveProjectId(projectId)) },
+        addIssues: function (issues) { dispatch(AddIssues(issues)) }
     }
 }
 const mapStateToProps = state => {
