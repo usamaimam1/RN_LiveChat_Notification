@@ -1,13 +1,14 @@
 const initialState ={
-    user:null
+    user:null,
 }
 export const userReducer = (state=initialState,action)=>{
     switch(action.type){
         case 'ADD_USER':
+            console.log(action)
             return Object.assign({},state,{
-                user:action.payload
+                user:action.payload.user
             })
-        case 'SET_USER':
+        case 'PRINT_USER':
             console.log(state)
             return state
         default:

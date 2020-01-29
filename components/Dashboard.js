@@ -29,9 +29,9 @@ import ImageResizer from 'react-native-image-resizer'
 import UUIDGenerator from 'react-native-uuid-generator';
 import { ScrollView } from 'react-native-gesture-handler';
 import SideBar from './SideBar'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
-import {SetUser, AddUser} from '../redux/actions/index'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject,DeleteProject } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -69,6 +69,7 @@ class Dashboard extends React.Component {
         this.handleBackPress = this.handleBackPress.bind(this)
         this.closeDrawer = this.closeDrawer.bind(this)
         this.openDrawer = this.openDrawer.bind(this)
+        this.handleDeleteProject = this.handleDeleteProject.bind(this)
     }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
@@ -83,7 +84,6 @@ class Dashboard extends React.Component {
         const isProjectManager = project.projectmanager[this.User.uid] ? true : false
         const isTeamLead = project.teamleads ? project.teamleads[this.User.uid] ? true : false : false
         const isTeamMember = project.teammembers ? project.teammembers[this.User.uid] ? true : false : false
-        console.log(isProjectManager || isTeamLead || isTeamMember)
         return isProjectManager || isTeamLead || isTeamMember
     }
     preFetchFunc() {
@@ -93,9 +93,8 @@ class Dashboard extends React.Component {
                 this.setState({ projectDetails: [] })
                 return
             }
-            console.log(data._value)
             const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
-            console.log(ProjectVals)
+            this.props.addprojects(ProjectVals)
             const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
             this.setState({ projectDetails: ProjectVals, issueCount: issueCount })
         })
@@ -103,24 +102,24 @@ class Dashboard extends React.Component {
     enableAddandRemoveListeners() {
         const ref = firebase.database().ref("users").child(this.User.uid)
         this.userfuncref = ref.on('value', data => {
-            if(data.val()){
+            if (data.val()) {
                 this.props.adduser(data._value)
-                this.props.setuser(data._value)
+                this.props.printuser()
                 this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
                 this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
             }
         })
         this.projectchildaddedref = firebase.database().ref('Projects').on('child_added', data => {
             if (data.val()) {
-                const isIncluded = this.state.projectDetails.filter(project => project.projectId === data.val().projectId)
+                const isIncluded = this.props.projects.filter(project => project.projectId === data.val().projectId)
                 if (isIncluded.length === 0 && this.filterRelevantProjects(data.val())) {
-                    this.setState({ projectDetails: [...this.state.projectDetails, data.val()] })
+                    this.props.addproject(data._value)
                 }
             }
         })
         this.projectchildremoveref = firebase.database().ref('Projects').on('child_removed', data => {
             if (data.val()) {
-                this.setState({ projectDetails: this.state.projectDetails.filter(project => project.projectId !== data.val().projectId) })
+                this.props.deleteproject(data._value.projectId)
             }
         })
     }
@@ -134,7 +133,6 @@ class Dashboard extends React.Component {
         return true
     }
     formatDate(date) {
-        // console.log(date)
         var monthNames = [
             "JAN", "FEB", "MAR",
             "APR", "MAY", "JUNE", "JULY",
@@ -148,7 +146,6 @@ class Dashboard extends React.Component {
         var hours = date.getHours()
         var minutes = date.getMinutes()
         var seconds = date.getSeconds()
-
         return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
     handleSignOut() {
@@ -179,11 +176,24 @@ class Dashboard extends React.Component {
     closeDrawer() {
         this._drawer._root.close()
     }
+    handleDeleteProject(proj) {
+        const ref = firebase.database().ref('Projects').child(proj.projectId)
+        const projectThumbnail = proj.projectId
+        firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => { })
+            .catch(err => { console.log(err.message) })
+        ref.remove().then(() => {
+            this.setState({ refresh: null })
+        })
+        firebase.database().ref('Issues').orderByChild('projectId').equalTo(proj.projectId).once('value', data => {
+            data._childKeys.forEach(i => { firebase.database().ref('Issues').child(i).remove() })
+        })
+        firebase.database().ref('Messages').child(proj.projectId).remove()
+    }
     render() {
         const { navigate } = this.props.navigation
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
-        console.log(this.props)
+        // console.log(this.props)
         return (
             <Drawer
                 ref={ref => { this._drawer = ref }}
@@ -216,13 +226,13 @@ class Dashboard extends React.Component {
                             </Header>
                             <Content>
                                 <List>
-                                    {this.state.projectDetails.map(proj => {
+                                    {this.props.projects.map(proj => {
                                         return (
                                             <ListItem key={proj.projectId} thumbnail onPress={() => {
                                                 this.props.navigation.navigate('ProjectScreen', {
                                                     projectId: proj.projectId,
-                                                    userData: this.state.userData,
-                                                    projectDetails: this.state.projectDetails,
+                                                    userData: this.props.user,
+                                                    projectDetails: this.props.projects,
                                                 })
                                             }}>
                                                 <Left>
@@ -233,46 +243,12 @@ class Dashboard extends React.Component {
                                                     <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
                                                 </Body>
                                                 <Right>
-                                                    {this.state.userData ? this.state.userData.adminaccess ?
+                                                    {this.props.user ? this.props.user.adminaccess ?
                                                         <Button transparent onPress={() => {
-                                                            Alert.alert(
-                                                                'Warning',
-                                                                'Are you sure to want to delete this project?',
+                                                            Alert.alert('Warning', 'Are you sure to want to delete this project?',
                                                                 [
-                                                                    {
-                                                                        text: 'Cancel',
-                                                                        onPress: () => console.log('Cancel Pressed'),
-                                                                        style: 'cancel',
-                                                                    },
-                                                                    {
-                                                                        text: 'OK',
-                                                                        onPress: () => {
-                                                                            const ref = firebase.database().ref('Projects').child(proj.projectId)
-                                                                            const projectThumbnail = proj.projectId
-                                                                            firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => {
-                                                                                // console.log('Project Thumbnail Removed From Storage')
-                                                                            }).catch(err => {
-                                                                                console.log(err.message)
-                                                                            })
-                                                                            ref.remove().then(() => {
-                                                                                // console.log("Remove Successful!")
-                                                                                this.setState({ refresh: null })
-                                                                            })
-                                                                            firebase.database().ref('Issues').orderByChild('projectId')
-                                                                                .equalTo(proj.projectId)
-                                                                                .once('value', data => {
-                                                                                    data._childKeys.forEach(i => {
-                                                                                        firebase
-                                                                                            .database()
-                                                                                            .ref('Issues')
-                                                                                            .child(i)
-                                                                                            .remove()
-                                                                                    })
-                                                                                })
-                                                                            firebase.database().ref('Messages').child(proj.projectId)
-                                                                                .remove()
-                                                                        }
-                                                                    },
+                                                                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                    { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
                                                                 ],
                                                                 { cancelable: true },
                                                             );
@@ -288,14 +264,14 @@ class Dashboard extends React.Component {
                             <Footer>
                                 <FooterTab>
                                     <Button active badge vertical>
-                                        <Badge><Text>{this.state.projectDetails.length}</Text></Badge>
+                                        <Badge><Text>{this.props.projects.length}</Text></Badge>
                                         <Icon name="project" type="Octicons" />
                                         <Text>Projects</Text>
                                     </Button>
                                     <Button vertical onPress={() => {
                                         this.props.navigation.navigate('UserProfile', {
-                                            userData: this.state.userData,
-                                            projectDetails: this.state.projectDetails,
+                                            userData: this.props.user,
+                                            projectDetails: this.props.projects,
                                             issueCount: this.state.issueCount
                                         })
                                     }}>
@@ -304,8 +280,8 @@ class Dashboard extends React.Component {
                                     </Button>
                                     <Button badge vertical onPress={() => {
                                         this.props.navigation.navigate('IssuesIndex', {
-                                            userData: this.state.userData,
-                                            projectDetails: this.state.projectDetails,
+                                            userData: this.props.user,
+                                            projectDetails: this.props.projects,
                                             issueCount: this.state.issueCount
                                         })
                                     }} >
@@ -313,7 +289,7 @@ class Dashboard extends React.Component {
                                         <Icon name="issue-opened" type="Octicons" />
                                         <Text>Issues</Text>
                                     </Button>
-                                    {this.state.userData ? this.state.userData.adminaccess ?
+                                    {this.props.user ? this.props.user.adminaccess ?
                                         <Button vertical onPress={() => {
                                             this.props.navigation.navigate('AddProject')
                                         }}>
@@ -330,14 +306,23 @@ class Dashboard extends React.Component {
         )
     }
 }
-const mapDispatchToProps = dispatch =>{
-  return{
-      adduser: function(user){dispatch(AddUser(user))},
-      setuser: function(user){dispatch(SetUser(user))}
-  }
+const mapDispatchToProps = dispatch => {
+    return {
+        adduser: function (user) { dispatch(AddUser(user)) },
+        setuser: function (user) { dispatch(SetUser(user)) },
+        printuser: function () { dispatch(PrintUser()) },
+        addprojects: function (projects) { dispatch(AddProjects(projects)) },
+        printprojects: function () { dispatch(PrintProjects()) },
+        addproject: function (project) { dispatch(AddProject(project)) },
+        deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) }
+    }
 }
-const mapStateToProps = state =>{
-    return {user:state.userReducer.user}
+const mapStateToProps = state => {
+    console.log(state)
+    return {
+        user: state.userReducer.user,
+        projects: state.projectReducer.projectDetails
+    }
 }
 const styles = StyleSheet.create({
     item: {
@@ -354,4 +339,4 @@ const styles = StyleSheet.create({
         flex: 1
     }
 })
-export default connect(mapStateToProps,mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

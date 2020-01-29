@@ -45,7 +45,8 @@ export default class ProjectScreen extends React.Component {
         this.disableListeners()
     }
     enableListeners() {
-        this._projectchangeslistener = firebase.database().ref('Projects').child(this.state.projectId).on('value', data => {
+        this._projectReference = firebase.database().ref('Projects').child(this.state.projectId)
+        this._projectReference.on('value', data => {
             if (!data._value) {
                 this.setState({ project: [] })
                 this.props.navigation.navigate('Dashboard')
@@ -53,13 +54,14 @@ export default class ProjectScreen extends React.Component {
             }
             this.setViewType(data._value)
         })
-        this._issueListener = firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.state.projectId).on('value', issues => {
+        this._issueRef = firebase.database().ref('Issues').orderByChild('projectId').equalTo(this.state.projectId)
+        this._issueRef.on('value', issues => {
             this.setState({ issues: issues._value })
         })
     }
     disableListeners() {
-        off('value', this._projectchangeslistener)
-        off('value', this._issueListener)
+        this._projectReference.off('value')
+        this._issueRef.off('value')
     }
     setViewType(project) {
         const userUid = firebase.auth().currentUser.uid
