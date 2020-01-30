@@ -3,83 +3,27 @@ import {
     Container, Content, Header, Footer, Left, Right, Body, Icon, Button, Title,
     Card, CardItem, Badge, FooterTab
 } from 'native-base'
-import firebase from 'react-native-firebase'
-import { Image, Text, ImageBackground, Dimensions, TouchableOpacity } from 'react-native'
-import ImagePicker from 'react-native-image-picker'
-import ImageResizer from 'react-native-image-resizer'
-const options = {
-    title: 'Select Image',
-    storageOptions: {
-        skipBackup: true,
-        path: 'images'
-    }
-};
-export default class UserProfile extends React.Component {
+import { Image, Text, ImageBackground, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
+import { handlePickImage, handleUpdate } from './UserProfile.functions'
+import { connect } from 'react-redux'
+class UserProfile extends React.Component {
     static navigationOptions = {
         header: null
     }
     constructor(props) {
         super(props)
         this.state = {
-            userData: this.props.navigation.state.params.userData,
-            projectDetails: this.props.navigation.state.params.projectDetails,
-            issueCount: this.props.navigation.state.params.issueCount,
             imagePicked: false,
-            imageUploaded: false
+            imageUploaded: false,
+            profilepic: this.props.user.profilepic
         }
-        this.handlePickImage = this.handlePickImage.bind(this)
-        this.handleUpdate = this.handleUpdate.bind(this)
-    }
-    componentDidUpdate(prevProps, prevState) {
-        console.log(prevProps.navigation.state.params)
-        console.log(this.props.navigation.state.params)
-    }
-    static getDerivedStateFromProps(nextProps, prevState) {
-        console.log(nextProps.navigation.state.params)
-        console.log(prevState)
-        return null
+        this.handlePickImage = handlePickImage.bind(this)
+        this.handleUpdate = handleUpdate.bind(this)
     }
     componentDidMount() {
 
     }
-    handleUpdate() {
-        if (this.state.imagePicked) {
-            firebase.storage()
-                .ref(`profilepics/${this.state.userData.uid}`)
-                .putFile(this.state.userData.profilepic)
-                .then(storageTask => {
-                    const imageRef = firebase.database().ref('users').child(this.state.userData.uid).child('profilepic')
-                    imageRef.set(storageTask.downloadURL, () => {
-                        this.setState({ imagePicked: false })
-                        alert('Image Updated Successfully')
-                    })
-                })
-        } else {
-            alert('Nothing to update')
-        }
-
-    }
-
-    handlePickImage() {
-        ImagePicker.showImagePicker(options, response => {
-            if (response.didCancel) {
-                alert('You cancelled image picker 😟');
-            } else if (response.error) {
-                alert('And error occured: ', response.error);
-            } else {
-                const source = { uri: response.uri };
-                ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99).then((output) => {
-                    this.state.userData.profilepic = output.uri
-                    this.setState({ userData: this.state.userData, imagePicked: true })
-                }).catch((err) => {
-                    console.log(err.message)
-                });
-            }
-        });
-    }
     render() {
-        const { params } = this.props.navigation.state
-        console.log(params)
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
@@ -102,26 +46,14 @@ export default class UserProfile extends React.Component {
                     </Header>
                     <Content padder>
                         <Card>
-
                             <CardItem cardBody >
                                 <ImageBackground
-                                    source={{
-                                        uri: "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                    }}
-                                    style={{
-                                        height: 300,
-                                        width: null,
-                                        flex: 1,
-                                        justifyContent: "center",
-                                        alignItems: "center"
-                                    }}
+                                    source={{ uri: "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" }}
+                                    style={styles.thumbnail}
                                 >
                                     <TouchableOpacity onPress={this.handlePickImage}>
-                                        <Image
-                                            square
-                                            style={{ height: 200, width: 200, borderRadius: 100 }}
-                                            source={{ uri: this.state.userData.profilepic }}
-
+                                        <Image square style={{ height: 200, width: 200, borderRadius: 100 }}
+                                            source={{ uri: this.state.profilepic }}
                                         />
                                     </TouchableOpacity>
                                 </ImageBackground>
@@ -133,7 +65,7 @@ export default class UserProfile extends React.Component {
                                 </Left>
                                 <Right>
                                     <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {this.state.userData.fullName}
+                                        {this.props.user.fullName}
                                     </Text>
                                 </Right>
                             </CardItem>
@@ -145,7 +77,7 @@ export default class UserProfile extends React.Component {
                                 </Left>
                                 <Right>
                                     <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {this.state.userData.email}
+                                        {this.props.user.email}
                                     </Text>
                                 </Right>
                             </CardItem>
@@ -156,7 +88,7 @@ export default class UserProfile extends React.Component {
                                 </Left>
                                 <Right>
                                     <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {JSON.stringify(this.state.userData.adminaccess)}
+                                        {JSON.stringify(this.props.user.adminaccess)}
                                     </Text>
                                 </Right>
                             </CardItem>
@@ -171,7 +103,7 @@ export default class UserProfile extends React.Component {
                     <Footer>
                         <FooterTab>
                             <Button badge vertical onPress={() => { this.props.navigation.navigate('Dashboard') }}>
-                                <Badge><Text>{this.state.projectDetails.length}</Text></Badge>
+                                <Badge><Text>{this.props.projectCount}</Text></Badge>
                                 <Icon name="project" type="Octicons" />
                                 <Text>Projects</Text>
                             </Button>
@@ -180,11 +112,7 @@ export default class UserProfile extends React.Component {
                                 <Text>User</Text>
                             </Button>
                             <Button badge vertical onPress={() => {
-                                this.props.navigation.navigate('IssuesIndex', {
-                                    userData: this.state.userData,
-                                    projectDetails: this.state.projectDetails,
-                                    issueCount: this.state.issueCount
-                                })
+                                this.props.navigation.navigate('IssuesIndex')
                             }}>
                                 <Badge ><Text>{this.state.issueCount}</Text></Badge>
                                 <Icon name="issue-opened" type="Octicons" />
@@ -199,3 +127,20 @@ export default class UserProfile extends React.Component {
         )
     }
 }
+const styles = StyleSheet.create({
+    thumbnail: {
+        height: 300,
+        width: null,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    }
+})
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user,
+        projectCount: state.projectReducer.projectDetails.length,
+        issueCount: state.issuesReducer.issuesCount
+    }
+}
+export default connect(mapStateToProps, null)(UserProfile)

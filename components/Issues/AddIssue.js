@@ -18,13 +18,15 @@ export default class AddIssue extends React.Component {
             issuePriority: 'Critical',
             issueStatus: 'Opened',
             projectId: this.props.navigation.state.params.projectId,
-            addedBy: firebase.auth().currentUser.uid
+            addedBy: firebase.auth().currentUser.uid,
+            issueId: null
         }
         this.handleIssueSubmit = this.handleIssueSubmit.bind(this)
     }
     handleIssueSubmit() {
         const uuid = UUIDGenerator.getRandomUUID()
         uuid.then(val => {
+            this.setState({ issueId: val })
             const IssueRef = firebase.database().ref('Issues')
             if (this.state.issueTitle) {
                 IssueRef.child(val).set(this.state, x => {
@@ -95,7 +97,6 @@ export default class AddIssue extends React.Component {
                                                 <Picker.Item label="Critical" value="Critical" />
                                                 <Picker.Item label="Normal" value="Normal" />
                                             </Picker>
-
                                         </Item>
                                         <Button rounded success style={{ width: 150, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }} onPress={() => { this.handleIssueSubmit() }}>
                                             <Text style={{ color: 'white', alignSelf: 'center' }}>Submit Issue</Text>

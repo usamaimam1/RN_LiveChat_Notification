@@ -1,5 +1,6 @@
 const initialState = {
     issueDetails: [],
+    issuesCount: 0
 }
 export const issuesReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -27,6 +28,10 @@ export const issuesReducer = (state = initialState, action) => {
         case 'DELETE_ISSUE':
             return Object.assign({}, state, {
                 issueDetails: state.issueDetails.filter(_issue => _issue.issueId !== action.payload.issueId)
+            })
+        case 'SET_ISSUES_COUNT':
+            return Object.assign({}, state, {
+                issuesCount: action.payload.issuesCount
             })
         default:
             return state

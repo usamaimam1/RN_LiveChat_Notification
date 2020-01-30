@@ -1,34 +1,14 @@
 import React from 'react';
 import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  ImageBackground,
-  TextInput,
-  Dimensions,
-  ScrollView,
+  Text, View, Image, StyleSheet, ImageBackground,
+  TextInput, Dimensions, ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
-  Button,
-  Toast,
-  Root,
-  Spinner,
-  Container,
-  Content,
-  Header,
-  Footer,
-  Title,
-  Left,
-  Icon,
-  Body,
-  Right,
-  Subtitle,
-  Item,
-  Input,
+  Button, Toast, Root, Spinner, Container, Content, Header,
+  Footer, Title, Left, Icon, Body, Right, Subtitle, Item, Input,
 } from 'native-base';
 import UUIDGenerator from 'react-native-uuid-generator';
 import firebase from 'react-native-firebase';
@@ -61,10 +41,9 @@ export default class AddProject extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount() {
-    firebase.database().ref('users').child(firebase.auth().currentUser.uid)
-      .once('value', data => {
-        this.setState({ AdminData: data._value });
-      });
+    firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', data => {
+      this.setState({ AdminData: data._value });
+    });
   }
   handleSubmit() {
     if (this.state.projectThumbnail == null || this.state.projectTitle == null) {
@@ -92,16 +71,14 @@ export default class AddProject extends React.Component {
       };
       const projectRef = firebase.database().ref('Projects').child(val);
       projectRef.set(toUpload);
-      firebase.storage().ref(`projectThumbnails/${val}`)
-        .putFile(this.state.projectThumbnail.uri)
-        .then(storageTask => {
-          projectRef.child('projectThumbnail').set(storageTask.downloadURL);
-          Toast.show({ text: 'Project Added Successfully', duration: 2000, buttonText: 'Ok' });
-          this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
-        }).catch(err => {
-          Toast.show({ text: err.message, duration: 2000, buttonText: 'Ok' });
-          this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
-        });
+      firebase.storage().ref(`projectThumbnails/${val}`).putFile(this.state.projectThumbnail.uri).then(storageTask => {
+        projectRef.child('projectThumbnail').set(storageTask.downloadURL);
+        Toast.show({ text: 'Project Added Successfully', duration: 2000, buttonText: 'Ok' });
+        this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
+      }).catch(err => {
+        Toast.show({ text: err.message, duration: 2000, buttonText: 'Ok' });
+        this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
+      });
     });
   }
   handleInput(key, newVal) {
@@ -117,14 +94,11 @@ export default class AddProject extends React.Component {
         alert('And error occured: ', response.error);
       } else {
         const source = { uri: response.uri };
-        ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99)
-          .then(output => {
-            this.setState({ projectThumbnail: { uri: output.uri } });
-            // console.log(output.size);
-          })
-          .catch(err => {
-            console.log(err.message);
-          });
+        ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99).then(output => {
+          this.setState({ projectThumbnail: { uri: output.uri } });
+        }).catch(err => {
+          console.log(err.message);
+        });
       }
     });
   }
@@ -133,7 +107,7 @@ export default class AddProject extends React.Component {
     return (
       <Root>
         {this.state.submitting ? (
-          <View>
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 200 }}>
             <Spinner />
           </View>
         ) : (
@@ -143,11 +117,9 @@ export default class AddProject extends React.Component {
               <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
                 <Header transparent>
                   <Left>
-                    <Button
-                      transparent
-                      onPress={() => {
-                        this.props.navigation.navigate('Dashboard');
-                      }}>
+                    <Button transparent onPress={() => {
+                      this.props.navigation.navigate('Dashboard');
+                    }}>
                       <Icon name="arrow-back" style={{ color: 'blue' }} />
                     </Button>
                   </Left>
@@ -159,11 +131,7 @@ export default class AddProject extends React.Component {
                 <View style={{ height: 300 }}>
                   <Image
                     source={require('../../assets/ReactNativeFirebase.png')}
-                    style={{
-                      width: Dimensions.get('window').width - 20,
-                      margin: 10,
-                      flex: 1,
-                    }}
+                    style={{ width: Dimensions.get('window').width - 20, margin: 10, flex: 1, }}
                     resizeMode="contain">
                   </Image>
                 </View>
@@ -173,23 +141,15 @@ export default class AddProject extends React.Component {
                       <View style={{ margin: 5 }} key={x._key}>
                         {x._key === 'projectThumbnail' ? (
                           <Item rounded>
-                            <Input
-                              placeholder={x._key}
-                              value={this.state.projectThumbnail.uri}
-                              onFocus={() => {
-                                this.handlePickImage();
-                              }}
-                            />
+                            <Input placeholder={x._key} value={this.state.projectThumbnail.uri} onFocus={() => {
+                              this.handlePickImage();
+                            }} />
                           </Item>
                         ) : (
                             <Item rounded>
-                              <Input
-                                value={this.state[x._key]}
-                                placeholder={x._key}
-                                onChangeText={newVal => {
-                                  this.handleInput(x._key, newVal);
-                                }}
-                              />
+                              <Input value={this.state[x._key]} placeholder={x._key} onChangeText={newVal => {
+                                this.handleInput(x._key, newVal);
+                              }} />
                             </Item>
                           )}
                       </View>
@@ -197,22 +157,12 @@ export default class AddProject extends React.Component {
                   })}
                   {this.state.projectThumbnail.uri ? (
                     <Image
-                      style={{ height: 150, width: 150, alignSelf: 'center' }}
+                      style={{ margin: 10, height: 150, width: 150, alignSelf: 'center' }}
                       source={this.state.projectThumbnail}></Image>
                   ) : null}
-                  <Button
-                    rounded
-                    success
-                    title="Add"
-                    style={{
-                      width: 70,
-                      alignSelf: 'center',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    onPress={() => {
-                      this.handleSubmit();
-                    }}>
+                  <Button rounded success title="Add"
+                    style={{ width: 70, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', }}
+                    onPress={() => { this.handleSubmit(); }}>
                     <Text style={{ color: 'white' }}>Add</Text>
                   </Button>
                 </View>

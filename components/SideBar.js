@@ -51,14 +51,14 @@ export default class SideBar extends React.Component {
                         />
                     </ImageBackground>
                     {/* Profile Navigator */}
-                    <ListItem icon onPress={() => { this.props._navigation.navigate('UserProfile', { userData: this.state.userData }) }}>
+                    <ListItem icon onPress={() => { this.props._navigation.navigate('UserProfile') }}>
                         <Left>
                             <Icon name="profile" type="AntDesign" />
                         </Left>
                         <Body>
                             <Text>Profile</Text>
                         </Body>
-                    </ListItem> 
+                    </ListItem>
                     {/* Projects Navigator */}
                     <ListItem icon onPress={() => { }}>
                         <Left>

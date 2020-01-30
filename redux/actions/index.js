@@ -86,3 +86,10 @@ export const DeleteIssue = function (issueId) {
         payload: { issueId: issueId }
     }
 }
+
+export const SetIssuesCount = function (issuesCount) {
+    return {
+        type: actions.SET_ISSUES_COUNT,
+        payload: { issuesCount: issuesCount }
+    }
+}
