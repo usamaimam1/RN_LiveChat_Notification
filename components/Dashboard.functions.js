@@ -12,6 +12,7 @@ export const preFetchFunc = function () {
         if (data._value) {
             const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
             this.props.addprojects(ProjectVals)
+            this.props.setRelevantProjectIds(ProjectVals.map(_project => _project.projectId))
             const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
             this.props.setIssuesCount(issueCount)
         }
@@ -37,6 +38,7 @@ export const enableAddandRemoveListeners = function () {
             const isRelevant = isIncluded.length === 0 ? this.filterRelevantProjects(data._value) : false
             if (isRelevant) {
                 this.props.addproject(data._value)
+                this.props.addRelevantProject(data._value.projectId)
             }
         }
     })

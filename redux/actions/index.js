@@ -59,6 +59,20 @@ export const SetActiveProjectId = function (projectId) {
     }
 }
 
+export const SetRelevantProjectIds = function (_relevantProjectIds) {
+    return {
+        type: actions.SET_RELEVANT_PROJECTS,
+        payload: { relevantProjectIds: _relevantProjectIds }
+    }
+}
+
+export const AddRelevantProject = function (projectId) {
+    return {
+        type: actions.ADD_RELEVANT_PROJECT,
+        payload: { projectId: projectId }
+    }
+}
+
 export const AddIssues = function (issues) {
     return {
         type: actions.ADD_ISSUES,

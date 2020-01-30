@@ -114,7 +114,7 @@ class UserProfile extends React.Component {
                             <Button badge vertical onPress={() => {
                                 this.props.navigation.navigate('IssuesIndex')
                             }}>
-                                <Badge ><Text>{this.state.issueCount}</Text></Badge>
+                                <Badge ><Text>{this.props.issueCount}</Text></Badge>
                                 <Icon name="issue-opened" type="Octicons" />
                                 <Text>Issues</Text>
                             </Button>

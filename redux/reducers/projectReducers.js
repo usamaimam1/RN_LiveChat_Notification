@@ -3,7 +3,8 @@ import { ActionSheet } from "native-base"
 const initialState = {
     projectDetails: [],
     activeProjectId: null,
-    activeProjectData: null
+    activeProjectData: null,
+    relevantProjectIds: []
 }
 export const projectReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -38,7 +39,18 @@ export const projectReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 projectDetails: filtered_projects,
                 activeProjectId: state.activeProjectId === action.payload.projectId ? null : state.activeProjectId,
-                activeProjectData: state.activeProjectId === action.payload.projectId ? null : state.activeProjectData
+                activeProjectData: state.activeProjectId === action.payload.projectId ? null : state.activeProjectData,
+                relevantProjectIds: state.relevantProjectIds.filter(_id => _id !== action.payload.projectId)
+            })
+        case 'SET_RELEVANT_PROJECTS':
+            return Object.assign({}, state, {
+                relevantProjectIds: action.payload.relevantProjectIds
+            })
+        case 'ADD_RELEVANT_PROJECT':
+            let _relevantProjects = state.relevantProjectIds
+            _relevantProjects.push(action.payload.projectId)
+            return Object.assign({}, state, {
+                relevantProjectIds: _relevantProjects
             })
         case 'PRINT_PROJECTS':
             return state
