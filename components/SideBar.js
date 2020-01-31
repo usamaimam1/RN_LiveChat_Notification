@@ -60,7 +60,7 @@ export default class SideBar extends React.Component {
                         </Body>
                     </ListItem>
                     {/* Projects Navigator */}
-                    <ListItem icon onPress={() => { }}>
+                    <ListItem icon selected onPress={() => { }}>
                         <Left>
                             <Icon name="project" type="Octicons" />
                         </Left>
@@ -69,21 +69,12 @@ export default class SideBar extends React.Component {
                         </Body>
                     </ListItem>
                     {/* Issues Navigator */}
-                    <ListItem icon onPress={() => { }}>
+                    <ListItem icon onPress={() => { this.props._navigation.navigate('IssuesIndex') }}>
                         <Left>
                             <Icon name="issue-opened" type="Octicons" />
                         </Left>
                         <Body>
                             <Text>Issues</Text>
-                        </Body>
-                    </ListItem>
-                    {/* Messages Navigator */}
-                    <ListItem icon onPress={() => { }}>
-                        <Left>
-                            <Icon name="message" type="Entypo" />
-                        </Left>
-                        <Body>
-                            <Text>Messages</Text>
                         </Body>
                     </ListItem>
                     {/* Change Password */}

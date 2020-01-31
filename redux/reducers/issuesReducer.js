@@ -1,6 +1,7 @@
 const initialState = {
     issueDetails: [],
-    issuesCount: 0
+    issuesCount: 0,
+    activeIssueId: null
 }
 export const issuesReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -32,6 +33,10 @@ export const issuesReducer = (state = initialState, action) => {
         case 'SET_ISSUES_COUNT':
             return Object.assign({}, state, {
                 issuesCount: action.payload.issuesCount
+            })
+        case 'SET_ACTIVE_ISSUE':
+            return Object.assign({}, state, {
+                activeIssueId: action.payload.activeIssueId
             })
         default:
             return state

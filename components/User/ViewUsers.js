@@ -1,77 +1,32 @@
 import React from 'react'
 import {
     Container, Content, Header, Footer, FooterTab, Badge, Icon,
-    Left, Right, Body, Button, Title, Separator, ListItem, Subtitle, Thumbnail
+    Left, Right, Body, Button, Title, Separator, ListItem, Subtitle, Thumbnail, View
 } from 'native-base'
-import { Text, Image, Dimension, Platform, Alert } from 'react-native'
+import { Text, Image, Dimension, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
 import OptionsMenu from 'react-native-options-menu'
-export default class ViewUsers extends React.Component {
+import { makeTeamLead, removefromProject, Demote } from './ViewUsers.functions'
+import { connect } from 'react-redux'
+class ViewUsers extends React.Component {
     static navigationOptions = {
         header: null
     }
     constructor(props) {
         super(props)
         this.state = {
-            ProjectData: null
+            ProjectData: this.props.ProjectData,
+            refresh: null
         }
-        const projectRef = firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).on('value', data => {
-            if(!data._value){
-                this.setState({ProjectData:null})
-                this.props.navigation.navigate('Dashboard')
-            }
-            this.setState({ ProjectData: data._value })
-        })
-        this.makeTeamLead = this.makeTeamLead.bind(this)
-        this.removefromProject = this.removefromProject.bind(this)
-        this.Demote = this.Demote.bind(this)
-    }
-    makeTeamLead(memberid) {
-        const memberData = this.state.ProjectData.teammembers[memberid]
-        firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teamleads').child(memberid).set(memberData)
-        firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teammembers').child(memberid).remove()
-    }
-    removefromProject(identifier, id) {
-        Alert.alert(
-            'Remove!',
-            'Are you sure to want to remove this user from this Project ?',
-            [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                {
-                    text: 'OK', onPress: () => {
-                        if (identifier === 'teamleads') {
-                            firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teamleads').child(id).remove()
-                        } else if (identifier === 'teammembers') {
-                            firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teammembers').child(id).remove()
-                        }
-                    }
-                },
-            ],
-            { cancelable: true },
-        )
-    }
-    Demote(id){
-        Alert.alert(
-            'Demote!',
-            'Are you sure to want to demote this user on this Project ?',
-            [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                {
-                    text: 'OK', onPress: () => {
-                        firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teammembers').child(id).set(this.state.ProjectData.teamleads[id])
-                        firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teamleads').child(id).remove()
-                    }
-                },
-            ],
-            { cancelable: true },
-        )
-        firebase.database().ref('Projects').child(this.props.navigation.state.params.projectId).child('teammembers').child(id).set(this.state.ProjectData.teamleads[id])
+        this.makeTeamLead = makeTeamLead.bind(this)
+        this.removefromProject = removefromProject.bind(this)
+        this.Demote = Demote.bind(this)
     }
     componentDidMount() {
 
     }
     render() {
-        // console.log(this.state)
+        console.log(this.state)
         return (
             <Container>
                 <Header transparent>
@@ -121,22 +76,22 @@ export default class ViewUsers extends React.Component {
                                 <Right>
                                     {
                                         this.state.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
-                                        Platform.OS === 'ios' ?
-                                            <OptionsMenu
-                                                customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                options={['Demote', 'Remove From Project', 'Cancel']}
-                                                destructiveIndex={1}
-                                                actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }, () => { }]} >
-                                            </OptionsMenu> :
-                                            <OptionsMenu
-                                                customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                options={['Demote', 'Remove From Project']}
-                                                actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }]}>
-                                            </OptionsMenu> :null
+                                            Platform.OS === 'ios' ?
+                                                <OptionsMenu
+                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                    options={['Demote', 'Remove From Project', 'Cancel']}
+                                                    destructiveIndex={1}
+                                                    actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }, () => { }]} >
+                                                </OptionsMenu> :
+                                                <OptionsMenu
+                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                    options={['Demote', 'Remove From Project']}
+                                                    actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }]}>
+                                                </OptionsMenu> : null
                                     }
                                 </Right>
                             </ListItem>)
-                    }) : null:null}
+                    }) : null : null}
                     <Separator>
                         <Text>Team Members</Text>
                     </Separator>
@@ -154,18 +109,18 @@ export default class ViewUsers extends React.Component {
                                     <Right>
                                         {
                                             this.state.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
-                                            Platform.OS === 'ios' ?
-                                                <OptionsMenu
-                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                    options={['Make Team Lead', 'Remove From Project', 'Cancel']}
-                                                    destructiveIndex={1}
-                                                    actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }, () => { }]} >
-                                                </OptionsMenu> :
-                                                <OptionsMenu
-                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                    options={['Make Team Lead', 'Remove From Project']}
-                                                    actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }]}>
-                                                </OptionsMenu>:null
+                                                Platform.OS === 'ios' ?
+                                                    <OptionsMenu
+                                                        customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                        options={['Make Team Lead', 'Remove From Project', 'Cancel']}
+                                                        destructiveIndex={1}
+                                                        actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }, () => { }]} >
+                                                    </OptionsMenu> :
+                                                    <OptionsMenu
+                                                        customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                        options={['Make Team Lead', 'Remove From Project']}
+                                                        actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }]}>
+                                                    </OptionsMenu> : null
                                         }
                                     </Right>
                                 </ListItem>)
@@ -176,3 +131,10 @@ export default class ViewUsers extends React.Component {
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        ProjectData: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : {}
+    }
+}
+const mapDispatchToProps = null
+export default connect(mapStateToProps, mapDispatchToProps)(ViewUsers)

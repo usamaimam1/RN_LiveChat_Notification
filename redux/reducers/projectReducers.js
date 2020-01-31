@@ -1,5 +1,3 @@
-import { ActionSheet } from "native-base"
-
 const initialState = {
     projectDetails: [],
     activeProjectId: null,
@@ -23,12 +21,14 @@ export const projectReducer = (state = initialState, action) => {
             })
         case 'SET_PROJECT':
             const _projectDetails = state.projectDetails
+            let newProject = []
+            newProject.push(action.payload.project)
             _projectDetails.forEach((_proj, index) => {
                 if (_proj.projectId === action.payload.projectId) {
                     _projectDetails[index] = action.payload.project
                     return Object.assign({}, state, {
                         projectDetails: _projectDetails,
-                        activeProjectData: state.activeProjectId === action.payload.projectId ? action.payload.project : state.activeProjectData
+                        activeProjectData: state.activeProjectId === action.payload.projectId ? newProject : state.activeProjectData
                     })
                 }
             })

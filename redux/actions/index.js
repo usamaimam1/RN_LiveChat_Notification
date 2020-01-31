@@ -107,3 +107,10 @@ export const SetIssuesCount = function (issuesCount) {
         payload: { issuesCount: issuesCount }
     }
 }
+
+export const SetActiveIssue = function (activeIssueId) {
+    return {
+        type: actions.SET_ACTIVE_ISSUE,
+        payload: { activeIssueId: activeIssueId }
+    }
+}

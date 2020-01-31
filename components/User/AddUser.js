@@ -5,7 +5,8 @@ import {
 } from 'native-base'
 import firebase from 'react-native-firebase'
 import { ImageBackground, Dimensions, Alert } from 'react-native'
-export default class AddUser extends React.Component {
+import { connect } from 'react-redux'
+class AddUser extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -16,29 +17,43 @@ export default class AddUser extends React.Component {
             searchString: '',
             ids: [],
             results: [],
-            projectData: null
         }
         this.handleSearch = this.handleSearch.bind(this)
         this.evalMemberShip = this.evalMemberShip.bind(this)
+        this.handleAdd = this.handleAdd.bind(this)
     }
     componentDidMount() {
-        const projectRef = firebase.database().ref('Projects').child(this.state.projectId).on('value', data => {
-            this.setState({ projectData: data._value })
+
+    }
+    handleAdd(id) {
+        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true, fullName: this.state.results[id].fullName, profilepic: this.state.results[id].profilepic, uid: id }, () => {
+            Alert.alert('Success!', 'User has been added successfully!',
+                [
+                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                    { text: 'OK', onPress: () => { this.setState({ ids: this.state.ids, results: this.state.results }) } },
+                ],
+                { cancelable: true },
+            )
         })
     }
     evalMemberShip(id) {
-        const isProjectManager = this.state.projectData.projectmanager[id]
-        const isTeamLead = this.state.projectData.teamleads ? this.state.projectData.teamleads[id] : false
-        const isTeamMember = this.state.projectData.teammembers ? this.state.projectData.teammembers[id] : false
+        const isProjectManager = this.props.project.projectmanager[id]
+        const isTeamLead = this.props.project.teamleads ? this.props.project.teamleads[id] : false
+        const isTeamMember = this.props.project.teammembers ? this.props.project.teammembers[id] : false
         return (isProjectManager || isTeamLead || isTeamMember)
     }
     handleSearch() {
         this.setState({ ids: [], results: [] })
-        // console.log(this.state.searchString)
         const userRef = firebase.database().ref('users')
-        userRef.orderByChild('fullName').startAt(this.state.searchString, 'fullName').endAt(this.state.searchString + "\uf8ff").once('value', data => {
-            if (data._value)
-                this.setState({ ids: Object.keys(data._value), results: data._value })
+        const Words = this.state.searchString.split(' ')
+        Words.forEach(word => {
+            userRef.orderByChild('fullName').startAt(word, 'fullName').endAt(word + "\uf8ff").once('value', data => {
+                if (data._value)
+                    this.setState({
+                        ids: [...new Set([...Object.keys(data._value), ...this.state.ids])],
+                        results: { ...data._value, ...this.state.results }
+                    })
+            })
         })
     }
     render() {
@@ -83,26 +98,8 @@ export default class AddUser extends React.Component {
                                                 <Subtitle style={{ color: 'grey' }}>{this.state.results[id].adminaccess ? 'Admin' : 'Employee'}</Subtitle>
                                             </Body>
                                             <Right>
-                                                {this.evalMemberShip(id) ?
-                                                    <Icon name='check' type='AntDesign' style={{ color: 'blue' }} />
-                                                    :
-                                                    <Icon name="add" style={{ color: 'blue' }} onPress={() => {
-                                                        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true, fullName: this.state.results[id].fullName, profilepic: this.state.results[id].profilepic, uid: id }, () => {
-                                                            Alert.alert(
-                                                                'Success!',
-                                                                'User has been added successfully!',
-                                                                [
-                                                                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                                                    {
-                                                                        text: 'OK', onPress: () => {
-                                                                            this.setState({ ids: [], results: [] })
-                                                                        }
-                                                                    },
-                                                                ],
-                                                                { cancelable: true },
-                                                            )
-                                                        })
-                                                    }} />
+                                                {this.evalMemberShip(id) ? <Icon name='check' type='AntDesign' style={{ color: 'blue' }} />
+                                                    : <Icon name="add" style={{ color: 'blue' }} onPress={() => { this.handleAdd(id) }} />
                                                 }
                                             </Right>
                                         </ListItem>
@@ -116,5 +113,12 @@ export default class AddUser extends React.Component {
             </Container>
         )
     }
-
 }
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user,
+        project: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : null
+    }
+}
+const mapDispatchToProps = null
+export default connect(mapStateToProps, mapDispatchToProps)(AddUser)
