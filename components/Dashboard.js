@@ -51,14 +51,33 @@ class Dashboard extends React.Component {
         this.closeDrawer = closeDrawer.bind(this)
         this.openDrawer = openDrawer.bind(this)
         this.handleDeleteProject = handleDeleteProject.bind(this)
+        this.setupNotificationsListeners = this.setupNotificationsListeners.bind(this)
+    }
+    async setupNotificationsListeners() {
+        try {
+            const enabled = await firebase.messaging().hasPermission()
+            if (!enabled) {
+                await firebase.messaging().requestPermission()
+            }
+            const token = await firebase.messaging().getToken()
+            console.log(`Token -> ${token}`)
+            firebase.database().ref('DeviceIds').set({ [this.props.user.uid]: token })
+            this.notificationListener = firebase.notifications().onNotification((notification) => {
+                firebase.notifications().displayNotification(notification)
+            });
+        } catch (error) {
+            console.log(error.message)
+        }
     }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+        this.setupNotificationsListeners()
         this.preFetchFunc()
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
         this.disableAddandRemoveListeners()
+        this.notificationListener()
     }
     render() {
         const width = Dimensions.get("window").width

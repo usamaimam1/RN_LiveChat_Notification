@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>81956839989-6d9ckld7afjuh1nkfdujafqc4e3gbcpr.apps.googleusercontent.com</string>
+	<string>81956839989-qkbci5stg58c83eq14nskarpku7e9knl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.81956839989-6d9ckld7afjuh1nkfdujafqc4e3gbcpr</string>
+	<string>com.googleusercontent.apps.81956839989-qkbci5stg58c83eq14nskarpku7e9knl</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBxI1hE94RVngrfJcxw_UE7iN_ZglRz75k</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.invertase.RTChat</string>
+	<string>com.spl.rtchatwithpn</string>
 	<key>PROJECT_ID</key>
 	<string>rtchat-702f9</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:81956839989:ios:7805b7016d8d093c39877c</string>
+	<string>1:81956839989:ios:42a8391c93d2e1a439877c</string>
 	<key>DATABASE_URL</key>
 	<string>https://rtchat-702f9.firebaseio.com</string>
 </dict>

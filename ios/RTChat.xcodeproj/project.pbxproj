@@ -67,6 +67,7 @@
 		00E356EE1AD99517003FC87E /* RTChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RTChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RTChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTChatTests.m; sourceTree = "<group>"; };
+		046983D423EC416F00A4E037 /* RTChatRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatRelease.entitlements; path = RTChat/RTChatRelease.entitlements; sourceTree = "<group>"; };
 		0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RTChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RTChat/AppDelegate.h; sourceTree = "<group>"; };
@@ -172,6 +173,7 @@
 		13B07FAE1A68108700A75B9A /* RTChat */ = {
 			isa = PBXGroup;
 			children = (
+				046983D423EC416F00A4E037 /* RTChatRelease.entitlements */,
 				62AFDB93237990F9006985DA /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -373,10 +375,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 2PZNM5JA9H;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = N8DSUYZ38S;
+						DevelopmentTeam = 2PZNM5JA9H;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -687,6 +691,8 @@
 			baseConfigurationReference = 527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -719,7 +725,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = N8DSUYZ38S;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -746,9 +752,11 @@
 			baseConfigurationReference = 73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = N8DSUYZ38S;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -760,8 +768,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spl.rtchatwithpn;
 				PRODUCT_NAME = RTChat;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -771,8 +780,9 @@
 			baseConfigurationReference = 5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N8DSUYZ38S;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -784,7 +794,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spl.rtchatwithpn;
 				PRODUCT_NAME = RTChat;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
