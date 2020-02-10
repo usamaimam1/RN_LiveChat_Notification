@@ -33,6 +33,7 @@ export default class AddIssue extends React.Component {
                     if (!x) {
                         firebase.database().ref('Projects').child(this.state.projectId).child('issues').child(val).set('Added')
                         Toast.show({ text: 'Issue Added Successfully', buttonText: 'Ok' })
+                        this.props.navigation.goBack()
                     } else {
                         Toast.show({ text: JSON.stringify(x), buttonText: 'Ok' })
                     }

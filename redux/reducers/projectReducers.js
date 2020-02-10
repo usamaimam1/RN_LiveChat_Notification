@@ -1,7 +1,7 @@
 const initialState = {
     projectDetails: [],
     activeProjectId: null,
-    activeProjectData: null,
+    activeProjectData: [],
     relevantProjectIds: []
 }
 export const projectReducer = (state = initialState, action) => {
@@ -36,10 +36,12 @@ export const projectReducer = (state = initialState, action) => {
         case 'DELETE_PROJECT':
             const __projectDetails = state.projectDetails
             let filtered_projects = __projectDetails.filter(proj => proj.projectId !== action.payload.projectId)
+            let activeProjectId = state.activeProjectId === action.payload.projectId ? null : state.activeProjectId
+            let activeProjectData = state.activeProjectId === action.payload.projectId ? [] : state.activeProjectData
             return Object.assign({}, state, {
                 projectDetails: filtered_projects,
-                activeProjectId: state.activeProjectId === action.payload.projectId ? null : state.activeProjectId,
-                activeProjectData: state.activeProjectId === action.payload.projectId ? null : state.activeProjectData,
+                activeProjectId: activeProjectId,
+                activeProjectData: activeProjectData,
                 relevantProjectIds: state.relevantProjectIds.filter(_id => _id !== action.payload.projectId)
             })
         case 'SET_RELEVANT_PROJECTS':

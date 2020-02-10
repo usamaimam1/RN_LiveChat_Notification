@@ -4,8 +4,9 @@ import {
     List, ListItem, Left, Right, Body, Thumbnail, Title, Subtitle
 } from 'native-base'
 import firebase from 'react-native-firebase'
-import { ImageBackground, Dimensions, Alert } from 'react-native'
+import { ImageBackground, Dimensions, Alert, View } from 'react-native'
 import { connect } from 'react-redux'
+import { SetSearchString, ResetSearchString, SetActiveProjectId } from '../../redux/actions'
 class AddUser extends React.Component {
     static navigationOptions = {
         header: null
@@ -25,16 +26,18 @@ class AddUser extends React.Component {
     componentDidMount() {
 
     }
-    handleAdd(id) {
-        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(id).set({ isAllowed: true, fullName: this.state.results[id].fullName, profilepic: this.state.results[id].profilepic, uid: id }, () => {
-            Alert.alert('Success!', 'User has been added successfully!',
-                [
-                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                    { text: 'OK', onPress: () => { this.setState({ ids: this.state.ids, results: this.state.results }) } },
-                ],
-                { cancelable: true },
-            )
-        })
+    handleAdd(user) {
+        firebase.database().ref('Projects').child(this.state.projectId).child('teammembers').child(user.uid)
+            .set({ isAllowed: true, fullName: user.fullName, profilepic: user.profilepic, uid: user.uid }, () => {
+                Alert.alert('Success!', 'User has been added successfully!',
+                    [
+                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        { text: 'OK', onPress: () => { } },
+                    ],
+                    { cancelable: true },
+                )
+                this.props.setActiveProjectId(this.state.projectId)
+            })
     }
     evalMemberShip(id) {
         const isProjectManager = this.props.project.projectmanager[id]
@@ -42,83 +45,81 @@ class AddUser extends React.Component {
         const isTeamMember = this.props.project.teammembers ? this.props.project.teammembers[id] : false
         return (isProjectManager || isTeamLead || isTeamMember)
     }
-    handleSearch() {
-        this.setState({ ids: [], results: [] })
-        const userRef = firebase.database().ref('users')
-        const Words = this.state.searchString.split(' ')
-        Words.forEach(word => {
-            userRef.orderByChild('fullName').startAt(word, 'fullName').endAt(word + "\uf8ff").once('value', data => {
-                if (data._value)
-                    this.setState({
-                        ids: [...new Set([...Object.keys(data._value), ...this.state.ids])],
-                        results: { ...data._value, ...this.state.results }
-                    })
-            })
-        })
+    handleSearch(query) {
+        this.setState({ searchString: query })
+        if (query.length > 2) {
+            this.props.setSearchString(query)
+        }
     }
     render() {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
+        console.log(this.state.searchString.length)
         return (
             <Container>
                 <ImageBackground source={require('../../assets/splash-bg.jpg')}
                     style={{ width: width, height: height }}>
                     <Header searchBar rounded transparent>
-                        <Left>
-                            <Button transparent onPress={() => {
+                        <Left style={{ flex: 1, flexDirection: 'row' }}>
+                            <Button transparent style={{ flex: 1 }} onPress={() => {
                                 this.props.navigation.navigate('ProjectScreen')
                             }}>
                                 <Icon name="arrow-back" style={{ color: 'blue' }} />
                             </Button>
-                        </Left>
-                        <Body>
-                            <Item>
+                            <Item style={{ flex: 6 }}>
                                 <Icon name="ios-search" />
-                                <Input placeholder="Search" value={this.state.searchString} onChangeText={newText => this.setState({ searchString: newText })} />
+                                <Input placeholder="Search" value={this.state.searchString} onChangeText={newText => this.handleSearch(newText)} />
                                 <Icon name="ios-people" />
                             </Item>
-                        </Body>
-                        <Right>
-                            <Button transparent onPress={() => { this.handleSearch() }}>
-                                <Text style={{ color: 'blue' }}>Search</Text>
-                            </Button>
-                        </Right>
+                        </Left>
                     </Header>
                     <Content>
-                        <List>
-                            {
-                                this.state.ids.map(id => {
-                                    return (
-                                        <ListItem avatar key={id}>
-                                            <Left>
-                                                <Thumbnail source={{ uri: this.state.results[id].profilepic }} style={{ width: 40, height: 40 }} />
-                                            </Left>
-                                            <Body>
-                                                <Title style={{ color: 'black' }}>{this.state.results[id].fullName}</Title>
-                                                <Subtitle style={{ color: 'grey' }}>{this.state.results[id].adminaccess ? 'Admin' : 'Employee'}</Subtitle>
-                                            </Body>
-                                            <Right>
-                                                {this.evalMemberShip(id) ? <Icon name='check' type='AntDesign' style={{ color: 'blue' }} />
-                                                    : <Icon name="add" style={{ color: 'blue' }} onPress={() => { this.handleAdd(id) }} />
-                                                }
-                                            </Right>
-                                        </ListItem>
-                                    )
-                                })
-                            }
-                        </List>
+                        {this.props.searchResults.length !== 0 ?
+                            <List>
+                                {
+                                    this.props.searchResults.map(result => {
+                                        return (
+                                            <ListItem avatar key={result.uid}>
+                                                <Left>
+                                                    <Thumbnail source={{ uri: result.profilepic }} style={{ width: 40, height: 40 }} />
+                                                </Left>
+                                                <Body>
+                                                    <Title style={{ color: 'black' }}>{result.fullName}</Title>
+                                                    <Subtitle style={{ color: 'grey' }}>{result.adminaccess ? 'Admin' : 'Employee'}</Subtitle>
+                                                </Body>
+                                                <Right>
+                                                    {this.evalMemberShip(result.uid) ? <Icon name='check' type='AntDesign' style={{ color: 'blue' }} />
+                                                        : <Icon name="add" style={{ color: 'blue' }} onPress={() => { this.handleAdd(result) }} />
+                                                    }
+                                                </Right>
+                                            </ListItem>
+                                        )
+                                    })
+                                }
+                            </List> :
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ textAlign: 'center', margin: 20 }}>{this.state.searchString.length == 0 ? null : "No Records Found"}</Text>
+                            </View>
+                        }
                     </Content>
                     <Footer />
                 </ImageBackground>
-            </Container>
+            </Container >
         )
     }
 }
 const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
-        project: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : null
+        project: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : null,
+        searchResults: state.searchReducer.searchResults
     }
 }
-const mapDispatchToProps = null
+const mapDispatchToProps = dispatch => {
+    return {
+        setSearchString: function (query) { dispatch(SetSearchString(query)) },
+        resetSearchString: function () { dispatch(ResetSearchString()) },
+        setActiveProjectId: function (id) { dispatch(SetActiveProjectId(id)) }
+    }
+}
 export default connect(mapStateToProps, mapDispatchToProps)(AddUser)

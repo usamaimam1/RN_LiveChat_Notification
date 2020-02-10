@@ -19,7 +19,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import { filterRelevantProjects, enableAddandRemoveListeners, disableAddandRemoveListeners, preFetchFunc, handleSignOut, handleChangePassword, formatDate, handleBackPress, closeDrawer, openDrawer, handleDeleteProject } from './Dashboard.functions'
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject } from '../redux/actions/index'
+import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: { skipBackup: true, path: 'images' }
@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
             }
             const token = await firebase.messaging().getToken()
             console.log(`Token -> ${token}`)
-            firebase.database().ref('DeviceIds').set({ [this.props.user.uid]: token })
+            firebase.database().ref('DeviceIds').child(this.props.user.uid).set({ token: token })
             this.notificationListener = firebase.notifications().onNotification((notification) => {
                 firebase.notifications().displayNotification(notification)
             });
@@ -90,7 +90,8 @@ class Dashboard extends React.Component {
                     _userData={this.props.user}
                     _navigation={this.props.navigation}
                     _onLogOut={this.handleSignOut}
-                    _onChangePassword={this.handleChangePassword} />}
+                    _onChangePassword={this.handleChangePassword}
+                    _onClose={this.closeDrawer} />}
                 onClose={() => { this.closeDrawer() }}>
                 <Root>
                     <Container>
@@ -194,7 +195,8 @@ const mapDispatchToProps = dispatch => {
         addIssues: function (issues) { dispatch(AddIssues(issues)) },
         setIssuesCount: function (issuesCount) { dispatch(SetIssuesCount(issuesCount)) },
         setRelevantProjectIds: function (relevantProjectIds) { dispatch(SetRelevantProjectIds(relevantProjectIds)) },
-        addRelevantProject: function (projectId) { dispatch(AddRelevantProject(projectId)) }
+        addRelevantProject: function (projectId) { dispatch(AddRelevantProject(projectId)) },
+        addUsers: function (users) { dispatch(SetUsers(users)) }
     }
 }
 const mapStateToProps = state => {

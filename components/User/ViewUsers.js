@@ -8,6 +8,7 @@ import firebase from 'react-native-firebase'
 import OptionsMenu from 'react-native-options-menu'
 import { makeTeamLead, removefromProject, Demote } from './ViewUsers.functions'
 import { connect } from 'react-redux'
+import { SetProject, SetActiveProjectId } from '../../redux/actions'
 class ViewUsers extends React.Component {
     static navigationOptions = {
         header: null
@@ -45,14 +46,14 @@ class ViewUsers extends React.Component {
                     <Separator >
                         <Text>Project Managers</Text>
                     </Separator>
-                    {this.state.ProjectData ? Object.keys(this.state.ProjectData.projectmanager).map(manager => {
+                    {this.props.ProjectData ? Object.keys(this.props.ProjectData.projectmanager).map(manager => {
                         return (
                             <ListItem thumbnail key={manager}>
                                 <Left>
-                                    <Thumbnail source={{ uri: this.state.ProjectData.projectmanager[manager].profilepic }} style={{ width: 40, height: 40 }} />
+                                    <Thumbnail source={{ uri: this.props.ProjectData.projectmanager[manager].profilepic }} style={{ width: 40, height: 40 }} />
                                 </Left>
                                 <Body style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Title style={{ color: 'black' }}>{this.state.ProjectData.projectmanager[manager].fullName}</Title>
+                                    <Title style={{ color: 'black' }}>{this.props.ProjectData.projectmanager[manager].fullName}</Title>
                                     <Subtitle style={{ color: 'grey' }}>Project Manager</Subtitle>
                                 </Body>
                                 <Right>
@@ -63,19 +64,19 @@ class ViewUsers extends React.Component {
                     <Separator>
                         <Text>Team Leads</Text>
                     </Separator>
-                    {this.state.ProjectData ? this.state.ProjectData.teamleads ? Object.keys(this.state.ProjectData.teamleads).map(teamlead => {
+                    {this.props.ProjectData ? this.props.ProjectData.teamleads ? Object.keys(this.props.ProjectData.teamleads).map(teamlead => {
                         return (
                             <ListItem thumbnail key={teamlead}>
                                 <Left>
-                                    <Thumbnail source={{ uri: this.state.ProjectData.teamleads[teamlead].profilepic }} style={{ width: 40, height: 40 }} />
+                                    <Thumbnail source={{ uri: this.props.ProjectData.teamleads[teamlead].profilepic }} style={{ width: 40, height: 40 }} />
                                 </Left>
                                 <Body>
-                                    <Title style={{ color: 'black' }}>{this.state.ProjectData.teamleads[teamlead].fullName}</Title>
+                                    <Title style={{ color: 'black' }}>{this.props.ProjectData.teamleads[teamlead].fullName}</Title>
                                     <Subtitle style={{ color: 'grey' }}>Team Lead</Subtitle>
                                 </Body>
                                 <Right>
                                     {
-                                        this.state.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
+                                        this.props.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
                                             Platform.OS === 'ios' ?
                                                 <OptionsMenu
                                                     customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
@@ -95,20 +96,20 @@ class ViewUsers extends React.Component {
                     <Separator>
                         <Text>Team Members</Text>
                     </Separator>
-                    {this.state.ProjectData ?
-                        this.state.ProjectData.teammembers ? Object.keys(this.state.ProjectData.teammembers).map(teammember => {
+                    {this.props.ProjectData ?
+                        this.props.ProjectData.teammembers ? Object.keys(this.props.ProjectData.teammembers).map(teammember => {
                             return (
                                 <ListItem thumbnail key={teammember}>
                                     <Left>
-                                        <Thumbnail source={{ uri: this.state.ProjectData.teammembers[teammember].profilepic }} style={{ width: 40, height: 40 }} />
+                                        <Thumbnail source={{ uri: this.props.ProjectData.teammembers[teammember].profilepic }} style={{ width: 40, height: 40 }} />
                                     </Left>
                                     <Body>
-                                        <Title style={{ color: 'black' }}>{this.state.ProjectData.teammembers[teammember].fullName}</Title>
+                                        <Title style={{ color: 'black' }}>{this.props.ProjectData.teammembers[teammember].fullName}</Title>
                                         <Subtitle style={{ color: 'grey' }}>Team Member</Subtitle>
                                     </Body>
                                     <Right>
                                         {
-                                            this.state.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
+                                            this.props.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
                                                 Platform.OS === 'ios' ?
                                                     <OptionsMenu
                                                         customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
@@ -136,5 +137,10 @@ const mapStateToProps = state => {
         ProjectData: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : {}
     }
 }
-const mapDispatchToProps = null
+const mapDispatchToProps = dispatch => {
+    return {
+        setProject: function (id, data) { dispatch(SetProject(id, data)) },
+        setActiveProjectId: function (id) { dispatch(SetActiveProjectId(id)) }
+    }
+}
 export default connect(mapStateToProps, mapDispatchToProps)(ViewUsers)

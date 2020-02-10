@@ -5,12 +5,19 @@ import {
     FooterTab, Card, CardItem
 } from 'native-base'
 import { connect } from 'react-redux'
+import { SetActiveProjectId, SetActiveIssue } from '../../redux/actions'
 class IssuesIndex extends React.Component {
     static navigationOptions = {
         header: null
     }
     constructor(props) {
         super(props)
+        this.handleNavigation = this.handleNavigation.bind(this)
+    }
+    handleNavigation(_project, _issue) {
+        this.props.setActiveProjectData(_project)
+        this.props.setActiveIssueId(_issue)
+        this.props.navigation.navigate('IssueScreen', { projectId: _project, IssueId: _issue })
     }
     componentDidMount() {
 
@@ -49,7 +56,7 @@ class IssuesIndex extends React.Component {
                                             <Right><Text>{this.props.projectData[_issue.projectId].projectTitle}</Text></Right>
                                         </Body>
                                     </CardItem>
-                                    <CardItem footer button style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: _issue.projectId, IssueId: _issue.issueId }) }}>
+                                    <CardItem footer button style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }} onPress={() => { this.handleNavigation(_issue.projectId, _issue.issueId) }}>
                                         <Text style={{ color: 'blue', fontStyle: 'italic' }}>View More</Text>
                                     </CardItem>
                                 </Card>
@@ -91,4 +98,10 @@ const mapStateToProps = state => {
         projectData: TitleToId
     }
 }
-export default connect(mapStateToProps, null)(IssuesIndex)
+const mapDispatchToProps = dispatch => {
+    return {
+        setActiveProjectData: function (projectId) { dispatch(SetActiveProjectId(projectId)) },
+        setActiveIssueId: function (issueId) { dispatch(SetActiveIssue(issueId)) }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(IssuesIndex)

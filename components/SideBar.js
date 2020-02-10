@@ -95,6 +95,9 @@ export default class SideBar extends React.Component {
                             <Text>Log Out</Text>
                         </Body>
                     </ListItem>
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon name="arrow-left" type="FontAwesome" size={100} style={{ marginTop: 20 }} onPress={() => { this.props._onClose() }} />
+                    </View>
                 </Content>
             </Container>
         )

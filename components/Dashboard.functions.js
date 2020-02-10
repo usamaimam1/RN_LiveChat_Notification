@@ -54,12 +54,20 @@ export const enableAddandRemoveListeners = function () {
             this.props.addIssues(Object.keys(data._value).map(_key => data._value[_key]))
         }
     })
+    this._usersListener = firebase.database().ref('users')
+    this._usersListener.on('value', data => {
+        if (data._value) {
+            console.log(data._value)
+            this.props.addUsers(Object.keys(data._value).map(_key => data._value[_key]))
+        }
+    })
 }
 export const disableAddandRemoveListeners = function () {
     this._userRef.off('value')
     this._projectchildaddedref.off('child_added')
     this._projectchildremoveref.off('child_removed')
     this._issuesAddandRemove.off('value')
+    this._usersListener.off('value')
 }
 export const handleBackPress = function () {
     Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })

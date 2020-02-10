@@ -114,3 +114,24 @@ export const SetActiveIssue = function (activeIssueId) {
         payload: { activeIssueId: activeIssueId }
     }
 }
+
+export const SetUsers = function (users) {
+    return {
+        type: actions.SET_USERS,
+        payload: { users: users }
+    }
+}
+
+export const SetSearchString = function (searchString) {
+    return {
+        type: actions.SET_SEARCH_STRING,
+        payload: { searchString: searchString }
+    }
+}
+
+export const ResetSearchString = function () {
+    return {
+        type: actions.RESET_SEARCH_STRING,
+        payload: null
+    }
+}

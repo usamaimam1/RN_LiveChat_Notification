@@ -72,9 +72,11 @@ export default class AddProject extends React.Component {
       const projectRef = firebase.database().ref('Projects').child(val);
       projectRef.set(toUpload);
       firebase.storage().ref(`projectThumbnails/${val}`).putFile(this.state.projectThumbnail.uri).then(storageTask => {
-        projectRef.child('projectThumbnail').set(storageTask.downloadURL);
-        Toast.show({ text: 'Project Added Successfully', duration: 2000, buttonText: 'Ok' });
-        this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
+        projectRef.child('projectThumbnail').set(storageTask.downloadURL, () => {
+          Toast.show({ text: 'Project Added Successfully', duration: 2000, buttonText: 'Ok' });
+          this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
+          this.props.navigation.goBack()
+        });
       }).catch(err => {
         Toast.show({ text: err.message, duration: 2000, buttonText: 'Ok' });
         this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
