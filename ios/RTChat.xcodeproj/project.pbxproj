@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
+		04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -23,7 +24,6 @@
 		3B256739E3C6C2F16E4CC225 /* libPods-RTChat-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21AF910D002494F62737A55A /* libPods-RTChat-tvOS.a */; };
 		43FBE6600C1F4C58A8435704 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4A315D4321F48CAACF22DE7 /* Foundation.ttf */; };
 		5FDFE937C25B425C9392FD35 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B512A9AD0F0748DAB7FC9E51 /* EvilIcons.ttf */; };
-		629601DA237EA9DF00C4C65B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62AFDB93237990F9006985DA /* GoogleService-Info.plist */; };
 		6C155DECD18C4BDEA5A39D52 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5158FE4FA6A46458FACBC31 /* Zocial.ttf */; };
 		6DDC8D1CC11C4B9FA8697760 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BF3C12D580946FC86DCE82A /* SimpleLineIcons.ttf */; };
 		772E2C0925984D5CA1033CD8 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D83DF709E22A45E8A366663F /* AntDesign.ttf */; };
@@ -68,6 +68,8 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RTChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTChatTests.m; sourceTree = "<group>"; };
 		046983D423EC416F00A4E037 /* RTChatRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatRelease.entitlements; path = RTChat/RTChatRelease.entitlements; sourceTree = "<group>"; };
+		04750E7623F2B6BE00AF63C2 /* RTChatDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatDebug.entitlements; path = RTChat/RTChatDebug.entitlements; sourceTree = "<group>"; };
+		04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RTChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RTChat/AppDelegate.h; sourceTree = "<group>"; };
@@ -92,7 +94,6 @@
 		479F281B499444DBA0BFE194 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat.release.xcconfig"; path = "Target Support Files/Pods-RTChat/Pods-RTChat.release.xcconfig"; sourceTree = "<group>"; };
 		527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChatTests.debug.xcconfig"; path = "Target Support Files/Pods-RTChatTests/Pods-RTChatTests.debug.xcconfig"; sourceTree = "<group>"; };
-		62AFDB93237990F9006985DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "RTChat/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		62D9594020CF410DA9A0E053 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		65275F3830C348A8B49FF460 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		70FF730174694D2C8F909A9A /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -173,8 +174,9 @@
 		13B07FAE1A68108700A75B9A /* RTChat */ = {
 			isa = PBXGroup;
 			children = (
+				04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */,
+				04750E7623F2B6BE00AF63C2 /* RTChatDebug.entitlements */,
 				046983D423EC416F00A4E037 /* RTChatRelease.entitlements */,
-				62AFDB93237990F9006985DA /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -427,7 +429,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				629601DA237EA9DF00C4C65B /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				772E2C0925984D5CA1033CD8 /* AntDesign.ttf in Resources */,
@@ -447,6 +448,7 @@
 				C0E9D953B76744CEACF693CD /* Roboto_medium.ttf in Resources */,
 				C5795D469076457A93195981 /* Roboto.ttf in Resources */,
 				D578EF809AC04EDFBD06E173 /* rubicon-icon-font.ttf in Resources */,
+				04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */,
 				6DDC8D1CC11C4B9FA8697760 /* SimpleLineIcons.ttf in Resources */,
 				6C155DECD18C4BDEA5A39D52 /* Zocial.ttf in Resources */,
 			);
@@ -752,6 +754,7 @@
 			baseConfigurationReference = 73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;

@@ -34,6 +34,7 @@ class IssueScreen extends React.Component {
     this.isCloseToTop = isCloseToTop.bind(this)
     this.handleDelete = handleDelete.bind(this)
     this.fetchUserName = fetchUserName.bind(this)
+    this.handleNotifications = this.handleNotifications.bind(this)
     this.state = {
       issueData: null,
       userData: null,
@@ -51,7 +52,46 @@ class IssueScreen extends React.Component {
     };
     this.preFetchFunc()
   }
-  componentDidMount() { }
+  async handleNotifications() {
+    const FIREBASE_API_KEY = "AIzaSyCZ2V_k6Q6w4PShd1Hh_gh2UVjJCJVPs0s";
+    const ds = await firebase.database().ref("DeviceIds").once('value')
+    console.log(ds)
+    let _regIds = []
+    Object.keys(ds._value).forEach(_key => {
+      _regIds = [..._regIds, ...ds._value[_key]]
+    })
+    console.log(_regIds)
+    const message = {
+      registration_ids: _regIds,
+      notification: {
+        title: "india vs south africa test",
+        body: "IND chose to bat",
+        "vibrate": 1,
+        "sound": 1,
+        "show_in_foreground": true,
+        "priority": "high",
+        "content_available": true,
+      },
+      data: {
+        title: "india vs south africa test",
+        body: "IND chose to bat",
+        score: 50,
+        wicket: 1
+      }
+    }
+
+    let headers = new Headers({
+      "Content-Type": "application/json",
+      "Authorization": "key=" + FIREBASE_API_KEY
+    });
+
+    let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
+    response = await response.json();
+    console.log(response);
+  }
+  componentDidMount() {
+    this.handleNotifications()
+  }
   componentDidUpdate() {
 
   }

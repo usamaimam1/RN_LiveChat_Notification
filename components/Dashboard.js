@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler
+    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler, AsyncStorage
 } from 'react-native'
 import firebase from 'react-native-firebase'
 import {
@@ -51,33 +51,38 @@ class Dashboard extends React.Component {
         this.closeDrawer = closeDrawer.bind(this)
         this.openDrawer = openDrawer.bind(this)
         this.handleDeleteProject = handleDeleteProject.bind(this)
-        this.setupNotificationsListeners = this.setupNotificationsListeners.bind(this)
+        // this.setupNotificationsListeners = this.setupNotificationsListeners.bind(this)
+        this.setAndResetDeviceIds = this.setAndResetDeviceIds.bind(this)
     }
-    async setupNotificationsListeners() {
+    async setAndResetDeviceIds() {
         try {
-            const enabled = await firebase.messaging().hasPermission()
-            if (!enabled) {
-                await firebase.messaging().requestPermission()
+            const snapshot = await firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).once('value')
+            let fcmToken = await AsyncStorage.getItem('fcmToken');
+            console.log(fcmToken)
+            console.log(snapshot)
+            if (snapshot._value) {
+                if (snapshot._value.includes(fcmToken)) {
+                    console.log('Token Already Included')
+                } else {
+                    let _vals = [...snapshot._value, fcmToken]
+                    firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).set(_vals)
+                }
+            } else {
+                firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).set([fcmToken])
             }
-            const token = await firebase.messaging().getToken()
-            console.log(`Token -> ${token}`)
-            firebase.database().ref('DeviceIds').child(this.props.user.uid).set({ token: token })
-            this.notificationListener = firebase.notifications().onNotification((notification) => {
-                firebase.notifications().displayNotification(notification)
-            });
-        } catch (error) {
-            console.log(error.message)
+        } catch (err) {
+            console.log(err)
         }
     }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
-        this.setupNotificationsListeners()
         this.preFetchFunc()
+        this.setAndResetDeviceIds()
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
         this.disableAddandRemoveListeners()
-        this.notificationListener()
+        // this.notificationListener()
     }
     render() {
         const width = Dimensions.get("window").width
@@ -200,7 +205,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 const mapStateToProps = state => {
-    console.log(state)
+    // console.log(state)
     return {
         user: state.userReducer.user,
         projects: state.projectReducer.projectDetails,
