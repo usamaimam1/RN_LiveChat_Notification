@@ -58,8 +58,6 @@ class Dashboard extends React.Component {
         try {
             const snapshot = await firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).once('value')
             let fcmToken = await AsyncStorage.getItem('fcmToken');
-            console.log(fcmToken)
-            console.log(snapshot)
             if (snapshot._value) {
                 if (snapshot._value.includes(fcmToken)) {
                     console.log('Token Already Included')

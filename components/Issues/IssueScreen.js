@@ -52,20 +52,29 @@ class IssueScreen extends React.Component {
     };
     this.preFetchFunc()
   }
-  async handleNotifications() {
+  async handleNotifications(messageBody) {
     const FIREBASE_API_KEY = "AIzaSyCZ2V_k6Q6w4PShd1Hh_gh2UVjJCJVPs0s";
     const ds = await firebase.database().ref("DeviceIds").once('value')
     console.log(ds)
     let _regIds = []
-    Object.keys(ds._value).forEach(_key => {
-      _regIds = [..._regIds, ...ds._value[_key]]
+    let projectmangersIds = this.props.project.projectmanager ? Object.keys(this.props.project.projectmanager) : []
+    let teamleadIds = this.props.project.teamleads ? Object.keys(this.props.project.teamleads) : []
+    let teammembersIds = this.props.project.teammembers ? Object.keys(this.props.project.teammembers) : []
+    let TotalIds = [...projectmangersIds, ...teamleadIds, ...teammembersIds]
+    console.log(TotalIds)
+    TotalIds.forEach(_Id => {
+      if (_Id !== firebase.auth().currentUser.uid) {
+        const Ids = ds._value[_Id]
+        if (Ids)
+          _regIds = [..._regIds, ...ds._value[_Id]]
+      }
     })
     console.log(_regIds)
     const message = {
       registration_ids: _regIds,
       notification: {
-        title: "india vs south africa test",
-        body: "IND chose to bat",
+        title: `${this.props.project.projectTitle} -> ${this.props.issue.issueTitle}`,
+        body: `${this.props.user.fullName} : ${messageBody}`,
         "vibrate": 1,
         "sound": 1,
         "show_in_foreground": true,
@@ -73,10 +82,7 @@ class IssueScreen extends React.Component {
         "content_available": true,
       },
       data: {
-        title: "india vs south africa test",
-        body: "IND chose to bat",
-        score: 50,
-        wicket: 1
+
       }
     }
 
@@ -90,7 +96,7 @@ class IssueScreen extends React.Component {
     console.log(response);
   }
   componentDidMount() {
-    this.handleNotifications()
+    // this.handleNotifications("Hello")
   }
   componentDidUpdate() {
 

@@ -128,6 +128,9 @@ export const handleSendMessage = function () {
         };
         this.setState({ messageBody: null });
         firebase.database().ref('Messages').child(this.state.projectId).child(this.state.IssueId).push(message, err => {
+            if (!err) {
+                this.handleNotifications(message.messageBody)
+            }
             console.log(err);
         })
     } else {
