@@ -38,6 +38,12 @@ export const issuesReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 activeIssueId: action.payload.activeIssueId
             })
+        case 'RESET_ISSUES':
+            return Object.assign({}, state, {
+                issueDetails: [],
+                issuesCount: 0,
+                activeIssueId: null
+            })
         default:
             return state
     }

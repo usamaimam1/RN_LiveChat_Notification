@@ -111,7 +111,7 @@ export default class ChangePassword extends React.Component {
         const contentToRender = (<ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
             <View style={{ flex: 1 }}>
                 <View style={styles.logo} >
-                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
+                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
 
                     </Image>
                 </View>
@@ -140,7 +140,7 @@ export default class ChangePassword extends React.Component {
                 {
                     this.state.showActivity ? (
                         <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                          <Spinner color="red" />
+                            <Spinner color="red" />
                         </Container>) :
                         Platform.OS === "ios" ?
                             (<SafeAreaView>
@@ -159,6 +159,8 @@ export default class ChangePassword extends React.Component {
 const styles = StyleSheet.create({
     logo: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent:'center'
     },
     background: {
         width: Dimensions.get("window").width,

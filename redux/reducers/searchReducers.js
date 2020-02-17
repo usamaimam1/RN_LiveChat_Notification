@@ -20,6 +20,10 @@ export const searchReducer = (state = initialState, action) => {
                 searchString: null,
                 searchResults: []
             })
+        case 'RESET_USERS':
+            return Object.assign({}, state, {
+                users: []
+            })
         default:
             return state
     }

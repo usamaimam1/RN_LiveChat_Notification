@@ -56,6 +56,13 @@ export const projectReducer = (state = initialState, action) => {
             })
         case 'PRINT_PROJECTS':
             return state
+        case 'RESET_PROJECTS':
+            return Object.assign({}, state, {
+                projectDetails: [],
+                activeProjectId: null,
+                activeProjectData: [],
+                relevantProjectIds: []
+            })
         default:
             return state
     }

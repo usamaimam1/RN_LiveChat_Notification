@@ -19,7 +19,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import { filterRelevantProjects, enableAddandRemoveListeners, disableAddandRemoveListeners, preFetchFunc, handleSignOut, handleChangePassword, formatDate, handleBackPress, closeDrawer, openDrawer, handleDeleteProject } from './Dashboard.functions'
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers } from '../redux/actions/index'
+import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: { skipBackup: true, path: 'images' }
@@ -199,7 +199,12 @@ const mapDispatchToProps = dispatch => {
         setIssuesCount: function (issuesCount) { dispatch(SetIssuesCount(issuesCount)) },
         setRelevantProjectIds: function (relevantProjectIds) { dispatch(SetRelevantProjectIds(relevantProjectIds)) },
         addRelevantProject: function (projectId) { dispatch(AddRelevantProject(projectId)) },
-        addUsers: function (users) { dispatch(SetUsers(users)) }
+        addUsers: function (users) { dispatch(SetUsers(users)) },
+        resetUser: function () { dispatch(ResetUser()) },
+        resetProjects: function () { dispatch(ResetProjects()) },
+        resetIssues: function () { dispatch(ResetIssues()) },
+        resetUsers: function () { dispatch(ResetUsers()) },
+        resetSearchString: function () { dispatch(ResetSearchString()) }
     }
 }
 const mapStateToProps = state => {

@@ -154,7 +154,7 @@ export default class SignUp extends React.Component {
                 <ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
                     <View style={{ flex: 1 }}>
                         <View style={styles.logo} >
-                            <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
+                            <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
                         </View>
                         <View style={styles.form} >
                             <View style={styles.inputContainer}>
@@ -170,7 +170,7 @@ export default class SignUp extends React.Component {
                                 }}> </Button>
                             </View>
                             <View style={styles.SignupText}>
-                                <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
+                                <Text style={{ flex: 1, textAlign: 'center' }}> Already have an account? </Text>
                                 <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
                             </View>
                             {
@@ -206,6 +206,8 @@ export default class SignUp extends React.Component {
 const styles = StyleSheet.create({
     logo: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     background: {
         width: Dimensions.get("window").width,
@@ -234,6 +236,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginTop: 10,
-        marginLeft: 30
+        justifyContent: 'center',
+        marginLeft: 50
     }
 });

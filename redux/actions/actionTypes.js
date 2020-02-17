@@ -1,6 +1,7 @@
 export const ADD_USER = 'ADD_USER'
 export const SET_USER = 'SET_USER'
 export const PRINT_USER = 'PRINT_USER'
+export const RESET_USER = 'RESET_USER'
 
 export const ADD_PROJECT = 'ADD_PROJECT'
 export const SET_PROJECT = 'SET_PROJECT'
@@ -10,6 +11,7 @@ export const PRINT_PROJECTS = 'PRINT_PROJECTS'
 export const SET_ACTIVE_PROJECT_ID = 'SET_ACTIVE_PROJECT_ID'
 export const SET_RELEVANT_PROJECTS = 'SET_RELEVANT_PROJECTS'
 export const ADD_RELEVANT_PROJECT = 'ADD_RELEVANT_PROJECT'
+export const RESET_PROJECTS = "RESET_PROJECTS"
 
 export const ADD_ISSUES = 'ADD_ISSUES'
 export const ADD_ISSUE = 'ADD_ISSUE'
@@ -17,7 +19,9 @@ export const SET_ISSUE = 'SET_ISSUE'
 export const DELETE_ISSUE = 'DELETE_ISSUE'
 export const SET_ISSUES_COUNT = 'SET_ISSUES_COUNT'
 export const SET_ACTIVE_ISSUE = 'SET_ACTIVE_ISSUE'
+export const RESET_ISSUES = 'RESET_ISSUES'
 
 export const SET_USERS = 'SET_USERS'
+export const RESET_USERS = "RESET_USERS"
 export const SET_SEARCH_STRING = 'SET_SEARCH_STRING'
 export const RESET_SEARCH_STRING = 'RESET_SEARCH_STRING'

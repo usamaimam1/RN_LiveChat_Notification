@@ -108,7 +108,7 @@ export default class Login extends React.Component {
             source={require('../../assets/splash-bg.jpg')}>
             <View style={{ flex: 1 }}>
                 <View style={styles.logo} >
-                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" >
+                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
 
                     </Image>
                 </View>
@@ -131,7 +131,7 @@ export default class Login extends React.Component {
                         <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('SignUp') }}> Sign Up? </Text>
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, marginBottom: 10 }}>
-                        <Text style={{ flex: 1, textAlign: 'center', color: 'red' }} onPress={() => {
+                        <Text style={{ flex: 1, textAlign: 'center', color: 'red', marginTop: 15 }} onPress={() => {
                             navigate('ForgotPassword')
                         }}> Forgot Password? </Text>
 
@@ -170,7 +170,9 @@ export default class Login extends React.Component {
 
 const styles = StyleSheet.create({
     logo: {
-        flex: 4,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     background: {
         width: Dimensions.get("window").width,
@@ -184,7 +186,6 @@ const styles = StyleSheet.create({
 
     },
     signinButton: {
-        flex: 1,
         marginTop: 10,
         marginLeft: 50,
         marginRight: 50
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgrey'
     },
     SignupText: {
-        flex: 1,
         flexDirection: 'row',
         marginTop: 10,
         marginLeft: 30

@@ -19,6 +19,12 @@ export const PrintUser = function () {
     }
 }
 
+export const ResetUser = function () {
+    return {
+        type: actions.RESET_USER,
+    }
+}
+
 export const AddProject = function (project) {
     return {
         type: actions.ADD_PROJECT,
@@ -72,6 +78,11 @@ export const AddRelevantProject = function (projectId) {
         payload: { projectId: projectId }
     }
 }
+export const ResetProjects = function () {
+    return {
+        type: actions.RESET_PROJECTS,
+    }
+}
 
 export const AddIssues = function (issues) {
     return {
@@ -115,6 +126,12 @@ export const SetActiveIssue = function (activeIssueId) {
     }
 }
 
+export const ResetIssues = function () {
+    return {
+        type: actions.RESET_ISSUES,
+    }
+}
+
 export const SetUsers = function (users) {
     return {
         type: actions.SET_USERS,
@@ -122,6 +139,11 @@ export const SetUsers = function (users) {
     }
 }
 
+export const ResetUsers = function () {
+    return {
+        type: actions.RESET_USERS,
+    }
+}
 export const SetSearchString = function (searchString) {
     return {
         type: actions.SET_SEARCH_STRING,

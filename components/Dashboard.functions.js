@@ -88,9 +88,14 @@ export const formatDate = function (date) {
 }
 export const handleSignOut = function () {
     firebase.auth().signOut().then(() => {
+        this.props.resetUser()
+        this.props.resetProjects()
+        this.props.resetIssues()
+        this.props.resetSearchString()
+        this.props.resetUsers()
         this.props.navigation.navigate('Home')
     }).catch((err) => {
-        ToastAndroid.show(err.message, ToastAndroid.LONG)
+        Toast.show({ text: err.message, buttonText: "OK" })
     })
 }
 export const handleChangePassword = function () {
