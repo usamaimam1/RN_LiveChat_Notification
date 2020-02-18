@@ -45,7 +45,8 @@ export const enableAddandRemoveListeners = function () {
         }
     })
     this._projectchildaddedref = firebase.database().ref('Projects')
-    this._projectchildaddedref.on('child_added', data => {
+    this._projectchildaddedref.on('child_changed', data => {
+        console.log(data._value)
         if (data.val()) {
             const isIncluded = this.props.projects.filter(project => project.projectId === data.val().projectId)
             const isRelevant = isIncluded.length === 0 ? this.filterRelevantProjects(data._value) : false

@@ -87,8 +87,8 @@ class Dashboard extends React.Component {
     async setAndResetDeviceIds() {
         try {
             const snapshot = await firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).once('value')
-            let fcmToken = await AsyncStorage.getItem('fcmToken');
-            if (snapshot._value) {
+            let fcmToken = await firebase.messaging().getToken();
+            if (snapshot._value && fcmToken) {
                 if (snapshot._value.includes(fcmToken)) {
                     console.log('Token Already Included')
                 } else {
