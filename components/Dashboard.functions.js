@@ -7,6 +7,7 @@ export const filterRelevantProjects = function (project) {
 }
 
 export const preFetchFunc = function () {
+
     const projRef = firebase.database().ref('Projects')
     projRef.once('value').then(data => {
         if (data._value) {
@@ -14,15 +15,20 @@ export const preFetchFunc = function () {
             this.props.addprojects(ProjectVals)
             this.props.setRelevantProjectIds(ProjectVals.map(_project => _project.projectId))
             const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
-            this.props.setIssuesCount(issueCount)
+            this.props.setIssuesCount(0)
         }
+        this.enableAddandRemoveListeners()
+    }).catch(err => {
+        console.log(err)
         this.enableAddandRemoveListeners()
     })
 }
 
 export const enableAddandRemoveListeners = function () {
+    console.log(this.User.uid)
     this._userRef = firebase.database().ref("users").child(this.User.uid)
-    this.userfuncref = this._userRef.on('value', data => {
+    this._userRef.on('value', data => {
+        console.log(data._value)
         if (data.val()) {
             this.props.adduser(data._value)
             this.setState({
@@ -57,7 +63,7 @@ export const enableAddandRemoveListeners = function () {
     this._usersListener = firebase.database().ref('users')
     this._usersListener.on('value', data => {
         if (data._value) {
-            console.log(data._value)
+            // console.log(data._value)
             this.props.addUsers(Object.keys(data._value).map(_key => data._value[_key]))
         }
     })

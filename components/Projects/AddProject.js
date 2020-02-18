@@ -59,9 +59,6 @@ export default class AddProject extends React.Component {
         projectmanager: {
           [projectManager]: {
             isAllowed: true,
-            uid: this.state.AdminData.uid,
-            profilepic: this.state.AdminData.profilepic,
-            fullName: this.state.AdminData.fullName,
           },
         },
         teammembers: '',
@@ -130,10 +127,10 @@ export default class AddProject extends React.Component {
                   </Body>
                   <Right></Right>
                 </Header>
-                <View style={{ height: 300 }}>
+                <View style={{ height: 300, alignItems: 'center', justifyContent: 'center' }}>
                   <Image
                     source={require('../../assets/ReactNativeFirebase.png')}
-                    style={{ width: Dimensions.get('window').width - 20, margin: 10, flex: 1, }}
+                    style={{ width: 150, height: 150, margin: 10, flex: 1, }}
                     resizeMode="contain">
                   </Image>
                 </View>

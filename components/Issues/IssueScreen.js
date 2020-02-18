@@ -195,13 +195,13 @@ class IssueScreen extends React.Component {
                         <ListItem avatar key={JSON.stringify(message.sentTime)} ref={c => { this._listitem = c }}>
                           <Left>
                             <Thumbnail
-                              source={{ uri: this.fetchThumbnail(message.sender), }}
+                              source={{ uri: this.props.users[message.sender].profilepic, }}
                               style={{ width: 30, height: 30 }}
                             />
                           </Left>
                           <Body>
                             <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
-                              {this.fetchUserName(message.sender)}
+                              {this.props.users[message.sender].fullName}
                             </Text>
                             {firebase.auth().currentUser.uid === message.sender ?
                               <Item rounded success
@@ -263,10 +263,15 @@ class IssueScreen extends React.Component {
   }
 }
 const mapStateToProps = state => {
+  let userMap = {}
+  state.searchReducer.users.forEach(_user => {
+    userMap[_user.uid] = _user
+  })
   return {
     user: state.userReducer.user,
     project: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : null,
-    issue: state.issuesReducer.issueDetails.filter(_x => _x.issueId === state.issuesReducer.activeIssueId)[0]
+    issue: state.issuesReducer.issueDetails.filter(_x => _x.issueId === state.issuesReducer.activeIssueId)[0],
+    users: userMap
   }
 }
 const mapDispatchToProps = null

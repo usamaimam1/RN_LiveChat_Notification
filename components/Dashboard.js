@@ -30,9 +30,10 @@ class Dashboard extends React.Component {
     static navigationOptions = {
         header: null
     }
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.User = firebase.auth().currentUser._user
+        console.log(firebase.auth().currentUser._user.uid)
         this.state = {
             status: null,
             imgSource: null,
@@ -85,6 +86,8 @@ class Dashboard extends React.Component {
     render() {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
+        console.log(this.props)
+        console.log(this.User)
         return (
             <Drawer
                 ref={ref => { this._drawer = ref }}

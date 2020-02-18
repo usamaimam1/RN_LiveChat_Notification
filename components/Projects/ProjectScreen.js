@@ -49,7 +49,7 @@ class ProjectScreen extends React.Component {
     }
     setViewType(project) {
         const userUid = firebase.auth().currentUser.uid
-        const isProjectManager = project.projectmanager[userUid]
+        const isProjectManager = project.projectmanager ? project.projectmanager[userUid] : false
         const isTeamLead = project.teamleads ? project.teamleads[userUid] : false
         const isTeamMember = project.teammembers ? project.teammembers[userUid] : false
         if (isProjectManager) this.setState({ viewType: 'ProjectManager' })

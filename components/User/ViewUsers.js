@@ -22,9 +22,14 @@ class ViewUsers extends React.Component {
         this.makeTeamLead = makeTeamLead.bind(this)
         this.removefromProject = removefromProject.bind(this)
         this.Demote = Demote.bind(this)
+        this.handleUserDelete = this.handleUserDelete.bind(this)
     }
     componentDidMount() {
 
+    }
+    handleUserDelete(child, _Id) {
+        firebase.database().ref('Projects').child(this.props.ProjectData.projectId).child(child).child(_Id).remove()
+        return null
     }
     render() {
         console.log(this.state)
@@ -48,64 +53,34 @@ class ViewUsers extends React.Component {
                     </Separator>
                     {this.props.ProjectData ? Object.keys(this.props.ProjectData.projectmanager).map(manager => {
                         return (
-                            <ListItem thumbnail key={manager}>
-                                <Left>
-                                    <Thumbnail source={{ uri: this.props.ProjectData.projectmanager[manager].profilepic }} style={{ width: 40, height: 40 }} />
-                                </Left>
-                                <Body style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Title style={{ color: 'black' }}>{this.props.ProjectData.projectmanager[manager].fullName}</Title>
-                                    <Subtitle style={{ color: 'grey' }}>Project Manager</Subtitle>
-                                </Body>
-                                <Right>
-                                    <Icon name='briefcase' type='Entypo' style={{ color: 'blue' }} />
-                                </Right>
-                            </ListItem>)
+                            this.props.users[manager] ?
+                                <ListItem thumbnail key={manager}>
+                                    <Left>
+                                        <Thumbnail source={{ uri: this.props.users[manager].profilepic }} style={{ width: 40, height: 40 }} />
+                                    </Left>
+                                    <Body style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                        <Title style={{ color: 'black' }}>{this.props.users[manager].fullName}</Title>
+                                        <Subtitle style={{ color: 'grey' }}>Project Manager</Subtitle>
+                                    </Body>
+                                    <Right>
+                                        <Icon name='briefcase' type='Entypo' style={{ color: 'blue' }} />
+                                    </Right>
+                                </ListItem> : this.handleUserDelete('projectmanager', manager)
+                        )
                     }) : null}
                     <Separator>
                         <Text>Team Leads</Text>
                     </Separator>
                     {this.props.ProjectData ? this.props.ProjectData.teamleads ? Object.keys(this.props.ProjectData.teamleads).map(teamlead => {
                         return (
-                            <ListItem thumbnail key={teamlead}>
-                                <Left>
-                                    <Thumbnail source={{ uri: this.props.ProjectData.teamleads[teamlead].profilepic }} style={{ width: 40, height: 40 }} />
-                                </Left>
-                                <Body>
-                                    <Title style={{ color: 'black' }}>{this.props.ProjectData.teamleads[teamlead].fullName}</Title>
-                                    <Subtitle style={{ color: 'grey' }}>Team Lead</Subtitle>
-                                </Body>
-                                <Right>
-                                    {
-                                        this.props.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
-                                            Platform.OS === 'ios' ?
-                                                <OptionsMenu
-                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                    options={['Demote', 'Remove From Project', 'Cancel']}
-                                                    destructiveIndex={1}
-                                                    actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }, () => { }]} >
-                                                </OptionsMenu> :
-                                                <OptionsMenu
-                                                    customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                    options={['Demote', 'Remove From Project']}
-                                                    actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }]}>
-                                                </OptionsMenu> : null
-                                    }
-                                </Right>
-                            </ListItem>)
-                    }) : null : null}
-                    <Separator>
-                        <Text>Team Members</Text>
-                    </Separator>
-                    {this.props.ProjectData ?
-                        this.props.ProjectData.teammembers ? Object.keys(this.props.ProjectData.teammembers).map(teammember => {
-                            return (
-                                <ListItem thumbnail key={teammember}>
+                            this.props.users[teamlead] ?
+                                < ListItem thumbnail key={teamlead} >
                                     <Left>
-                                        <Thumbnail source={{ uri: this.props.ProjectData.teammembers[teammember].profilepic }} style={{ width: 40, height: 40 }} />
+                                        <Thumbnail source={{ uri: this.props.users[teamlead].profilepic }} style={{ width: 40, height: 40 }} />
                                     </Left>
                                     <Body>
-                                        <Title style={{ color: 'black' }}>{this.props.ProjectData.teammembers[teammember].fullName}</Title>
-                                        <Subtitle style={{ color: 'grey' }}>Team Member</Subtitle>
+                                        <Title style={{ color: 'black' }}>{this.props.users[teamlead].fullName}</Title>
+                                        <Subtitle style={{ color: 'grey' }}>Team Lead</Subtitle>
                                     </Body>
                                     <Right>
                                         {
@@ -113,28 +88,70 @@ class ViewUsers extends React.Component {
                                                 Platform.OS === 'ios' ?
                                                     <OptionsMenu
                                                         customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                        options={['Make Team Lead', 'Remove From Project', 'Cancel']}
+                                                        options={['Demote', 'Remove From Project', 'Cancel']}
                                                         destructiveIndex={1}
-                                                        actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }, () => { }]} >
+                                                        actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }, () => { }]} >
                                                     </OptionsMenu> :
                                                     <OptionsMenu
                                                         customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
-                                                        options={['Make Team Lead', 'Remove From Project']}
-                                                        actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }]}>
+                                                        options={['Demote', 'Remove From Project']}
+                                                        actions={[() => { this.Demote(teamlead) }, () => { this.removefromProject('teamleads', teamlead) }]}>
                                                     </OptionsMenu> : null
                                         }
                                     </Right>
-                                </ListItem>)
+                                </ListItem> : this.handleUserDelete('teamleads', teamlead)
+                        )
+                    }) : null : null}
+                    <Separator>
+                        <Text>Team Members</Text>
+                    </Separator>
+                    {this.props.ProjectData ?
+                        this.props.ProjectData.teammembers ? Object.keys(this.props.ProjectData.teammembers).map(teammember => {
+                            return (
+                                this.props.users[teammember] ?
+                                    < ListItem thumbnail key={teammember} >
+                                        <Left>
+                                            <Thumbnail source={{ uri: this.props.users[teammember].profilepic }} style={{ width: 40, height: 40 }} />
+                                        </Left>
+                                        <Body>
+                                            <Title style={{ color: 'black' }}>{this.props.users[teammember].fullName}</Title>
+                                            <Subtitle style={{ color: 'grey' }}>Team Member</Subtitle>
+                                        </Body>
+                                        <Right>
+                                            {
+                                                this.props.ProjectData.projectmanager[firebase.auth().currentUser.uid] ?
+                                                    Platform.OS === 'ios' ?
+                                                        <OptionsMenu
+                                                            customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                            options={['Make Team Lead', 'Remove From Project', 'Cancel']}
+                                                            destructiveIndex={1}
+                                                            actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }, () => { }]} >
+                                                        </OptionsMenu> :
+                                                        <OptionsMenu
+                                                            customButton={<Icon name='ellipsis1' type='AntDesign' style={{ color: 'blue' }} />}
+                                                            options={['Make Team Lead', 'Remove From Project']}
+                                                            actions={[() => { this.makeTeamLead(teammember) }, () => { this.removefromProject('teammembers', teammember) }]}>
+                                                        </OptionsMenu> : null
+                                            }
+                                        </Right>
+                                    </ListItem> : this.handleUserDelete('teammembers', teammember)
+                                )
                         }) : null : null}
                 </Content>
                 <Footer />
-            </Container>
+            </Container >
         )
     }
 }
 const mapStateToProps = state => {
+    let userMap = {}
+    state.searchReducer.users.forEach(_val => {
+        userMap[_val.uid] = _val
+    })
+    console.log(userMap)
     return {
-        ProjectData: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : {}
+        ProjectData: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : {},
+        users: userMap
     }
 }
 const mapDispatchToProps = dispatch => {
