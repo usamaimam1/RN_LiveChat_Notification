@@ -5,7 +5,7 @@ import {
 import firebase from 'react-native-firebase'
 import {
     Root, Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body,
-    Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch
+    Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch, Spinner
 } from 'native-base'
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
@@ -33,13 +33,16 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props)
         this.User = firebase.auth().currentUser._user
-        console.log(firebase.auth().currentUser._user.uid)
         this.state = {
             status: null,
             imgSource: null,
             iconSource: require('../assets/ReactNativeFirebase.png'),
             active: null,
             refresh: null,
+            userAdded: false,
+            projectAdded: false,
+            issuesAdded: false,
+            usersAdded: false
         }
         this.enableAddandRemoveListeners = enableAddandRemoveListeners.bind(this)
         this.disableAddandRemoveListeners = disableAddandRemoveListeners.bind(this)
@@ -54,6 +57,32 @@ class Dashboard extends React.Component {
         this.handleDeleteProject = handleDeleteProject.bind(this)
         // this.setupNotificationsListeners = this.setupNotificationsListeners.bind(this)
         this.setAndResetDeviceIds = this.setAndResetDeviceIds.bind(this)
+        this.handleFailMessage = this.handleFailMessage.bind(this)
+    }
+    handleFailMessage() {
+        const allLoading = this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                {!this.state.userAdded && !this.state.usersAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading User ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="red" />
+                    </View>
+                    : null}
+                {!this.state.projectAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading Projects ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="blue" />
+                    </View>
+                    : null}
+                {!this.state.issuesAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading Issues ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="green" />
+                    </View>
+                    : null}
+            </View>
+        )
     }
     async setAndResetDeviceIds() {
         try {
@@ -120,38 +149,39 @@ class Dashboard extends React.Component {
                                 </Right>
                             </Header>
                             <Content>
-                                <List>
-                                    {this.props.projects.map(proj => {
-                                        return (
-                                            <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                this.props.setActiveProjectId(proj.projectId)
-                                                this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
-                                            }}>
-                                                <Left>
-                                                    <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                                </Left>
-                                                <Body>
-                                                    <Text>{proj.projectTitle}</Text>
-                                                    <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                </Body>
-                                                <Right>
-                                                    {this.props.user ? this.props.user.adminaccess ?
-                                                        <Button transparent onPress={() => {
-                                                            Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                                [
-                                                                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                                    { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                                ],
-                                                                { cancelable: true },
-                                                            );
-                                                        }} >
-                                                            <Icon name="cross" type="Entypo" />
-                                                        </Button> : null : null}
-                                                </Right>
-                                            </ListItem>
-                                        )
-                                    })}
-                                </List>
+                                {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
+                                    <List>
+                                        {this.props.projects.map(proj => {
+                                            return (
+                                                <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                                    this.props.setActiveProjectId(proj.projectId)
+                                                    this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                                }}>
+                                                    <Left>
+                                                        <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                                    </Left>
+                                                    <Body>
+                                                        <Text>{proj.projectTitle}</Text>
+                                                        <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                                    </Body>
+                                                    <Right>
+                                                        {this.props.user ? this.props.user.adminaccess ?
+                                                            <Button transparent onPress={() => {
+                                                                Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                                    [
+                                                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                        { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
+                                                                    ],
+                                                                    { cancelable: true },
+                                                                );
+                                                            }} >
+                                                                <Icon name="cross" type="Entypo" />
+                                                            </Button> : null : null}
+                                                    </Right>
+                                                </ListItem>
+                                            )
+                                        })}
+                                    </List> : this.handleFailMessage()}
                             </Content>
                             <Footer>
                                 <FooterTab>

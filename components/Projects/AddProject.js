@@ -59,6 +59,9 @@ export default class AddProject extends React.Component {
         projectmanager: {
           [projectManager]: {
             isAllowed: true,
+            uid: this.state.AdminData.uid,
+            fullName: this.state.AdminData.fullName,
+            profilepic: this.state.AdminData.profilepic
           },
         },
         teammembers: '',

@@ -7,25 +7,31 @@ export const filterRelevantProjects = function (project) {
 }
 
 export const preFetchFunc = function () {
-
     const projRef = firebase.database().ref('Projects')
     projRef.once('value').then(data => {
         if (data._value) {
             const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
             this.props.addprojects(ProjectVals)
             this.props.setRelevantProjectIds(ProjectVals.map(_project => _project.projectId))
-            const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
-            this.props.setIssuesCount(0)
+            ProjectVals.map(project => project.issues ? console.log(Object.keys(project.issues).length) : 0)
+            let issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0)
+            issueCount = [...issueCount].reduce((res, curr) => res + curr)
+            this.props.setIssuesCount(issueCount)
         }
         this.enableAddandRemoveListeners()
+        this.setState({ projectAdded: true })
     }).catch(err => {
         console.log(err)
         this.enableAddandRemoveListeners()
+        this.setState({ projectAdded: true })
     })
 }
 
 export const enableAddandRemoveListeners = function () {
-    console.log(this.User.uid)
+    let userAdded = false
+    let projectAdded = false
+    let issuesAdded = false
+    let usersAdded = false
     this._userRef = firebase.database().ref("users").child(this.User.uid)
     this._userRef.on('value', data => {
         console.log(data._value)
@@ -33,7 +39,8 @@ export const enableAddandRemoveListeners = function () {
             this.props.adduser(data._value)
             this.setState({
                 status: data._value.adminaccess ? 'Admin' : 'Employee',
-                iconSource: { uri: data._value.profilepic, cache: 'force-cache' }
+                iconSource: { uri: data._value.profilepic, cache: 'force-cache' },
+                userAdded: true
             })
         }
     })
@@ -47,6 +54,7 @@ export const enableAddandRemoveListeners = function () {
                 this.props.addRelevantProject(data._value.projectId)
             }
         }
+        this.setState({ projectAdded: true })
     })
     this._projectchildremoveref = firebase.database().ref('Projects')
     this._projectchildremoveref.on('child_removed', data => {
@@ -59,13 +67,16 @@ export const enableAddandRemoveListeners = function () {
         if (data._value) {
             this.props.addIssues(Object.keys(data._value).map(_key => data._value[_key]))
         }
+        this.setState({ issuesAdded: true })
     })
     this._usersListener = firebase.database().ref('users')
     this._usersListener.on('value', data => {
+        console.log(data)
         if (data._value) {
             // console.log(data._value)
             this.props.addUsers(Object.keys(data._value).map(_key => data._value[_key]))
         }
+        this.setState({ usersAdded: true })
     })
 }
 export const disableAddandRemoveListeners = function () {
