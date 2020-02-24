@@ -1,22 +1,11 @@
 import React from 'react'
 import {
-    View,
-    Text,
-    Image,
-    StyleSheet,
-    ScrollView,
-    ImageBackground,
-    TextInput,
-    ToastAndroid,
-    Dimensions,
-    Button,
-    Platform,
-    SafeAreaView
+    View, Text, Image, StyleSheet, ScrollView, ImageBackground, TextInput,
+    ToastAndroid, Dimensions, Button, Platform, SafeAreaView
 } from 'react-native'
 import { Toast, Root, Container, Content, Spinner } from 'native-base'
 import firebase from 'react-native-firebase'
-import * as Progress from 'react-native-progress'
-// import { platform } from 'os'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default class ChangePassword extends React.Component {
     static navigationOptions = {
@@ -144,11 +133,13 @@ export default class ChangePassword extends React.Component {
                         </Container>) :
                         Platform.OS === "ios" ?
                             (<SafeAreaView>
-                                {contentToRender}
+                                <KeyboardAwareScrollView>
+                                    {contentToRender}
+                                </KeyboardAwareScrollView>
                             </SafeAreaView>)
-                            : (< ScrollView keyboardShouldPersistTaps="always" >
+                            : (< KeyboardAwareScrollView keyboardShouldPersistTaps="always" >
                                 {contentToRender}
-                            </ScrollView >)
+                            </ KeyboardAwareScrollView >)
                 }
             </Root>
         )
@@ -160,7 +151,7 @@ const styles = StyleSheet.create({
     logo: {
         flex: 1,
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     background: {
         width: Dimensions.get("window").width,

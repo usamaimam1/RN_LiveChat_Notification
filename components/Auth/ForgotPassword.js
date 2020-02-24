@@ -1,21 +1,12 @@
 import React from 'react'
 import {
-    Text,
-    View,
-    Image,
-    Platform,
-    Dimensions,
-    StyleSheet,
-    ScrollView,
-    ImageBackground,
-    TextInput,
-    Button,
-    ToastAndroid,
-    Alert
+    Text, View, Image, Platform, Dimensions, StyleSheet, ScrollView,
+    ImageBackground, TextInput, Button, ToastAndroid, Alert
 } from 'react-native'
 import { Toast, Root } from 'native-base'
 import firebase from 'react-native-firebase'
 import { SafeAreaView } from 'react-navigation'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default class ForgotPassword extends React.Component {
     static navigationOptions = {
@@ -58,7 +49,7 @@ export default class ForgotPassword extends React.Component {
                 {/* <ActivityIndicator size="large" animating={this.state.showActivity} /> */}
                 <View style={{ flex: 1 }}>
                     <View style={styles.logo} >
-                        <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height:150, margin: 10, flex: 1 }} resizeMode="contain" >
+                        <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
 
                         </Image>
                     </View>
@@ -121,11 +112,11 @@ export default class ForgotPassword extends React.Component {
                                                     duration: 2500
                                                 })
                                             })
-                                    }else{
+                                    } else {
                                         Toast.show({
-                                            text:'Do not leave the fields empty',
-                                            buttonText:'Okay',
-                                            duration:2500
+                                            text: 'Do not leave the fields empty',
+                                            buttonText: 'Okay',
+                                            duration: 2500
                                         })
                                     }
                                 } else {
@@ -192,7 +183,7 @@ const styles = StyleSheet.create({
     logo: {
         flex: 1,
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     background: {
         width: Dimensions.get("window").width,

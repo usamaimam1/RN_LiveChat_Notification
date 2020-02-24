@@ -115,8 +115,8 @@ class Dashboard extends React.Component {
     render() {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
-        console.log(this.props)
-        console.log(this.User)
+        // console.log(this.props)
+        // console.log(this.User)
         return (
             <Drawer
                 ref={ref => { this._drawer = ref }}
@@ -248,19 +248,19 @@ const mapStateToProps = state => {
         issueCount: state.issuesReducer.issuesCount
     }
 }
-const styles = StyleSheet.create({
-    item: {
-        flex: 1,
-        margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomWidth: 1
-    },
-    body: {
-        flex: 2
-    },
-    poet: {
-        flex: 1
-    }
-})
+// const styles = StyleSheet.create({
+//     item: {
+//         flex: 1,
+//         margin: 10,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         borderBottomWidth: 1
+//     },
+//     body: {
+//         flex: 2
+//     },
+//     poet: {
+//         flex: 1
+//     }
+// })
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

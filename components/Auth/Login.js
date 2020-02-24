@@ -1,23 +1,11 @@
 import React from 'react'
 import {
-    Text,
-    View,
-    Dimensions,
-    Platform,
-    Image,
-    StyleSheet,
-    ScrollView,
-    ImageBackground,
-    TextInput,
-    Button,
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    SafeAreaView
+    Text, View, Dimensions, Platform, Image, StyleSheet, ScrollView,
+    ImageBackground, TextInput, Button, ActivityIndicator, KeyboardAvoidingView, SafeAreaView
 } from 'react-native'
 import { Toast, Root, Container, Spinner } from 'native-base'
 import firebase from 'react-native-firebase';
-import * as Progress from 'react-native-progress'
-import { cloneNode } from '@babel/types';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default class Login extends React.Component {
     static navigationOptions = {
@@ -147,21 +135,23 @@ export default class Login extends React.Component {
                     </Container>) :
                     Platform.OS === "ios" ?
                         <SafeAreaView keyboardShouldPersistTaps="always">
-                            {this.state.isLoading ?
-                                (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                                    <Spinner color="red" />
-                                </Container>) :
-                                contentToRender
-                            }
+                            <KeyboardAwareScrollView>
+                                {this.state.isLoading ?
+                                    (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                                        <Spinner color="red" />
+                                    </Container>) :
+                                    contentToRender
+                                }
+                            </KeyboardAwareScrollView>
                         </SafeAreaView> :
-                        <ScrollView keyboardShouldPersistTaps="always" >
+                        <KeyboardAwareScrollView keyboardShouldPersistTaps="always" >
                             {this.state.isLoading ?
                                 (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                                     <Spinner color="red" />
                                 </Container>) :
                                 contentToRender
                             }
-                        </ScrollView>
+                        </KeyboardAwareScrollView>
             }
             </Root>
         )

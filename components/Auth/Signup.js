@@ -10,7 +10,6 @@ import ImageResizer from 'react-native-image-resizer'
 import { Toast, Root, Container, Spinner } from 'native-base'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import firebase from 'react-native-firebase'
-import * as Progress from 'react-native-progress'
 
 const options = {
     title: 'Select Image',

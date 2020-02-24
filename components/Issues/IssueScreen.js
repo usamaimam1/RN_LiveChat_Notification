@@ -36,6 +36,7 @@ class IssueScreen extends React.Component {
     this.fetchUserName = fetchUserName.bind(this)
     this.handleNotifications = this.handleNotifications.bind(this)
     this.state = {
+      defaultThumb: 'https://colorofhope.org/wp-content/uploads/2017/09/default-user-thumbnail-1.png',
       issueData: null,
       userData: null,
       ProjectData: null,
@@ -195,13 +196,13 @@ class IssueScreen extends React.Component {
                         <ListItem avatar key={JSON.stringify(message.sentTime)} ref={c => { this._listitem = c }}>
                           <Left>
                             <Thumbnail
-                              source={{ uri: this.props.users[message.sender].profilepic, }}
+                              source={{ uri: this.props.users[message.sender] ? this.props.users[message.sender].profilepic : this.state.defaultThumb }}
                               style={{ width: 30, height: 30 }}
                             />
                           </Left>
                           <Body>
                             <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
-                              {this.props.users[message.sender].fullName}
+                              {this.props.users[message.sender] ? this.props.users[message.sender].fullName : '[Deleted User]'}
                             </Text>
                             {firebase.auth().currentUser.uid === message.sender ?
                               <Item rounded success
