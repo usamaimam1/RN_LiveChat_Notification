@@ -61,6 +61,11 @@ class Dashboard extends React.Component {
     }
     handleFailMessage() {
         const allLoading = this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded
+        // if (this.state.userAdded && this.state.usersAdded) {
+        //     const notification = new firebase.notifications.Notification().setNotificationId(1).setTitle('Users Loaded').setBody('Success !!')
+        //     firebase.notifications().displayNotification(notification)
+
+        // }
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {!this.state.userAdded && !this.state.usersAdded ?
@@ -87,7 +92,7 @@ class Dashboard extends React.Component {
     async setAndResetDeviceIds() {
         try {
             const snapshot = await firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).once('value')
-            let fcmToken = await firebase.messaging().getToken();
+            let fcmToken = await AsyncStorage.getItem('fcmToken');
             if (snapshot._value && fcmToken) {
                 if (snapshot._value.includes(fcmToken)) {
                     console.log('Token Already Included')
@@ -151,36 +156,40 @@ class Dashboard extends React.Component {
                             <Content>
                                 {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
                                     <List>
-                                        {this.props.projects.map(proj => {
-                                            return (
-                                                <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                    this.props.setActiveProjectId(proj.projectId)
-                                                    this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
-                                                }}>
-                                                    <Left>
-                                                        <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                                    </Left>
-                                                    <Body>
-                                                        <Text>{proj.projectTitle}</Text>
-                                                        <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                    </Body>
-                                                    <Right>
-                                                        {this.props.user ? this.props.user.adminaccess ?
-                                                            <Button transparent onPress={() => {
-                                                                Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                                    [
-                                                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                                        { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                                    ],
-                                                                    { cancelable: true },
-                                                                );
-                                                            }} >
-                                                                <Icon name="cross" type="Entypo" />
-                                                            </Button> : null : null}
-                                                    </Right>
-                                                </ListItem>
-                                            )
-                                        })}
+                                        {this.props.projects.length === 0 ?
+                                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                <Text style={{ color: 'grey' }}>No Projects To Display</Text>
+                                            </View> :
+                                            this.props.projects.map(proj => {
+                                                return (
+                                                    <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                                        this.props.setActiveProjectId(proj.projectId)
+                                                        this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                                    }}>
+                                                        <Left>
+                                                            <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                                        </Left>
+                                                        <Body>
+                                                            <Text>{proj.projectTitle}</Text>
+                                                            <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                                        </Body>
+                                                        <Right>
+                                                            {this.props.user ? this.props.user.adminaccess ?
+                                                                <Button transparent onPress={() => {
+                                                                    Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                                        [
+                                                                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                            { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
+                                                                        ],
+                                                                        { cancelable: true },
+                                                                    );
+                                                                }} >
+                                                                    <Icon name="cross" type="Entypo" />
+                                                                </Button> : null : null}
+                                                        </Right>
+                                                    </ListItem>
+                                                )
+                                            })}
                                     </List> : this.handleFailMessage()}
                             </Content>
                             <Footer>
