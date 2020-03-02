@@ -104,6 +104,7 @@ export const fetchThumbnail = function (id) {
     }
 }
 export const markClosed = function () {
+    // console.log(this.props.issue)
     if (this.props.issue.issueStatus === 'Opened') {
         firebase.database().ref('Issues').child(this.state.IssueId).child('issueStatus').set('Closed');
     } else {

@@ -19,7 +19,7 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import { filterRelevantProjects, enableAddandRemoveListeners, disableAddandRemoveListeners, preFetchFunc, handleSignOut, handleChangePassword, formatDate, handleBackPress, closeDrawer, openDrawer, handleDeleteProject } from './Dashboard.functions'
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString } from '../redux/actions/index'
+import { SetProject, SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString } from '../redux/actions/index'
 const options = {
     title: 'Select Image',
     storageOptions: { skipBackup: true, path: 'images' }
@@ -235,6 +235,7 @@ const mapDispatchToProps = dispatch => {
         addprojects: function (projects) { dispatch(AddProjects(projects)) },
         printprojects: function () { dispatch(PrintProjects()) },
         addproject: function (project) { dispatch(AddProject(project)) },
+        setproject: function (projectId, project) { dispatch(SetProject(projectId, project)) },
         deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) },
         setActiveProjectId: function (projectId) { dispatch(SetActiveProjectId(projectId)) },
         addIssues: function (issues) { dispatch(AddIssues(issues)) },
@@ -254,7 +255,8 @@ const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
         projects: state.projectReducer.projectDetails,
-        issueCount: state.issuesReducer.issuesCount
+        issueCount: state.issuesReducer.issuesCount,
+        activeProjectId: state.projectReducer.activeProjectId
     }
 }
 // const styles = StyleSheet.create({

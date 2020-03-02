@@ -35,6 +35,7 @@ class IssueScreen extends React.Component {
     this.handleDelete = handleDelete.bind(this)
     this.fetchUserName = fetchUserName.bind(this)
     this.handleNotifications = this.handleNotifications.bind(this)
+    this.evalStatus = this.evalStatus.bind(this)
     this.state = {
       defaultThumb: 'https://colorofhope.org/wp-content/uploads/2017/09/default-user-thumbnail-1.png',
       issueData: null,
@@ -52,6 +53,14 @@ class IssueScreen extends React.Component {
       IssueId: this.props.navigation.state.params.IssueId,
     };
     this.preFetchFunc()
+  }
+  componentDidMount() {
+
+  }
+  evalStatus() {
+    const isProjectManager = this.props.project.projectmanager ? this.props.project.projectmanager[this.props.user.uid] : false
+    const isTeamLead = this.props.project.teamleads ? this.props.project.teamleads[this.props.user.uid] : false
+    return isProjectManager || isTeamLead
   }
   async handleNotifications(messageBody) {
     const FIREBASE_API_KEY = "AIzaSyCZ2V_k6Q6w4PShd1Hh_gh2UVjJCJVPs0s";
@@ -106,6 +115,7 @@ class IssueScreen extends React.Component {
   render() {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
+
     return (
       <Root>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
@@ -128,7 +138,7 @@ class IssueScreen extends React.Component {
                     </Title>
                   </Body>
                   <Right>
-                    {this.props.user ? this.state.Status !== 'Member' ?
+                    {this.props.user ? this.evalStatus() ?
                       Platform.OS == 'ios' ?
                         <OptionsMenu
                           customButton={<Icon name="menu" style={{ color: 'blue' }} />}

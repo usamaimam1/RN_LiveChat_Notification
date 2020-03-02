@@ -13,9 +13,10 @@ export const preFetchFunc = function () {
             const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
             this.props.addprojects(ProjectVals)
             this.props.setRelevantProjectIds(ProjectVals.map(_project => _project.projectId))
-            ProjectVals.map(project => project.issues ? console.log(Object.keys(project.issues).length) : 0)
-            let issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0)
-            issueCount = [...issueCount].reduce((res, curr) => res + curr)
+            let issueCount = 0
+            ProjectVals.forEach(_project => {
+                issueCount += _project.issues ? Object.keys(_project.issues).length : 0
+            })
             this.props.setIssuesCount(issueCount)
         }
         this.enableAddandRemoveListeners()
@@ -46,13 +47,26 @@ export const enableAddandRemoveListeners = function () {
     })
     this._projectchildaddedref = firebase.database().ref('Projects')
     this._projectchildaddedref.on('child_changed', data => {
-        console.log(data._value)
         if (data.val()) {
             const isIncluded = this.props.projects.filter(project => project.projectId === data.val().projectId)
             const isRelevant = isIncluded.length === 0 ? this.filterRelevantProjects(data._value) : false
             if (isRelevant) {
                 this.props.addproject(data._value)
                 this.props.addRelevantProject(data._value.projectId)
+                this.props.setIssuesCount(this.props.issueCount + (data._value.issues ? Object.keys(data._value.issues).length : 0))
+            }
+            if (isIncluded.length > 0) {
+                let oldProjectData = this.props.projects.find(project => project.projectId === data._value.projectId)
+                let oldIssuesCount = oldProjectData.issues ? Object.keys(oldProjectData.issues).length : 0
+                let newIssuesCount = data._value.issues ? Object.keys(data._value.issues).length : 0
+                if (oldIssuesCount !== newIssuesCount) {
+                    this.props.setIssuesCount(this.props.issueCount + (newIssuesCount - oldIssuesCount))
+                    console.log('Issues Count called in child_changed')
+                }
+                this.props.setproject(data._value.projectId, data._value)
+                if (this.props.activeProjectId === data._value.projectId) {
+                    this.props.setActiveProjectId(data._value.projectId)
+                }
             }
         }
         this.setState({ projectAdded: true })
@@ -61,6 +75,9 @@ export const enableAddandRemoveListeners = function () {
     this._projectchildremoveref.on('child_removed', data => {
         if (data.val()) {
             this.props.deleteproject(data._value.projectId)
+            const newIssuesNumber = data._value.issues ? Object.keys(data._value.issues).length : 0
+            this.props.setIssuesCount(this.props.issueCount - newIssuesNumber)
+            console.log('Issues Count called in child_removed')
         }
     })
     this._issuesAddandRemove = firebase.database().ref('Issues')

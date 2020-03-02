@@ -157,3 +157,10 @@ export const ResetSearchString = function () {
         payload: null
     }
 }
+
+export const SetNetworkState = function (netstate) {
+    return {
+        type: actions.SET_NETWORK_STATE,
+        payload: { netstate }
+    }
+}

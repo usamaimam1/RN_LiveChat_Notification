@@ -7,7 +7,7 @@ import { SafeAreaView, ImageBackground, Dimensions, Text, Alert } from 'react-na
 import OptionsMenu from 'react-native-options-menu'
 import firebase from 'react-native-firebase'
 import { connect } from 'react-redux'
-import { SetProject, SetIssuesCount, SetActiveIssue } from '../../redux/actions'
+import { SetProject, SetIssuesCount, SetActiveIssue, SetActiveProjectId } from '../../redux/actions'
 class ProjectScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -55,10 +55,11 @@ class ProjectScreen extends React.Component {
         if (isProjectManager) this.setState({ viewType: 'ProjectManager' })
         else if (isTeamLead) this.setState({ viewType: 'TeamLead' })
         if (this.props.project !== project) {
-            this.props.setproject(project.projectId, project)
-            const oldIssuesNumber = this.props.project.issues ? Object.keys(this.props.project.issues).length : 0
-            const newIssuesNumber = project.issues ? Object.keys(project.issues).length : 0
-            this.props.setIssuesCount(this.props.issuesCount + (newIssuesNumber - oldIssuesNumber))
+            // this.props.setproject(project.projectId, project)
+            // this.props.setActiveProjectId(project.projectId)
+            // const oldIssuesNumber = this.props.project.issues ? Object.keys(this.props.project.issues).length : 0
+            // const newIssuesNumber = project.issues ? Object.keys(project.issues).length : 0
+            // this.props.setIssuesCount(this.props.issuesCount + (newIssuesNumber - oldIssuesNumber))
         }
     }
     handleDelete() {
@@ -131,26 +132,28 @@ class ProjectScreen extends React.Component {
                     </Header>
                     <Content>
                         {
-                            this.props.issues.map(_issue => {
-                                return (
-                                    <ListItem key={_issue.issueId} icon onPress={() => {
-                                        this.props.setActiveIssueId(_issue.issueId)
-                                        this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: _issue.issueId })
-                                    }}>
-                                        <Left>
-                                            <Button style={{ backgroundColor: _issue.issuePriority === 'Critical' ? 'red' : 'green' }}>
-                                                <Icon active name={_issue.issueStatus === "Opened" ? "issue-opened" : "issue-closed"} type='Octicons' />
-                                            </Button>
-                                        </Left>
-                                        <Body>
-                                            <Text>{_issue.issueTitle}</Text>
-                                        </Body>
-                                        <Right>
-                                            <Icon active name="arrow-forward" style={{ color: 'blue' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: _issue.issueId }) }} />
-                                        </Right>
-                                    </ListItem>
-                                )
-                            })
+                            this.props.issues.length === 0 ?
+                                <Text style={{ textAlign: 'center', alignSelf: 'center', color: 'grey' }}>No Issues To Display</Text> :
+                                this.props.issues.map(_issue => {
+                                    return (
+                                        <ListItem key={_issue.issueId} icon onPress={() => {
+                                            this.props.setActiveIssueId(_issue.issueId)
+                                            this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: _issue.issueId })
+                                        }}>
+                                            <Left>
+                                                <Button style={{ backgroundColor: _issue.issuePriority === 'Critical' ? 'red' : 'green' }}>
+                                                    <Icon active name={_issue.issueStatus === "Opened" ? "issue-opened" : "issue-closed"} type='Octicons' />
+                                                </Button>
+                                            </Left>
+                                            <Body>
+                                                <Text>{_issue.issueTitle}</Text>
+                                            </Body>
+                                            <Right>
+                                                <Icon active name="arrow-forward" style={{ color: 'blue' }} onPress={() => { this.props.navigation.navigate('IssueScreen', { projectId: this.state.projectId, IssueId: _issue.issueId }) }} />
+                                            </Right>
+                                        </ListItem>
+                                    )
+                                })
                         }
                     </Content>
                     <Footer>
@@ -195,7 +198,8 @@ const mapDispatchToProps = dispatch => {
     return {
         setproject: function (projectId, project) { dispatch(SetProject(projectId, project)) },
         setIssuesCount: function (issuesCount) { dispatch(SetIssuesCount(issuesCount)) },
-        setActiveIssueId: function (activeIssueId) { dispatch(SetActiveIssue(activeIssueId)) }
+        setActiveIssueId: function (activeIssueId) { dispatch(SetActiveIssue(activeIssueId)) },
+        setActiveProjectId: function (activeProjectId) { dispatch(SetActiveProjectId(activeProjectId)) }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectScreen)
