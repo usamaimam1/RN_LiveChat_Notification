@@ -3,11 +3,10 @@ import { StyleSheet, Platform, Image, Text, View, ScrollView, AsyncStorage } fro
 
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
-import { Root } from 'native-base'
-import { Provider } from 'react-redux'
-import store from './redux/store'
 import firebase from 'react-native-firebase';
-
+import * as actions from './redux/actions/actionTypes'
+import { connect } from 'react-redux'
+import NetInfo from '@react-native-community/netinfo'
 import Login from './components/Auth/Login'
 import SignUp from './components/Auth/Signup'
 import Dashboard from './components/Dashboard'
@@ -21,6 +20,7 @@ import ViewUsers from './components/User/ViewUsers'
 import AddIssue from './components/Issues/AddIssue'
 import IssueScreen from './components/Issues/IssueScreen'
 import IssuesIndex from './components/Issues/IssuesIndex'
+import { SetNetworkState } from './redux/actions';
 
 const MainNavigator = createStackNavigator({
   Home: { screen: Login },
@@ -40,7 +40,7 @@ const MainNavigator = createStackNavigator({
 
 const Navigator = createAppContainer(MainNavigator);
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props)
     this.getToken = this.getToken.bind(this)
@@ -99,21 +99,28 @@ export default class App extends React.Component {
     firebase.notifications().android.createChannel(channel);
     this.checkPermission();
     this.createNotificationListeners();
+    this.unsubscribe = NetInfo.addEventListener(state => {
+      this.props.setNetworkState(state)
+    });
   }
 
   componentWillUnmount() {
     this.removeNotificationListeners();
+    this.unsubscribe()
   }
   render() {
     return (
-      <Provider store={store}>
-        <Navigator />
-      </Provider>
+      <Navigator />
     )
   }
 }
-
-
+const mapStateToProps = null
+const mapDispatchToProps = dispatch => {
+  return {
+    setNetworkState: function (netstate) { dispatch(SetNetworkState(netstate)) }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 // export default class App extends React.Component{
 //   render(){
 //     return(<MainNavigator screenProps={{code:null}} />)

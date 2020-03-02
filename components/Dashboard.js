@@ -3,6 +3,7 @@ import {
     Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler, AsyncStorage
 } from 'react-native'
 import firebase from 'react-native-firebase'
+import NetInfo from '@react-native-community/netinfo'
 import {
     Root, Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body,
     Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch, Spinner
@@ -19,7 +20,8 @@ import UUIDGenerator from 'react-native-uuid-generator';
 import { filterRelevantProjects, enableAddandRemoveListeners, disableAddandRemoveListeners, preFetchFunc, handleSignOut, handleChangePassword, formatDate, handleBackPress, closeDrawer, openDrawer, handleDeleteProject } from './Dashboard.functions'
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
-import { SetProject, SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString } from '../redux/actions/index'
+import { SetProject, SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString, SetNetworkState } from '../redux/actions/index'
+import WarningScreen from './WarningScreen'
 const options = {
     title: 'Select Image',
     storageOptions: { skipBackup: true, path: 'images' }
@@ -123,107 +125,109 @@ class Dashboard extends React.Component {
         // console.log(this.props)
         // console.log(this.User)
         return (
-            <Drawer
-                ref={ref => { this._drawer = ref }}
-                content={<SideBar
-                    imgSrc={this.state.iconSource}
-                    _userData={this.props.user}
-                    _navigation={this.props.navigation}
-                    _onLogOut={this.handleSignOut}
-                    _onChangePassword={this.handleChangePassword}
-                    _onClose={this.closeDrawer} />}
-                onClose={() => { this.closeDrawer() }}>
-                <Root>
-                    <Container>
-                        <ImageBackground source={require('../assets/splash-bg.jpg')}
-                            style={{ width: width, height: height }}>
-                            <Header transparent>
-                                <Left>
-                                    <Button transparent onPress={() => {
-                                        this.openDrawer()
-                                    }}>
-                                        <Icon name="menu" style={{ color: 'blue' }} />
-                                    </Button>
-                                </Left>
-                                <Body style={{ alignSelf: 'center' }}>
-                                    <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
-                                    <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
-                                </Body>
-                                <Right>
-
-                                </Right>
-                            </Header>
-                            <Content>
-                                {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
-                                    <List>
-                                        {this.props.projects.length === 0 ?
-                                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                                <Text style={{ color: 'grey' }}>No Projects To Display</Text>
-                                            </View> :
-                                            this.props.projects.map(proj => {
-                                                return (
-                                                    <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                        this.props.setActiveProjectId(proj.projectId)
-                                                        this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
-                                                    }}>
-                                                        <Left>
-                                                            <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                                        </Left>
-                                                        <Body>
-                                                            <Text>{proj.projectTitle}</Text>
-                                                            <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                        </Body>
-                                                        <Right>
-                                                            {this.props.user ? this.props.user.adminaccess ?
-                                                                <Button transparent onPress={() => {
-                                                                    Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                                        [
-                                                                            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                                            { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                                        ],
-                                                                        { cancelable: true },
-                                                                    );
-                                                                }} >
-                                                                    <Icon name="cross" type="Entypo" />
-                                                                </Button> : null : null}
-                                                        </Right>
-                                                    </ListItem>
-                                                )
-                                            })}
-                                    </List> : this.handleFailMessage()}
-                            </Content>
-                            <Footer>
-                                <FooterTab>
-                                    <Button active badge vertical>
-                                        <Badge><Text>{this.props.projects.length}</Text></Badge>
-                                        <Icon name="project" type="Octicons" />
-                                        <Text>Projects</Text>
-                                    </Button>
-                                    <Button vertical onPress={() => {
-                                        this.props.navigation.navigate('UserProfile')
-                                    }}>
-                                        <Icon name="user" type="AntDesign" />
-                                        <Text>User</Text>
-                                    </Button>
-                                    <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
-                                        <Badge ><Text>{this.props.issueCount}</Text></Badge>
-                                        <Icon name="issue-opened" type="Octicons" />
-                                        <Text>Issues</Text>
-                                    </Button>
-                                    {this.props.user ? this.props.user.adminaccess ?
-                                        <Button vertical onPress={() => {
-                                            this.props.navigation.navigate('AddProject')
+            !this.props.netState.isConnected || !this.props.netState.isInternetReachable ?
+                <WarningScreen isConnected={this.props.netState.isConnected} isInternetReachable={this.props.netState.isInternetReachable} /> :
+                <Drawer
+                    ref={ref => { this._drawer = ref }}
+                    content={<SideBar
+                        imgSrc={this.state.iconSource}
+                        _userData={this.props.user}
+                        _navigation={this.props.navigation}
+                        _onLogOut={this.handleSignOut}
+                        _onChangePassword={this.handleChangePassword}
+                        _onClose={this.closeDrawer} />}
+                    onClose={() => { this.closeDrawer() }}>
+                    <Root>
+                        <Container>
+                            <ImageBackground source={require('../assets/splash-bg.jpg')}
+                                style={{ width: width, height: height }}>
+                                <Header transparent>
+                                    <Left>
+                                        <Button transparent onPress={() => {
+                                            this.openDrawer()
                                         }}>
-                                            <Icon name="plus" type="AntDesign" />
-                                            <Text>Add Project</Text>
-                                        </Button> : null : null
-                                    }
-                                </FooterTab>
-                            </Footer>
-                        </ImageBackground>
-                    </Container>
-                </Root>
-            </Drawer >
+                                            <Icon name="menu" style={{ color: 'blue' }} />
+                                        </Button>
+                                    </Left>
+                                    <Body style={{ alignSelf: 'center' }}>
+                                        <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
+                                        <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
+                                    </Body>
+                                    <Right>
+
+                                    </Right>
+                                </Header>
+                                <Content>
+                                    {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
+                                        <List>
+                                            {this.props.projects.length === 0 ?
+                                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Text style={{ color: 'grey' }}>No Projects To Display</Text>
+                                                </View> :
+                                                this.props.projects.map(proj => {
+                                                    return (
+                                                        <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                                            this.props.setActiveProjectId(proj.projectId)
+                                                            this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                                        }}>
+                                                            <Left>
+                                                                <Thumbnail square source={{ uri: proj.projectThumbnail }} />
+                                                            </Left>
+                                                            <Body>
+                                                                <Text>{proj.projectTitle}</Text>
+                                                                <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                                            </Body>
+                                                            <Right>
+                                                                {this.props.user ? this.props.user.adminaccess ?
+                                                                    <Button transparent onPress={() => {
+                                                                        Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                                            [
+                                                                                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                                { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
+                                                                            ],
+                                                                            { cancelable: true },
+                                                                        );
+                                                                    }} >
+                                                                        <Icon name="cross" type="Entypo" />
+                                                                    </Button> : null : null}
+                                                            </Right>
+                                                        </ListItem>
+                                                    )
+                                                })}
+                                        </List> : this.handleFailMessage()}
+                                </Content>
+                                <Footer>
+                                    <FooterTab>
+                                        <Button active badge vertical>
+                                            <Badge><Text>{this.props.projects.length}</Text></Badge>
+                                            <Icon name="project" type="Octicons" />
+                                            <Text>Projects</Text>
+                                        </Button>
+                                        <Button vertical onPress={() => {
+                                            this.props.navigation.navigate('UserProfile')
+                                        }}>
+                                            <Icon name="user" type="AntDesign" />
+                                            <Text>User</Text>
+                                        </Button>
+                                        <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
+                                            <Badge ><Text>{this.props.issueCount}</Text></Badge>
+                                            <Icon name="issue-opened" type="Octicons" />
+                                            <Text>Issues</Text>
+                                        </Button>
+                                        {this.props.user ? this.props.user.adminaccess ?
+                                            <Button vertical onPress={() => {
+                                                this.props.navigation.navigate('AddProject')
+                                            }}>
+                                                <Icon name="plus" type="AntDesign" />
+                                                <Text>Add Project</Text>
+                                            </Button> : null : null
+                                        }
+                                    </FooterTab>
+                                </Footer>
+                            </ImageBackground>
+                        </Container>
+                    </Root>
+                </Drawer >
         )
     }
 }
@@ -247,7 +251,8 @@ const mapDispatchToProps = dispatch => {
         resetProjects: function () { dispatch(ResetProjects()) },
         resetIssues: function () { dispatch(ResetIssues()) },
         resetUsers: function () { dispatch(ResetUsers()) },
-        resetSearchString: function () { dispatch(ResetSearchString()) }
+        resetSearchString: function () { dispatch(ResetSearchString()) },
+        setNetworkState: function (netstate) { dispatch(SetNetworkState(netstate)) }
     }
 }
 const mapStateToProps = state => {
@@ -256,7 +261,8 @@ const mapStateToProps = state => {
         user: state.userReducer.user,
         projects: state.projectReducer.projectDetails,
         issueCount: state.issuesReducer.issuesCount,
-        activeProjectId: state.projectReducer.activeProjectId
+        activeProjectId: state.projectReducer.activeProjectId,
+        netState: state.networkReducer.netState
     }
 }
 // const styles = StyleSheet.create({
