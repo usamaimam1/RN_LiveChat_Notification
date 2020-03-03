@@ -1,7 +1,7 @@
 const initialState = {
     netState: {
-        isConnected: false,
-        isInternetReachable: false
+        isConnected: true,
+        isInternetReachable: true
     }
 }
 export const networkReducer = (state = initialState, action) => {

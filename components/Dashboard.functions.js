@@ -1,4 +1,5 @@
 import firebase from 'react-native-firebase'
+import { Toast } from 'native-base'
 export const filterRelevantProjects = function (project) {
     const isProjectManager = project.projectmanager[this.User.uid] ? true : false
     const isTeamLead = project.teamleads ? project.teamleads[this.User.uid] ? true : false : false
