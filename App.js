@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, ScrollView, AsyncStorage } from 'react-native';
-
-import { createAppContainer } from 'react-navigation'
+import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import firebase from 'react-native-firebase';
 import * as actions from './redux/actions/actionTypes'
@@ -20,13 +20,17 @@ import ViewUsers from './components/User/ViewUsers'
 import AddIssue from './components/Issues/AddIssue'
 import IssueScreen from './components/Issues/IssueScreen'
 import IssuesIndex from './components/Issues/IssuesIndex'
+import LoadingScreen from './components/LoadingScreen'
 import { SetNetworkState } from './redux/actions';
+// import LoadingScreen from './components/LoadingScreen';
 
-const MainNavigator = createStackNavigator({
-  Home: { screen: Login },
+const LoginStackNavigator = createStackNavigator({
+  Login: { screen: Login },
   SignUp: { screen: SignUp },
+  ForgotPassword: { screen: ForgotPassword, params: { code: null } }
+})
+const AppStackNavigator = createStackNavigator({
   Dashboard: { screen: Dashboard },
-  ForgotPassword: { screen: ForgotPassword, params: { code: null } },
   ChangePassword: { screen: ChangePassword },
   AddProject: { screen: AddProject },
   ProjectScreen: { screen: ProjectScreen },
@@ -36,9 +40,13 @@ const MainNavigator = createStackNavigator({
   AddIssue: { screen: AddIssue },
   IssueScreen: { screen: IssueScreen },
   IssuesIndex: { screen: IssuesIndex }
-});
-
-const Navigator = createAppContainer(MainNavigator);
+})
+const AppLoadingNavigator = createSwitchNavigator({
+  Loading: LoadingScreen,
+  Auth: LoginStackNavigator,
+  App: AppStackNavigator
+})
+const Navigator = createAppContainer(AppLoadingNavigator);
 
 class App extends React.Component {
   constructor(props) {

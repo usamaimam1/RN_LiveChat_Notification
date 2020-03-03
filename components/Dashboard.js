@@ -1,7 +1,8 @@
 import React from 'react'
 import {
-    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler, AsyncStorage
+    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler,
 } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import firebase from 'react-native-firebase'
 import NetInfo from '@react-native-community/netinfo'
 import {
@@ -110,12 +111,12 @@ class Dashboard extends React.Component {
         }
     }
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+        // BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
         this.preFetchFunc()
         this.setAndResetDeviceIds()
     }
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
         this.disableAddandRemoveListeners()
         // this.notificationListener()
     }

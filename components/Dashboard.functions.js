@@ -129,7 +129,7 @@ export const handleSignOut = function () {
         this.props.resetIssues()
         this.props.resetSearchString()
         this.props.resetUsers()
-        this.props.navigation.navigate('Home')
+        this.props.navigation.navigate('Loading')
     }).catch((err) => {
         Toast.show({ text: err.message, buttonText: "OK" })
     })

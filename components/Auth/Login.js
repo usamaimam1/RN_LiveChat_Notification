@@ -16,7 +16,7 @@ export default class Login extends React.Component {
         this.state = {
             userEmail: null,
             userPassword: null,
-            isLoading: true,
+            isLoading: false,
             foundUser: false,
             showActivity: false
         };
@@ -53,7 +53,7 @@ export default class Login extends React.Component {
             firebase.auth().signInWithEmailAndPassword(this.state.userEmail, this.state.userPassword)
                 .then(() => {
                     this.setState({ userEmail: null, userPassword: null, showActivity: false })
-                    this.props.navigation.navigate('Dashboard')
+                    this.props.navigation.navigate('App')
                 })
                 .catch((error) => {
                     this.setState({ userEmail: null, userPassword: null, showActivity: false })
@@ -82,11 +82,11 @@ export default class Login extends React.Component {
             this.handleURL(url)
         })
 
-        firebase.auth().onAuthStateChanged(user => {
-            this.setState({ isLoading: false })
-            this.setState({ foundUser: user ? true : false })
-            this.props.navigation.navigate(user ? 'Dashboard' : 'Home')
-        })
+        // firebase.auth().onAuthStateChanged(user => {
+        //     this.setState({ isLoading: false })
+        //     this.setState({ foundUser: user ? true : false })
+        //     this.props.navigation.navigate(user ? 'Dashboard' : 'Home')
+        // })
     }
 
     render() {
