@@ -3,13 +3,14 @@ import {
     Text, View, Dimensions, Platform, Image, StyleSheet, ScrollView,
     ImageBackground, TextInput, Button, ActivityIndicator, KeyboardAvoidingView, SafeAreaView
 } from 'react-native'
-import { Toast, Root, Container, Spinner } from 'native-base'
+import { Toast, Root, Container, Spinner, Item, Content, Input } from 'native-base'
 import firebase from 'react-native-firebase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 export default class Login extends React.Component {
     static navigationOptions = {
-        // header: null
+        header: null
     };
     constructor() {
         super();
@@ -129,29 +130,54 @@ export default class Login extends React.Component {
         </ImageBackground>)
         return (
             <Root>{
-                this.state.showActivity ? (
-                    <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        <Spinner color="red" />
-                    </Container>) :
-                    Platform.OS === "ios" ?
-                        <SafeAreaView keyboardShouldPersistTaps="always">
-                            <KeyboardAwareScrollView>
-                                {this.state.isLoading ?
-                                    (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                                        <Spinner color="red" />
-                                    </Container>) :
-                                    contentToRender
-                                }
-                            </KeyboardAwareScrollView>
-                        </SafeAreaView> :
-                        <KeyboardAwareScrollView keyboardShouldPersistTaps="always" >
-                            {this.state.isLoading ?
-                                (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                                    <Spinner color="red" />
-                                </Container>) :
-                                contentToRender
-                            }
-                        </KeyboardAwareScrollView>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <KeyboardAwareScrollView>
+                        <View style={styles.Container}>
+                            <View style={{ height: hp(22.2), flex: 1, borderColor: 'red' }}>
+                                <Image
+                                    source={require('../../assets/SVGIcons/logo.png')}
+                                    resizeMode="contain"
+                                    style={styles.Logo}>
+                                </Image>
+                            </View>
+                            <View style={styles.Form}>
+                                <Item rounded style={styles.Field}>
+                                    <Input placeholder='Email' />
+                                </Item>
+                                <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
+                                    <Input placeholder='Password' />
+                                </Item>
+                                <Text style={styles.ForgotPassword}>Forgot Password?</Text>
+                                <View style={styles.SignInButton}>
+                                    <Text style={{ color: 'white' }}>LOGIN</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </KeyboardAwareScrollView>
+                </SafeAreaView>
+                // this.state.showActivity ? (
+                //     <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                //         <Spinner color="red" />
+                //     </Container>) :
+                //     Platform.OS === "ios" ?
+                //         <SafeAreaView keyboardShouldPersistTaps="always">
+                //             <KeyboardAwareScrollView>
+                //                 {this.state.isLoading ?
+                //                     (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                //                         <Spinner color="red" />
+                //                     </Container>) :
+                //                     contentToRender
+                //                 }
+                //             </KeyboardAwareScrollView>
+                //         </SafeAreaView> :
+                //         <KeyboardAwareScrollView keyboardShouldPersistTaps="always" >
+                //             {this.state.isLoading ?
+                //                 (<Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                //                     <Spinner color="red" />
+                //                 </Container>) :
+                //                 contentToRender
+                //             }
+                //         </KeyboardAwareScrollView>
             }
             </Root>
         )
@@ -159,37 +185,46 @@ export default class Login extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    logo: {
+    Container: {
         flex: 1,
+        marginLeft: wp(15.466),
+        marginRight: wp(15.466),
+        marginTop: hp(20.86),
+        marginBottom: hp(20.86),
+        borderColor: 'red',
+        // borderWidth: 1
+    },
+    Logo: {
+        // flex: 1,
+        width: wp(28.8),
+        height: hp(15.27),
+        alignSelf: 'center',
+        // borderWidth: 1,
+        borderColor: 'green'
+    },
+    Form: {
+        flex: 1,
+        height: hp(25.98),
+        borderColor: 'blue',
+        // borderWidth: 1,
+    },
+    Field: {
+        height: hp(5.5)
+    },
+    ForgotPassword: {
+        alignSelf: 'flex-end',
+        fontSize: RFValue(11),
+        // fontFamily:,''
+        marginTop: hp(1.72),
+        color: '#758692'
+    },
+    SignInButton: {
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    background: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height
-    },
-    form: {
-        flex: 4,
-        margin: 20
-    },
-    inputContainer: {
-
-    },
-    signinButton: {
-        marginTop: 10,
-        marginLeft: 50,
-        marginRight: 50
-    },
-    Text: {
-        backgroundColor: 'white',
-        margin: 10,
-        borderRadius: 5,
-        height: 50,
-        backgroundColor: 'lightgrey'
-    },
-    SignupText: {
-        flexDirection: 'row',
-        marginTop: 10,
-        marginLeft: 30
+        justifyContent: 'center',
+        borderRadius: 30,
+        backgroundColor: '#F48A20',
+        height: hp(5.5),
+        marginTop: hp(3.5),
+        color: 'white'
     }
 });
