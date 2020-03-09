@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Text, View, Dimensions, Platform, Image, StyleSheet, ScrollView,
+    Text, View, Dimensions, Platform, Image, StyleSheet, ScrollView, TouchableOpacity,
     ImageBackground, TextInput, Button, ActivityIndicator, KeyboardAvoidingView, SafeAreaView
 } from 'react-native'
 import { Toast, Root, Container, Spinner, Item, Content, Input } from 'native-base'
@@ -130,35 +130,44 @@ export default class Login extends React.Component {
         </ImageBackground>)
         return (
             <Root>{
-                <SafeAreaView style={{ flex: 1 }}>
-                    <KeyboardAwareScrollView>
-                        <View style={styles.Container}>
-                            <View style={{ height: hp(22.2), flex: 1, borderColor: 'red' }}>
-                                <Image
-                                    source={require('../../assets/SVGIcons/logo.png')}
-                                    resizeMode="contain"
-                                    style={styles.Logo}>
-                                </Image>
-                            </View>
-                            <View style={styles.Form}>
-                                <Item rounded style={styles.Field}>
-                                    <Input placeholder='Email' />
-                                </Item>
-                                <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
-                                    <Input placeholder='Password' />
-                                </Item>
-                                <Text style={styles.ForgotPassword}>Forgot Password?</Text>
-                                <View style={styles.SignInButton}>
-                                    <Text style={{ color: 'white' }}>LOGIN</Text>
+                this.state.showActivity ? (
+                    <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                        <Spinner color="red" />
+                    </Container>) :
+                    <SafeAreaView style={{ flex: 1 }}>
+                        <KeyboardAwareScrollView>
+                            <View style={styles.Container}>
+                                <View style={{ height: hp(22.2), flex: 1, borderColor: 'red' }}>
+                                    <Image
+                                        source={require('../../assets/SVGIcons/logo.png')}
+                                        resizeMode="contain"
+                                        style={styles.Logo}>
+                                    </Image>
+                                </View>
+                                <View style={styles.Form}>
+                                    <Item rounded style={styles.Field}>
+                                        <Input placeholder='Email' value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
+                                    </Item>
+                                    <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
+                                        <Input placeholder='Password' value={this.state.userPassword} onChangeText={this.handleUserPasswordChange} textContentType="password" secureTextEntry />
+                                    </Item>
+                                    <Text style={styles.ForgotPassword} onPress={() => { navigate('ForgotPassword') }}>
+                                        Forgot Password ?
+                                        </Text>
+                                    <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleSubmit() }}>
+                                        <Text style={{ color: 'white' }}>LOGIN</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <Text style={[styles.BottomText, { textAlign: 'right' }]}>Not A User? </Text>
+                                    <Text style={[styles.BottomText, { textAlign: 'left', marginLeft: 5, color: '#F48A20', fontWeight: '400' }]}
+                                        onPress={() => { navigate('SignUp') }}>
+                                        Sign Up!
+                                        </Text>
                                 </View>
                             </View>
-                        </View>
-                    </KeyboardAwareScrollView>
-                </SafeAreaView>
-                // this.state.showActivity ? (
-                //     <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                //         <Spinner color="red" />
-                //     </Container>) :
+                        </KeyboardAwareScrollView>
+                    </SafeAreaView>
                 //     Platform.OS === "ios" ?
                 //         <SafeAreaView keyboardShouldPersistTaps="always">
                 //             <KeyboardAwareScrollView>
@@ -191,15 +200,12 @@ const styles = StyleSheet.create({
         marginRight: wp(15.466),
         marginTop: hp(20.86),
         marginBottom: hp(20.86),
-        borderColor: 'red',
-        // borderWidth: 1
     },
     Logo: {
         // flex: 1,
         width: wp(28.8),
         height: hp(15.27),
         alignSelf: 'center',
-        // borderWidth: 1,
         borderColor: 'green'
     },
     Form: {
@@ -226,5 +232,11 @@ const styles = StyleSheet.create({
         height: hp(5.5),
         marginTop: hp(3.5),
         color: 'white'
+    },
+    BottomText: {
+        flex: 1,
+        color: '#758692',
+        marginTop: hp(1.72),
+        // color: '#F48A20'
     }
 });
