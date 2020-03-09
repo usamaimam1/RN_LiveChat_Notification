@@ -1,16 +1,19 @@
 import React from 'react'
 import {
     Text, View, Image, Platform, Dimensions, StyleSheet, ScrollView,
-    ImageBackground, TextInput, Button, ToastAndroid, Alert
+    ImageBackground, TextInput, Button, ToastAndroid, Alert, TouchableOpacity
 } from 'react-native'
-import { Toast, Root } from 'native-base'
+import { Toast, Root, Item, Input } from 'native-base'
 import firebase from 'react-native-firebase'
 import { SafeAreaView } from 'react-navigation'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import { widthPercentage as wv, heightPercentage as hv } from '../../util/stylerHelpers'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import * as SvgIcons from '../../assets/SVGIcons/index'
 export default class ForgotPassword extends React.Component {
     static navigationOptions = {
-        // header: null
+        header: null
     }
     constructor(props) {
         super(props)
@@ -26,6 +29,7 @@ export default class ForgotPassword extends React.Component {
         this.handleUserPasswordChange = this.handleUserPasswordChange.bind(this)
         this.handleUserPasswordChangeConfirm = this.handleUserPasswordChangeConfirm.bind(this)
         this.handlepasswordChangeCode = this.handlepasswordChangeCode.bind(this)
+        this.handleConfirmation = this.handleConfirmation.bind(this)
     }
     componentDidMount() {
 
@@ -42,174 +46,90 @@ export default class ForgotPassword extends React.Component {
     handlepasswordChangeCode(code) {
         this.setState({ passwordChangeCode: code })
     }
-    render() {
-        const { navigate } = this.props.navigation
-        const ContentToRender = (
-            <ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
-                {/* <ActivityIndicator size="large" animating={this.state.showActivity} /> */}
-                <View style={{ flex: 1 }}>
-                    <View style={styles.logo} >
-                        <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
-
-                        </Image>
-                    </View>
-                </View>
-                <View style={styles.form} >
-                    <View style={styles.inputContainer}>
-                        {this.state.receivedCode ? null :
-                            <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail} >
-
-                            </TextInput>
-                        }
-                        {this.state.receivedCode ?
-                            <TextInput
-                                placeholder="Enter Password : "
-                                textContentType="password"
-                                style={styles.Text}
-                                onChangeText={this.handleUserPasswordChange}
-                                secureTextEntry={true}
-                                value={this.state.newPassword}>
-
-                            </TextInput>
-                            : null}
-                        {this.state.receivedCode ?
-                            <TextInput
-                                placeholder="Enter Password Again : "
-                                textContentType="password"
-                                style={styles.Text}
-                                onChangeText={this.handleUserPasswordChangeConfirm}
-                                secureTextEntry={true}
-                                value={this.state.confirmnewPassword}>
-                            </TextInput>
-                            : null}
-                    </View>
-                    <View style={styles.signinButton}>
-                        <Button
-                            title={"Submit"}
-                            onPress={() => {
-                                if (!this.state.receivedCode) {
-                                    if (this.state.userEmail) {
-                                        firebase.auth().sendPasswordResetEmail(this.state.userEmail, { android: { packageName: "com.spl.RTChat" }, iOS: { bundleId: "com.invertase.RTChat" }, url: "https://splrtchat.page.link/", handleCodeInApp: true })
-                                            .then(() => {
-                                                // console.log(url)
-                                                Alert.alert(
-                                                    'Notification',
-                                                    'Please Check Your Email',
-                                                    [
-                                                        { text: 'OK', onPress: () => navigate('Home') }
-                                                    ],
-                                                    { cancelable: false },
-                                                );
-
-                                                // this.setState({receivedCode:true})
-
-                                            })
-                                            .catch(err => {
-                                                // ToastAndroid.show(err.message, ToastAndroid.LONG)
-                                                Toast.show({
-                                                    text: error.message,
-                                                    buttonText: 'OK',
-                                                    duration: 2500
-                                                })
-                                            })
-                                    } else {
-                                        Toast.show({
-                                            text: 'Do not leave the fields empty',
-                                            buttonText: 'Okay',
-                                            duration: 2500
-                                        })
-                                    }
-                                } else {
-                                    if (this.state.newPassword && this.state.confirmnewPassword) {
-                                        if (this.state.newPassword == this.state.confirmnewPassword) {
-                                            firebase.auth().confirmPasswordReset(this.state.passwordChangeCode, this.state.newPassword).then(() => {
-                                                // ToastAndroid.show("Password Changed Successfully..", ToastAndroid.SHORT)
-                                                Toast.show({
-                                                    text: 'Password Changed Successfully',
-                                                    buttonText: 'OK',
-                                                    duration: 2500
-                                                })
-                                                this.setState({ newPassword: null, confirmPasswordReset: null, passwordChangeCode: null })
-                                                navigate('Home')
-                                            }).catch(err => {
-                                                // ToastAndroid.show(err.message, ToastAndroid.SHORT)
-                                                Toast.show({
-                                                    text: error.message,
-                                                    buttonText: 'OK',
-                                                    duration: 2500
-                                                })
-                                            })
-                                        } else {
-                                            // ToastAndroid.show("Passwords Do not match", ToastAndroid.SHORT)
-                                            Toast.show({
-                                                text: 'Passwords Do Not Match',
-                                                buttonText: 'OK',
-                                                duration: 2500
-                                            })
-                                            this.setState({ newPassword: null, confirmnewPassword: null })
-                                        }
-                                    } else {
-                                        // ToastAndroid.show('Please do not leave the fields empty', ToastAndroid.SHORT)
-                                        Toast.show({
-                                            text: 'Please do not leave the fields empty',
-                                            buttonText: 'OK',
-                                            duration: 2500
-                                        })
-                                    }
-                                }
-                            }} />
-                    </View>
-                </View>
-            </ImageBackground>)
-        if (Platform.OS === "ios") {
-            return (
-                <Root>
-                    <SafeAreaView style={styles.Container}>
-                        {ContentToRender}
-                    </SafeAreaView>
-                </Root>)
+    handleConfirmation() {
+        console.log(this.state.userEmail)
+        if (this.state.userEmail) {
+            firebase.auth().sendPasswordResetEmail(this.state.userEmail)
+                .then(() => {
+                    Alert.alert('Notification', 'Please Check Your Email', [
+                        { text: 'OK', onPress: () => navigate('Home') }
+                    ], { cancelable: false });
+                })
+                .catch(err => {
+                    Toast.show({ text: err.message, buttonText: 'OK', duration: 2500 })
+                })
         } else {
-            return (
-                <Root>
-                    <ScrollView style={styles.Container} keyboardShouldPersistTaps="always">
-                        {ContentToRender}
-                    </ScrollView>
-                </Root>
-            )
+            Toast.show({ text: 'Do not leave the fields empty', buttonText: 'Okay', duration: 2500 })
         }
+    }
+    render() {
+        return (
+            <Root>
+                <KeyboardAwareScrollView>
+                    <SafeAreaView style={styles.Container}>
+                        <View style={styles.Header}>
+                            <View style={styles.HeaderInnerView} >
+                                <SvgIcons.Back height={hp(2.9)} width={wp(6.4)} color="#34304C" onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
+                                <Text style={styles.HeaderTitle}>Forgot Password</Text>
+                            </View>
+                        </View>
+                        <View style={styles.SubContainer}>
+                            <View style={{ height: hp(22.2), flex: 1, borderColor: 'red' }}>
+                                <Image
+                                    source={require('../../assets/SVGIcons/logo.png')}
+                                    resizeMode="contain"
+                                    style={styles.Logo}>
+                                </Image>
+                            </View>
+                            <View style={styles.Form}>
+                                <Item rounded style={styles.Field}>
+                                    <Input placeholder='Email' value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
+                                </Item>
+                                <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleConfirmation() }}>
+                                    <Text style={{ color: 'white' }}>Confirm</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </SafeAreaView>
+                </KeyboardAwareScrollView>
+            </Root>
+        )
     }
 }
 const styles = StyleSheet.create({
-    logo: {
+    Container: {
+        shadowColor: "#000", shadowOpacity: 0.16
+    },
+    Header: {
+        height: hp(8.3), borderBottomColor: 'grey', borderBottomWidth: 1
+    },
+    HeaderInnerView: {
+        height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
+    },
+    HeaderTitle: {
+        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C'
+    },
+    SubContainer: {
         flex: 1,
+        marginLeft: wp(15.466),
+        marginRight: wp(15.466),
+        marginTop: hp(20.86),
+        marginBottom: hp(20.86),
+    },
+    Logo: {
+        // flex: 1,
+        width: wp(28.8),
+        height: hp(15.27),
+        alignSelf: 'center',
+        borderColor: 'green'
+    },
+    SignInButton: {
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    background: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height
-    },
-    form: {
-        flex: 1,
-        margin: 20
-    },
-    inputContainer: {
-
-    },
-    signinButton: {
-        marginTop: 10,
-        marginLeft: 50,
-        marginRight: 50
-    },
-    Text: {
-        backgroundColor: 'white',
-        margin: 10,
-        borderRadius: 5
-    },
-    SignupText: {
-        flex: 1,
-        flexDirection: 'row',
-        marginTop: 10,
-        marginLeft: 30
+        justifyContent: 'center',
+        borderRadius: 30,
+        backgroundColor: '#F48A20',
+        height: hp(5.5),
+        marginTop: hp(3.5),
+        color: 'white'
     }
 })
