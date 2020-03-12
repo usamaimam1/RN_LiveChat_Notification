@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Text, View, StyleSheet, Image, ToastAndroid, Picker, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler,
+    Text, View, StyleSheet, Image, ToastAndroid, Picker, TouchableOpacity, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler,
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import firebase from 'react-native-firebase'
@@ -152,98 +152,153 @@ class Dashboard extends React.Component {
                                         <Text style={styles.WelcomeText}>{`Welcome ${this.props.user ? this.props.user.adminaccess ? 'Admin' : 'Employee' : null}`}</Text>
                                     </View>
                                 </View>
-                                <Content>
+                                <Content style={{ marginTop: hv(26), marginHorizontal: wv(15) }}>
                                     {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
                                         <List>
                                             {this.props.projects.length === 0 ?
                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                     <Text style={{ color: 'grey' }}>No Projects To Display</Text>
                                                 </View> :
-                                                this.props.projects.map(proj => {
-                                                    return (
-                                                        <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                            this.props.setActiveProjectId(proj.projectId)
-                                                            this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
-                                                        }}>
-                                                            <Left>
-                                                                <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                                            </Left>
-                                                            <Body>
-                                                                <Text>{proj.projectTitle}</Text>
-                                                                <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                            </Body>
-                                                            <Right>
-                                                                {this.props.user ? this.props.user.adminaccess ?
-                                                                    <Button transparent onPress={() => {
-                                                                        Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                                            [
-                                                                                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                                                { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                                            ],
-                                                                            { cancelable: true },
-                                                                        );
-                                                                    }} >
-                                                                        <Icon name="cross" type="Entypo" />
-                                                                    </Button> : null : null}
-                                                            </Right>
-                                                        </ListItem>
-                                                    )
-                                                })}
+                                                // <FlatList
+                                                //     data={this.props.projects}
+                                                //     keyExtractor={item => item.projectId}
+                                                //     renderItem={({ item }) =>
+                                                //         <View style={{ height: hv(55 + 17.5), width: wv(345.5), borderWidth: 0, marginTop: hv(13.5) }} onPress={() => {
+                                                //             this.props.setActiveProjectId(proj.projectId)
+                                                //             this.props.navigation.navigate('ProjectScreen', { projectId: item.projectId })
+                                                //         }}>
+                                                //             <View style={{ height: hv(55), width: wv(345.5), flexDirection: 'row' }}>
+                                                //                 <View style={{ height: hv(55), width: wv(55) }}>
+                                                //                     <Image source={{ uri: item.projectThumbnail }} style={{ height: RFValue(50), width: RFValue(50), borderRadius: RFValue(50 / 2) }}></Image>
+                                                //                 </View>
+                                                //                 <View style={{ marginLeft: wv(11), marginVertical: hv(5), height: hv(40), width: wv(159 + 90), borderWidth: 0 }}>
+                                                //                     <Text style={{ fontSize: RFValue(14), fontWeight: '500' }}>{item.projectTitle}</Text>
+                                                //                     <Text note numberOfLines={1} style={{ fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
+                                                //                 </View>
+                                                //                 <View>
+                                                //                     <SvgIcons.Remove width={RFValue(25)} height={RFValue(25)} style={{ marginVertical: hv(10) }}></SvgIcons.Remove>
+                                                //                 </View>
+                                                //             </View>
+                                                //             <View style={{ marginTop: hv(12.5), borderBottomWidth: 1, borderBottomColor: '#D8D8D8' }}></View>
+                                                //         </View>}>
+
+                                                // </FlatList>
+                                                <List>
+                                                    {this.props.projects.map(item => {
+                                                        return (
+                                                            <View key={item.projectId} style={{ height: hv(55 + 17.5), width: wv(345.5), borderWidth: 0, marginTop: hv(13.5) }}>
+                                                                <View style={{ height: hv(55), width: wv(345.5), flexDirection: 'row' }}>
+                                                                    <TouchableOpacity style={{ height: hv(55), width: wv(55 + 95 + 159), flexDirection: 'row' }} onPress={() => {
+                                                                        this.props.setActiveProjectId(item.projectId)
+                                                                        this.props.navigation.navigate('ProjectScreen', { projectId: item.projectId })
+                                                                    }}>
+                                                                        <View style={{ height: hv(55), width: wv(55) }}>
+                                                                            <Image source={{ uri: item.projectThumbnail }} style={{ height: RFValue(50), width: RFValue(50), borderRadius: RFValue(50 / 2) }}></Image>
+                                                                        </View>
+                                                                        <View style={{ marginLeft: wv(11), marginVertical: hv(5), height: hv(40), width: wv(159 + 90), borderWidth: 0 }}>
+                                                                            <Text style={{ fontSize: RFValue(14), fontWeight: '500' }}>{item.projectTitle}</Text>
+                                                                            <Text note numberOfLines={1} style={{ fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
+                                                                        </View>
+                                                                    </TouchableOpacity>
+                                                                    <View>
+                                                                        {this.props.user ? this.props.user.adminaccess ?
+                                                                            <SvgIcons.Remove width={RFValue(25)} height={RFValue(25)} style={{ marginVertical: hv(10) }} onPress={() => {
+                                                                                Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                                                    [
+                                                                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                                        { text: 'OK', onPress: () => { this.handleDeleteProject(item) } },
+                                                                                    ],
+                                                                                    { cancelable: true },
+                                                                                );
+                                                                            }}></SvgIcons.Remove> : null : null}
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{ marginTop: hv(12.5), borderBottomWidth: 1, borderBottomColor: '#D8D8D8' }}></View>
+                                                            </View>)
+                                                    }
+                                                    )}
+                                                </List>
+                                                // this.props.projects.map(proj => {
+                                                //     return (
+                                                //         <ListItem key={proj.projectId} thumbnail onPress={() => {
+                                                //             this.props.setActiveProjectId(proj.projectId)
+                                                //             this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
+                                                //         }}>
+                                                //             <Left>
+                                                //                 <Thumbnail avatar source={{ uri: proj.projectThumbnail }} />
+                                                //             </Left>
+                                                //             <Body>
+                                                //                 <Text>{proj.projectTitle}</Text>
+                                                //                 <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
+                                                //             </Body>
+                                                //             <Right>
+                                                //                 {this.props.user ? this.props.user.adminaccess ?
+                                                //                     <Button transparent onPress={() => {
+                                                //                         Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                //                             [
+                                                //                                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                //                                 { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
+                                                //                             ],
+                                                //                             { cancelable: true },
+                                                //                         );
+                                                //                     }} >
+                                                //                         <Icon name="cross" type="Entypo" />
+                                                //                     </Button> : null : null}
+                                                //             </Right>
+                                                //         </ListItem>
+                                                //     )
+                                                // })
+                                            }
                                         </List> : this.handleFailMessage()}
                                 </Content>
-                                <View style={styles.Footer}>
-                                    <View style={styles.ProjectsIcon}>
-                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                {this.props.user ? this.props.user.adminaccess ?
+                                    <View style={styles.Footer}>
+                                        <View style={styles.ProjectsIcon}>
+                                            <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                            </View>
+                                            <SvgIcons.Projects style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.Projects>
+                                            <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                         </View>
-                                        <SvgIcons.Projects style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.Projects>
-                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
-                                    </View>
-                                    <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
-                                        <SvgIcons.Users width={wv(19.5)} height={hv(22)} style={{ alignSelf: 'center' }} ></SvgIcons.Users>
-                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
-                                    </View>
-                                    <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
-                                        <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }}></SvgIcons.AddProject>
-                                    </View>
-                                    <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
-                                        <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
-                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
-                                    </View>
-                                    <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
-                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                        <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
+                                            <SvgIcons.Users width={wv(19.5)} height={hv(22)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('UserProfile') }} ></SvgIcons.Users>
+                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
                                         </View>
-                                        <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }}></SvgIcons.IssueFooter>
-                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
-                                    </View>
-                                </View>
-                                {/* <Footer>
-                                    <FooterTab>
-                                        <Button active badge vertical>
-                                            <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.projects.length}</Text></Badge>
-                                            <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)}></SvgIcons.Projects>
-                                            <Text>Projects</Text>
-                                        </Button>
-                                        <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
-                                            <SvgIcons.Users width={RFValue(26)} height={RFValue(26)}></SvgIcons.Users>
-                                            <Text>User</Text>
-                                        </Button>
-                                        <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
-                                            <Badge ><Text>{this.props.issueCount}</Text></Badge>
-                                            <Icon name="issue-opened" type="Octicons" />
-                                            <Text>Issues</Text>
-                                        </Button>
-                                        {this.props.user ? this.props.user.adminaccess ?
-                                            <Button vertical onPress={() => {
-                                                this.props.navigation.navigate('AddProject')
-                                            }}>
-                                                <Icon name="plus" type="AntDesign" />
-                                                <Text>Add Project</Text>
-                                            </Button> : null : null
-                                        }
-                                    </FooterTab>
-                                </Footer> */}
+                                        <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
+                                            <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}></SvgIcons.AddProject>
+                                        </View>
+                                        <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
+                                            <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
+                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
+                                        </View>
+                                        <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
+                                            <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                            </View>
+                                            <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('IssuesIndex') }}></SvgIcons.IssueFooter>
+                                            <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
+                                        </View>
+                                    </View> :
+                                    <Footer style={{ backgroundColor: 'white' }}>
+                                        <FooterTab>
+                                            <Button badge vertical>
+                                                <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.projects.length}</Text></Badge>
+                                                <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.Projects>
+                                                <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                            </Button>
+                                            <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
+                                                <Badge style={{ backgroundColor: 'white' }}><Text style={{ color: 'white' }}>{this.props.projects.length}</Text></Badge>
+                                                <SvgIcons.Users width={RFValue(26)} height={RFValue(26)} ></SvgIcons.Users>
+                                                <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
+                                            </Button>
+                                            <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
+                                                <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.issueCount}</Text></Badge>
+                                                <SvgIcons.IssueFooter width={RFValue(26)} height={RFValue(26)}></SvgIcons.IssueFooter>
+                                                <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Issues</Text>
+                                            </Button>
+                                        </FooterTab>
+                                    </Footer> : null
+                                }
                             </Container>
                         </SafeAreaView>
                     </Root>
