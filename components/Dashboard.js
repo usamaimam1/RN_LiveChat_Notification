@@ -159,30 +159,6 @@ class Dashboard extends React.Component {
                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                     <Text style={{ color: 'grey' }}>No Projects To Display</Text>
                                                 </View> :
-                                                // <FlatList
-                                                //     data={this.props.projects}
-                                                //     keyExtractor={item => item.projectId}
-                                                //     renderItem={({ item }) =>
-                                                //         <View style={{ height: hv(55 + 17.5), width: wv(345.5), borderWidth: 0, marginTop: hv(13.5) }} onPress={() => {
-                                                //             this.props.setActiveProjectId(proj.projectId)
-                                                //             this.props.navigation.navigate('ProjectScreen', { projectId: item.projectId })
-                                                //         }}>
-                                                //             <View style={{ height: hv(55), width: wv(345.5), flexDirection: 'row' }}>
-                                                //                 <View style={{ height: hv(55), width: wv(55) }}>
-                                                //                     <Image source={{ uri: item.projectThumbnail }} style={{ height: RFValue(50), width: RFValue(50), borderRadius: RFValue(50 / 2) }}></Image>
-                                                //                 </View>
-                                                //                 <View style={{ marginLeft: wv(11), marginVertical: hv(5), height: hv(40), width: wv(159 + 90), borderWidth: 0 }}>
-                                                //                     <Text style={{ fontSize: RFValue(14), fontWeight: '500' }}>{item.projectTitle}</Text>
-                                                //                     <Text note numberOfLines={1} style={{ fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
-                                                //                 </View>
-                                                //                 <View>
-                                                //                     <SvgIcons.Remove width={RFValue(25)} height={RFValue(25)} style={{ marginVertical: hv(10) }}></SvgIcons.Remove>
-                                                //                 </View>
-                                                //             </View>
-                                                //             <View style={{ marginTop: hv(12.5), borderBottomWidth: 1, borderBottomColor: '#D8D8D8' }}></View>
-                                                //         </View>}>
-
-                                                // </FlatList>
                                                 <List>
                                                     {this.props.projects.map(item => {
                                                         return (
@@ -218,36 +194,6 @@ class Dashboard extends React.Component {
                                                     }
                                                     )}
                                                 </List>
-                                                // this.props.projects.map(proj => {
-                                                //     return (
-                                                //         <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                //             this.props.setActiveProjectId(proj.projectId)
-                                                //             this.props.navigation.navigate('ProjectScreen', { projectId: proj.projectId })
-                                                //         }}>
-                                                //             <Left>
-                                                //                 <Thumbnail avatar source={{ uri: proj.projectThumbnail }} />
-                                                //             </Left>
-                                                //             <Body>
-                                                //                 <Text>{proj.projectTitle}</Text>
-                                                //                 <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                //             </Body>
-                                                //             <Right>
-                                                //                 {this.props.user ? this.props.user.adminaccess ?
-                                                //                     <Button transparent onPress={() => {
-                                                //                         Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                //                             [
-                                                //                                 { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                //                                 { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                //                             ],
-                                                //                             { cancelable: true },
-                                                //                         );
-                                                //                     }} >
-                                                //                         <Icon name="cross" type="Entypo" />
-                                                //                     </Button> : null : null}
-                                                //             </Right>
-                                                //         </ListItem>
-                                                //     )
-                                                // })
                                             }
                                         </List> : this.handleFailMessage()}
                                 </Content>
