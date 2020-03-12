@@ -3,7 +3,7 @@ import Svg, { Defs, ClipPath, Path, G } from "react-native-svg";
 
 function SvgBack(props) {
   return (
-    <Svg width={18} height={14} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 18 14" {...props}>
       <Defs>
         <ClipPath id="back_svg__a">
           <Path

@@ -5,10 +5,10 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
 		04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */; };
+		047A132B2417A80600C1225A /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047A132A2417A80600C1225A /* fontello.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -70,6 +70,7 @@
 		046983D423EC416F00A4E037 /* RTChatRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatRelease.entitlements; path = RTChat/RTChatRelease.entitlements; sourceTree = "<group>"; };
 		04750E7623F2B6BE00AF63C2 /* RTChatDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatDebug.entitlements; path = RTChat/RTChatDebug.entitlements; sourceTree = "<group>"; };
 		04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		047A132A2417A80600C1225A /* fontello.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = fontello.ttf; path = "../../../../Downloads/fontello-6db75a46/font/fontello.ttf"; sourceTree = "<group>"; };
 		0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RTChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RTChat/AppDelegate.h; sourceTree = "<group>"; };
@@ -212,6 +213,7 @@
 		4599446EE4C4464F8475D64B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				047A132A2417A80600C1225A /* fontello.ttf */,
 				D83DF709E22A45E8A366663F /* AntDesign.ttf */,
 				B29A8B7E55BF4125A0B9B9E6 /* Entypo.ttf */,
 				B512A9AD0F0748DAB7FC9E51 /* EvilIcons.ttf */,
@@ -440,6 +442,7 @@
 				C1BA0EE7628545909F36E0C0 /* FontAwesome5_Regular.ttf in Resources */,
 				CD179A71BF1948B88539D691 /* FontAwesome5_Solid.ttf in Resources */,
 				B9600FB5FD98446890032680 /* Fontisto.ttf in Resources */,
+				047A132B2417A80600C1225A /* fontello.ttf in Resources */,
 				43FBE6600C1F4C58A8435704 /* Foundation.ttf in Resources */,
 				208A7E8EAA154EA99A4D390F /* Ionicons.ttf in Resources */,
 				77A4DE33B5084452A83738CE /* MaterialCommunityIcons.ttf in Resources */,

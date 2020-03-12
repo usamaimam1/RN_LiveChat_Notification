@@ -4,7 +4,7 @@ import Svg, { Defs, ClipPath, Path, G, Circle } from "react-native-svg";
 
 function SvgUpload(props) {
   return (
-    <Svg width={111} height={111} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 111 111" {...props}>
       <Defs>
         <ClipPath id="upload_svg__b">
           <Path

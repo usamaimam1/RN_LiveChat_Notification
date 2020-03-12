@@ -3,7 +3,7 @@ import Svg, { G, Circle, Path } from "react-native-svg";
 
 function SvgProjectManagerB(props) {
   return (
-    <Svg width={25} height={25} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 25 25" {...props}>
       <G>
         <Circle cx={12.5} cy={12.5} r={12.5} fill="#34304c" />
         <Path

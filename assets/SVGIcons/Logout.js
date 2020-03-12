@@ -3,7 +3,7 @@ import Svg, { Defs, ClipPath, Path, G } from "react-native-svg";
 
 function SvgLogout(props) {
   return (
-    <Svg width={16} height={17.603} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 16 17.603" {...props}>
       <Defs>
         <ClipPath id="logout_svg__a">
           <Path

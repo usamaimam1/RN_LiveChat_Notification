@@ -3,7 +3,7 @@ import Svg, { Defs, ClipPath, Path, G } from "react-native-svg";
 
 function SvgUsers(props) {
   return (
-    <Svg width={16} height={18.051} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 16 18.051" {...props}>
       <Defs>
         <ClipPath id="users_svg__a">
           <Path

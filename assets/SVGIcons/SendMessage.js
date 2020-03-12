@@ -3,7 +3,7 @@ import Svg, { Rect, Path } from "react-native-svg";
 
 function SvgSendMessage(props) {
   return (
-    <Svg width={40} height={40} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 40 40" {...props}>
       <Rect
         data-name="Rectangle Copy"
         width={40}

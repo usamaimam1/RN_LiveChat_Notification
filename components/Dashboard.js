@@ -11,8 +11,10 @@ import {
 } from 'native-base'
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+// import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentage as wv, heightPercentage as hv } from '../util/stylerHelpers'
+import * as SvgIcons from '../assets/SVGIcons/index'
 import OptionsMenu from 'react-native-options-menu'
 import RNFetchBlob from 'rn-fetch-blob'
 import ImagePicker from 'react-native-image-picker';
@@ -23,6 +25,9 @@ import SideBar from './SideBar'
 import { connect } from 'react-redux'
 import { SetProject, SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString, SetNetworkState } from '../redux/actions/index'
 import WarningScreen from './WarningScreen'
+import { RFValue } from 'react-native-responsive-fontsize'
+import CustomIcons from '../util/CustomIcons'
+import Svg from 'react-native-svg'
 const options = {
     title: 'Select Image',
     storageOptions: { skipBackup: true, path: 'images' }
@@ -139,25 +144,14 @@ class Dashboard extends React.Component {
                         _onClose={this.closeDrawer} />}
                     onClose={() => { this.closeDrawer() }}>
                     <Root>
-                        <Container>
-                            <ImageBackground source={require('../assets/splash-bg.jpg')}
-                                style={{ width: width, height: height }}>
-                                <Header transparent>
-                                    <Left>
-                                        <Button transparent onPress={() => {
-                                            this.openDrawer()
-                                        }}>
-                                            <Icon name="menu" style={{ color: 'blue' }} />
-                                        </Button>
-                                    </Left>
-                                    <Body style={{ alignSelf: 'center' }}>
-                                        <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
-                                        <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
-                                    </Body>
-                                    <Right>
-
-                                    </Right>
-                                </Header>
+                        <SafeAreaView style={{ flex: 1 }}>
+                            <Container>
+                                <View style={styles.Header}>
+                                    <View style={styles.InnerHeaderView}>
+                                        <SvgIcons.Menu width={hv(24)} height={hv(24)} onPress={() => { this.openDrawer() }}></SvgIcons.Menu>
+                                        <Text style={styles.WelcomeText}>{`Welcome ${this.props.user ? this.props.user.adminaccess ? 'Admin' : 'Employee' : null}`}</Text>
+                                    </View>
+                                </View>
                                 <Content>
                                     {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
                                         <List>
@@ -197,17 +191,42 @@ class Dashboard extends React.Component {
                                                 })}
                                         </List> : this.handleFailMessage()}
                                 </Content>
-                                <Footer>
+                                <View style={styles.Footer}>
+                                    <View style={styles.ProjectsIcon}>
+                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                        </View>
+                                        <SvgIcons.Projects style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.Projects>
+                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                    </View>
+                                    <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
+                                        <SvgIcons.Users width={wv(19.5)} height={hv(22)} style={{ alignSelf: 'center' }} ></SvgIcons.Users>
+                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
+                                    </View>
+                                    <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
+                                        <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }}></SvgIcons.AddProject>
+                                    </View>
+                                    <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
+                                        <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
+                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
+                                    </View>
+                                    <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
+                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                        </View>
+                                        <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }}></SvgIcons.IssueFooter>
+                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
+                                    </View>
+                                </View>
+                                {/* <Footer>
                                     <FooterTab>
                                         <Button active badge vertical>
-                                            <Badge><Text>{this.props.projects.length}</Text></Badge>
-                                            <Icon name="project" type="Octicons" />
+                                            <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.projects.length}</Text></Badge>
+                                            <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)}></SvgIcons.Projects>
                                             <Text>Projects</Text>
                                         </Button>
-                                        <Button vertical onPress={() => {
-                                            this.props.navigation.navigate('UserProfile')
-                                        }}>
-                                            <Icon name="user" type="AntDesign" />
+                                        <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
+                                            <SvgIcons.Users width={RFValue(26)} height={RFValue(26)}></SvgIcons.Users>
                                             <Text>User</Text>
                                         </Button>
                                         <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
@@ -224,9 +243,9 @@ class Dashboard extends React.Component {
                                             </Button> : null : null
                                         }
                                     </FooterTab>
-                                </Footer>
-                            </ImageBackground>
-                        </Container>
+                                </Footer> */}
+                            </Container>
+                        </SafeAreaView>
                     </Root>
                 </Drawer >
         )
@@ -266,19 +285,12 @@ const mapStateToProps = state => {
         netState: state.networkReducer.netState
     }
 }
-// const styles = StyleSheet.create({
-//     item: {
-//         flex: 1,
-//         margin: 10,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         borderBottomWidth: 1
-//     },
-//     body: {
-//         flex: 2
-//     },
-//     poet: {
-//         flex: 1
-//     }
-// })
+
+const styles = StyleSheet.create({
+    Header: { height: hv(68) },
+    InnerHeaderView: { borderWidth: 0, flexDirection: 'row', height: hv(24), marginTop: hv(58 - 32), marginLeft: wv(13), marginBottom: hv(18) },
+    WelcomeText: { marginLeft: wv(10), fontWeight: '500', textAlign: 'center', marginBottom: hv(2), fontSize: RFValue(15), fontWeight: "400" },
+    Footer: { height: hv(94.5), width: wv(375), borderWidth: 0, flexDirection: 'row' },
+    ProjectsIcon: { width: wv(47), height: hv(47), marginTop: hv(20), marginLeft: wv(27), borderWidth: 0 },
+})
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

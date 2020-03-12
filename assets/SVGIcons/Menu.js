@@ -3,7 +3,7 @@ import Svg, { Defs, ClipPath, Path, G } from "react-native-svg";
 
 function SvgMenu(props) {
   return (
-    <Svg width={20} height={14} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 20 14" {...props}>
       <Defs>
         <ClipPath id="menu_svg__a">
           <Path

@@ -3,7 +3,7 @@ import Svg, { Defs, ClipPath, Path, G } from "react-native-svg";
 
 function SvgTeam(props) {
   return (
-    <Svg width={24} height={20} {...props}>
+    <Svg width="1em" height="1em" viewBox="0 0 24 20" {...props}>
       <Defs>
         <ClipPath id="team_svg__a">
           <Path
