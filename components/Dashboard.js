@@ -228,7 +228,9 @@ class Dashboard extends React.Component {
                                     <Footer style={{ backgroundColor: 'white' }}>
                                         <FooterTab>
                                             <Button badge vertical>
-                                                <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.projects.length}</Text></Badge>
+                                                <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                    <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                                </Badge>
                                                 <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.Projects>
                                                 <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                             </Button>
@@ -238,7 +240,8 @@ class Dashboard extends React.Component {
                                                 <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
                                             </Button>
                                             <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
-                                                <Badge style={{ backgroundColor: '#F48A20' }}><Text>{this.props.issueCount}</Text></Badge>
+                                                <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                    <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text></Badge>
                                                 <SvgIcons.IssueFooter width={RFValue(26)} height={RFValue(26)}></SvgIcons.IssueFooter>
                                                 <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Issues</Text>
                                             </Button>
