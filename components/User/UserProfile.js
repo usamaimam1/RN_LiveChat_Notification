@@ -3,8 +3,11 @@ import {
     Container, Content, Header, Footer, Left, Right, Body, Icon, Button, Title,
     Card, CardItem, Badge, FooterTab
 } from 'native-base'
-import { Image, Text, ImageBackground, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
-import { handlePickImage, handleUpdate } from './UserProfile.functions'
+import { Image, View, Text, ImageBackground, Dimensions, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
+import { widthPercentage as wv, heightPercentage as hv } from '../../util/stylerHelpers'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import * as SvgIcons from '../../assets/SVGIcons/index'
 import { connect } from 'react-redux'
 class UserProfile extends React.Component {
     static navigationOptions = {
@@ -17,8 +20,8 @@ class UserProfile extends React.Component {
             imageUploaded: false,
             profilepic: this.props.user.profilepic
         }
-        this.handlePickImage = handlePickImage.bind(this)
-        this.handleUpdate = handleUpdate.bind(this)
+        // this.handlePickImage = handlePickImage.bind(this)
+        // this.handleUpdate = handleUpdate.bind(this)
     }
     componentDidMount() {
 
@@ -27,114 +30,82 @@ class UserProfile extends React.Component {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
-            <Container>
-                <ImageBackground source={require('../../assets/splash-bg.jpg')}
-                    style={{ width: width, height: height }}>
-                    <Header transparent>
-                        <Left>
-                            <Button transparent onPress={() => {
-                                this.props.navigation.goBack()
-                            }}>
-                                <Icon name="arrow-back" style={{ color: 'blue' }} />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: 'black' }}>User Profile</Title>
-                        </Body>
-                        <Right>
-                        </Right>
-                    </Header>
-                    <Content padder>
-                        <Card>
-                            <CardItem cardBody >
-                                <ImageBackground
-                                    source={{ uri: "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" }}
-                                    style={styles.thumbnail}
-                                >
-                                    <TouchableOpacity onPress={this.handlePickImage}>
-                                        <Image square style={{ height: 200, width: 200, borderRadius: 100 }}
-                                            source={{ uri: this.state.profilepic }}
-                                        />
-                                    </TouchableOpacity>
-                                </ImageBackground>
-                            </CardItem>
-                            {/* Full Name Entry */}
-                            <CardItem cardBody style={{ margin: 10 }}>
-                                <Left>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}> Full Name : </Text>
-                                </Left>
-                                <Right>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {this.props.user.fullName}
-                                    </Text>
-                                </Right>
-                            </CardItem>
+            <SafeAreaView style={styles.Container}>
+                <View style={styles.Header}>
+                    <View style={styles.HeaderInnerView} >
+                        <SvgIcons.Back height={hp(2.9)} width={wp(6.4)} color="#34304C" onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
+                        <Text style={styles.HeaderTitle}>User Profile</Text>
+                    </View>
+                </View>
+                <View style={styles.ProfileView}>
+                    <View style={styles.ProfileInnerUpperView}>
+                    </View>
+                    <Image source={{ uri: this.state.profilepic }} style={styles.Avatar}>
+                    </Image>
+                    <View style={styles.ProfileInnerLowerView}>
+                        <View style={styles.StatusView}>
+                            <Text style={styles.StatusText}>{this.props.user ? this.props.user.adminaccess ? "Admin" : "Employee" : ""}</Text>
+                        </View>
+                        <View style={styles.NameEmailView} >
+                            <Text style={styles.Name}>{this.props.user.fullName}</Text>
+                            <Text style={styles.Email}>{this.props.user.email}</Text>
+                        </View>
+                        <View style={styles.NameEmailDivider}></View>
+                        <View style={styles.InfoView}>
+                            <View style={styles.InfoRow}>
+                                <Text style={styles.InfoText}>{this.props.projectCount}</Text>
+                                <Text style={styles.InfoLabel}>Projects</Text>
+                            </View>
+                            <View style={[styles.InfoRow, { marginLeft: wv(32) }]}>
+                                <Text style={styles.InfoText}>{this.props.issueCount}</Text>
+                                <Text style={styles.InfoLabel}>Issues</Text>
+                            </View>
+                            <View style={[styles.InfoRow, { marginLeft: wv(46) }]}>
+                                <Text style={styles.InfoText}>{this.props.projectCount}</Text>
+                                <Text style={styles.InfoLabel}>Teams</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity style={styles.UpdateButton} onPress={() => { this.props.navigation.navigate('EditUserProfile') }}>
+                            <Text style={styles.UpdateButtonText}>UPDATE</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                            {/* Email Entry */}
-                            <CardItem cardBody style={{ margin: 10 }}>
-                                <Left>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}> Email : </Text>
-                                </Left>
-                                <Right>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {this.props.user.email}
-                                    </Text>
-                                </Right>
-                            </CardItem>
-                            {/* Admin Access */}
-                            <CardItem cardBody style={{ margin: 10 }}>
-                                <Left>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}> Admin Access : </Text>
-                                </Left>
-                                <Right>
-                                    <Text style={{ fontSize: 15, fontStyle: 'italic', fontWeight: "600" }}>
-                                        {JSON.stringify(this.props.user.adminaccess)}
-                                    </Text>
-                                </Right>
-                            </CardItem>
-                            {/* Card Footer */}
-                            <CardItem footer style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <Button rounded success style={{ alignItems: 'center', justifyContent: 'center', width: 80 }} onPress={this.handleUpdate}>
-                                    <Text>Update</Text>
-                                </Button>
-                            </CardItem>
-                        </Card>
-                    </Content>
-                    <Footer>
-                        <FooterTab>
-                            <Button badge vertical onPress={() => { this.props.navigation.navigate('Dashboard') }}>
-                                <Badge><Text>{this.props.projectCount}</Text></Badge>
-                                <Icon name="project" type="Octicons" />
-                                <Text>Projects</Text>
-                            </Button>
-                            <Button active vertical>
-                                <Icon name="user" type="AntDesign" />
-                                <Text>User</Text>
-                            </Button>
-                            <Button badge vertical onPress={() => {
-                                this.props.navigation.navigate('IssuesIndex')
-                            }}>
-                                <Badge ><Text>{this.props.issueCount}</Text></Badge>
-                                <Icon name="issue-opened" type="Octicons" />
-                                <Text>Issues</Text>
-                            </Button>
-
-                        </FooterTab>
-                    </Footer>
-                </ImageBackground>
-            </Container >
-
+                </View>
+            </SafeAreaView>
         )
     }
 }
 const styles = StyleSheet.create({
-    thumbnail: {
-        height: 300,
-        width: null,
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
+    Container: {
+        shadowColor: "#000", shadowOpacity: 0.16
+    },
+    Header: {
+        height: hp(8.3), borderBottomColor: 'grey', borderBottomWidth: 1
+    },
+    HeaderInnerView: {
+        height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
+    },
+    HeaderTitle: {
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
+    },
+    ProfileView: { height: hv(396), width: wv(345), marginTop: hv(20.5), marginHorizontal: wv(15), borderWidth: 0, },
+    Avatar: { height: hv(124), width: hv(124), borderRadius: hv(124) / 2, alignSelf: 'center', position: 'absolute' },
+    ProfileInnerUpperView: { height: hv(60), backgroundColor: '#FBFCFE' },
+    ProfileInnerLowerView: { position: 'absolute', height: hv(336), width: wv(345), marginTop: hv(60), borderWidth: 0 },
+    StatusView: { height: hv(25), width: wv(64), alignSelf: 'center', marginTop: hv(79.5), borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+    StatusText: { fontSize: RFValue(12), fontWeight: '500', },
+    NameEmailView: { alignSelf: 'center', width: wv(190), height: hv(56), marginTop: hv(11.5) },
+    Name: { fontSize: RFValue(26), alignSelf: 'center' },
+    Email: { fontSize: RFValue(14), color: '#758692', alignSelf: 'center', marginTop: hv(6) },
+    NameEmailDivider: { borderBottomColor: '#D4DCE1', borderBottomWidth: 1, marginHorizontal: wv(20), marginTop: hv(17) },
+    InfoView: { alignSelf: 'center', width: wv(254), height: hv(45), marginTop: hv(13.5), flexDirection: 'row' },
+    InfoRow: { width: wv(58), height: hv(45) },
+    InfoText: { alignSelf: 'center', fontSize: RFValue(18), fontWeight: 'bold' },
+    InfoLabel: { marginTop: hv(5), fontSize: RFValue(14), color: '#758692', alignSelf: 'center' },
+    UpdateButton: { alignSelf: 'center', width: wv(100), height: hv(32), borderRadius: hv(32) / 2, marginTop: hv(26.5), backgroundColor: '#F48A20' },
+    UpdateButtonText: { color: 'white', textAlign: 'center', fontSize: RFValue(13), marginVertical: hv(8), marginHorizontal: wv(22), fontWeight: '500' }
+
+
 })
 const mapStateToProps = state => {
     return {

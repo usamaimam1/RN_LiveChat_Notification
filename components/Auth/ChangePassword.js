@@ -49,84 +49,30 @@ export default class ChangePassword extends React.Component {
         this.reauthenticate(oldPassword).then(() => {
             let user = firebase.auth().currentUser;
             user.updatePassword(newPassword).then(() => {
-                // ToastAndroid.show("Password updated!", ToastAndroid.LONG);
-                Toast.show({
-                    text: 'Password Updated',
-                    buttonText: 'OK',
-                    duration: 2500
-                })
+                Toast.show({ text: 'Password Updated', buttonText: 'OK', duration: 2500 })
                 this.setState({ oldPassword: null, newPassword: null, newPasswordConfirm: null, showActivity: false })
                 this.props.navigation.navigate('Dashboard')
             }).catch((error) => {
-                // ToastAndroid.show(error.message, ToastAndroid.SHORT);
                 this.setState({ showActivity: false })
-                Toast.show({
-                    text: error.message,
-                    buttonText: 'OK',
-                    duration: 2500
-                })
+                Toast.show({ text: error.message, buttonText: 'OK', duration: 2500 })
             });
         }).catch((error) => {
-            // ToastAndroid.show(error.message, ToastAndroid.SHORT)
             this.setState({ showActivity: false })
-            Toast.show({
-                text: error.message,
-                buttonText: 'OK',
-                duration: 2500
-            })
+            Toast.show({ text: error.message, buttonText: 'OK', duration: 2500 })
         });
-        // this.setState({ showActivity: false })
     }
     handleConfirmAndValidation() {
         if (this.state.oldPassword && this.state.newPassword && this.state.newPasswordConfirm) {
             if (this.state.newPassword == this.state.newPasswordConfirm) {
                 this.handleChangePassword(this.state.oldPassword, this.state.newPassword)
             } else {
-                // ToastAndroid.show("Passwords Do NOT Match!..")
-                Toast.show({
-                    text: 'Passwords Do Not Match',
-                    buttonText: 'OK',
-                    duration: 2500
-                })
+                Toast.show({ text: 'Passwords Do Not Match', buttonText: 'OK', duration: 2500 })
             }
         } else {
-            // ToastAndroid.show("Please don't leave the fields empty...")
-            Toast.show({
-                text: 'Please Do Not Leave the Fields Empty',
-                buttonText: 'OK',
-                duration: 2500
-            })
+            Toast.show({ text: 'Please Do Not Leave the Fields Empty', buttonText: 'OK', duration: 2500 })
         }
     }
     render() {
-        const { navigate } = this.props.navigation
-        const contentToRender = (<ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
-            <View style={{ flex: 1 }}>
-                <View style={styles.logo} >
-                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
-
-                    </Image>
-                </View>
-                <View style={styles.form} >
-                    <View style={styles.inputContainer}>
-                        <TextInput placeholder="Enter Original Password : " textContentType="password" style={styles.Text} onChangeText={this.handleOldPassword} secureTextEntry={true} value={this.state.oldPassword} >
-
-                        </TextInput>
-                        <TextInput placeholder="Enter New Password : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPassword} secureTextEntry={true} value={this.state.newPassword}>
-
-                        </TextInput>
-                        <TextInput placeholder="Enter New Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleNewPasswordConfirm} secureTextEntry={true} value={this.state.newPasswordConfirm}>
-
-                        </TextInput>
-                    </View>
-                    <View style={styles.signinButton}>
-                        <Button title={"Validate and Confirm"} onPress={() => {
-                            this.handleConfirmAndValidation()
-                        }}> </Button>
-                    </View>
-                </View>
-            </View>
-        </ImageBackground>)
         return (
             <Root>
                 {
@@ -185,7 +131,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C'
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
     },
     SubContainer: {
         flex: 1,

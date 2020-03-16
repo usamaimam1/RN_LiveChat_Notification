@@ -21,6 +21,7 @@ import AddIssue from './components/Issues/AddIssue'
 import IssueScreen from './components/Issues/IssueScreen'
 import IssuesIndex from './components/Issues/IssuesIndex'
 import LoadingScreen from './components/LoadingScreen'
+import EditUserProfile from './components/User/EditUserProfile'
 import { SetNetworkState } from './redux/actions';
 // import LoadingScreen from './components/LoadingScreen';
 
@@ -39,7 +40,8 @@ const AppStackNavigator = createStackNavigator({
   ViewUsers: { screen: ViewUsers },
   AddIssue: { screen: AddIssue },
   IssueScreen: { screen: IssueScreen },
-  IssuesIndex: { screen: IssuesIndex }
+  IssuesIndex: { screen: IssuesIndex },
+  EditUserProfile: { screen: EditUserProfile }
 })
 const AppLoadingNavigator = createSwitchNavigator({
   Loading: LoadingScreen,

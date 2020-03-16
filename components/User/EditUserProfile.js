@@ -5,6 +5,7 @@ import {
     Dimensions, TextInput, Button, ToastAndroid, KeyboardAvoidingView,
     SafeAreaView, TouchableOpacity
 } from 'react-native';
+import { handleUpdate } from './EditUserProfile.functions'
 import { Header, Left, Right, Body, Title, Item, Label, Input } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
 import ImageResizer from 'react-native-image-resizer'
@@ -15,6 +16,7 @@ import { widthPercentage as wv, heightPercentage as hv } from '../../util/styler
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import firebase from 'react-native-firebase'
 import * as SvgIcons from '../../assets/SVGIcons/index'
+import { connect } from 'react-redux'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -23,7 +25,7 @@ const options = {
     }
 };
 
-export default class SignUp extends React.Component {
+class EditUserProfile extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -31,100 +33,30 @@ export default class SignUp extends React.Component {
         super();
         this.state = {
             fullName: null,
-            imgSource: null,
+            imgSource: { uri: null },
             userEmail: null,
             userPassword: null,
             userPasswordConfirm: null,
             showActivity: false
         };
+        this.handlePickImage = this.handlePickImage.bind(this)
+        this.handleUpdate = handleUpdate.bind(this)
+        this.handlefullnamechange = this.handlefullnamechange.bind(this)
         this.handleUserEmailChange = this.handleUserEmailChange.bind(this)
         this.handleUserPasswordChange = this.handleUserPasswordChange.bind(this)
         this.handleUserPasswordChangeConfirm = this.handleUserPasswordChangeConfirm.bind(this)
-        this.handlefullnamechange = this.handlefullnamechange.bind(this)
-        this.handlePickImage = this.handlePickImage.bind(this)
-        this.handleSignUp = this.handleSignUp.bind(this)
-        this.uploadImage = this.uploadImage.bind(this)
-    }
-
-    handleUserEmailChange(changedEmail) {
-        this.setState({ userEmail: changedEmail })
-    }
-    handleUserPasswordChange(changedPassword) {
-        this.setState({ userPassword: changedPassword })
-    }
-    handleUserPasswordChangeConfirm(changedPassword) {
-        this.setState({ userPasswordConfirm: changedPassword })
     }
     handlefullnamechange(fullName) {
         this.setState({ fullName: fullName })
     }
-    uploadImage = () => {
-
-    };
-    handleSignUp() {
-        this.setState({ showActivity: true })
-        if (this.state.userEmail && this.state.userPassword && this.state.userPasswordConfirm && this.state.fullName && this.state.imgSource) {
-            if (this.state.userPassword === this.state.userPasswordConfirm) {
-                firebase.auth().createUserWithEmailAndPassword(this.state.userEmail, this.state.userPassword)
-                    .then(() => {
-                        const ref = firebase.database().ref("users")
-                        const User = firebase.auth().currentUser._user
-                        ref.child(User.uid).set({
-                            email: User.email,
-                            uid: User.uid,
-                            adminaccess: false,
-                            fullName: this.state.fullName,
-                        }, (err) => {
-                            console.log(err)
-                        })
-                        firebase
-                            .storage()
-                            .ref(`profilepics/${User.uid}`)
-                            .putFile(this.state.imgSource.uri)
-                            .then(storageTask => {
-                                console.log(storageTask)
-                                const imageRef = firebase.database().ref('users').child(User.uid).child('profilepic')
-                                imageRef.set(storageTask.downloadURL, () => {
-                                    console.log("Image Uploaded successfully!")
-                                })
-                                this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, fullName: null, imgSource: null, showActivity: false })
-                                this.props.navigation.navigate('Dashboard')
-                            }).catch(error => {
-                                Toast.show({
-                                    text: 'User Added! Error Uploading Image',
-                                    buttonText: 'OK',
-                                    duration: 2000
-                                })
-                                this.setState({ showActivity: false })
-                            });
-                    })
-                    .catch(error => {
-                        this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
-                        Toast.show({
-                            text: error.message,
-                            buttonText: 'OK',
-                            duration: 2000
-                        })
-                    })
-
-            } else {
-                // ToastAndroid.show("Passwords do not match!", ToastAndroid.LONG)
-                this.setState({ userEmail: null, userPassword: null, userPasswordConfirm: null, showActivity: false })
-                Toast.show({
-                    text: 'Passwords Do not Match',
-                    buttonText: 'OK',
-                    duration: 2000
-                })
-            }
-        } else {
-            // ToastAndroid.show("Please do not leave the fields Empty!", ToastAndroid.SHORT)
-            this.setState({ showActivity: false })
-            Toast.show({
-                text: 'Please do not leave the fields empty',
-                buttonText: 'OK',
-                duration: 2000
-            })
-        }
+    handleUserEmailChange(userEmail) {
+        this.setState({ userEmail: userEmail })
+    }
+    handleUserPasswordChange(userPassword) {
+        this.setState({ userPassword: userPassword })
+    }
+    handleUserPasswordChangeConfirm(userPasswordConfirm) {
+        this.setState({ userPasswordConfirm: userPasswordConfirm })
     }
     handlePickImage() {
         ImagePicker.showImagePicker(options, response => {
@@ -135,16 +67,28 @@ export default class SignUp extends React.Component {
             } else {
                 const source = { uri: response.uri };
                 ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99).then((output) => {
+                    console.log(output.uri)
                     this.setState({ imgSource: { uri: output.uri } })
-                    console.log(output.size)
-
                 }).catch((err) => {
                     console.log(err.message)
                 });
             }
         });
     }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.user) {
+            if (prevState.fullName === null || prevState.imgSource === null || prevState.userEmail === null) {
+                return {
+                    fullName: nextProps.user.fullName,
+                    imgSource: { uri: nextProps.user.profilepic },
+                    userEmail: nextProps.user.email
+                }
+            }
+        }
+        return null
+    }
     render() {
+        console.log(this.state.imgSource)
         return (
             <Root>{
                 this.state.showActivity ? (
@@ -189,8 +133,8 @@ export default class SignUp extends React.Component {
                                         <Input style={{ fontSize: 10, marginBottom: hv(11) }} placeholder="Confirm Password" textContentType="password" secureTextEntry
                                             value={this.state.userPasswordConfirm} onChangeText={this.handleUserPasswordChangeConfirm} />
                                     </Item>
-                                    <TouchableOpacity style={styles.SignUpButton} onPress={() => { this.handleSignUp() }}>
-                                        <Text style={{ color: 'white' }}>SIGN UP</Text>
+                                    <TouchableOpacity style={styles.SignUpButton} onPress={() => { this.handleUpdate() }}>
+                                        <Text style={{ color: 'white' }}>Update Changes</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -200,6 +144,13 @@ export default class SignUp extends React.Component {
             </Root>)
     }
 }
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user
+    }
+}
+const mapDispatchToProps = null
+export default connect(mapStateToProps, mapDispatchToProps)(EditUserProfile)
 
 const styles = StyleSheet.create({
     Container: {

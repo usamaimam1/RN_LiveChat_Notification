@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C'
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
     },
     SubContainer: {
         flex: 1,
