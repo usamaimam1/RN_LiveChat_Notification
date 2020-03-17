@@ -203,7 +203,7 @@ class Dashboard extends React.Component {
                                             <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
                                                 <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
                                             </View>
-                                            <SvgIcons.Projects style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.Projects>
+                                            <SvgIcons.ProjectsActive style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.ProjectsActive>
                                             <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                         </View>
                                         <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
@@ -231,11 +231,11 @@ class Dashboard extends React.Component {
                                                 <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
                                                     <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
                                                 </Badge>
-                                                <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.Projects>
+                                                <SvgIcons.ProjectsActive width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.ProjectsActive>
                                                 <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                             </Button>
                                             <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
-                                                <Badge style={{ backgroundColor: 'white' }}><Text style={{ color: 'white' }}>{this.props.projects.length}</Text></Badge>
+                                                <Badge style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}><Text style={{ color: 'rgba(255, 255, 255, 0.1)' }}>{this.props.projects.length}</Text></Badge>
                                                 <SvgIcons.Users width={RFValue(26)} height={RFValue(26)} ></SvgIcons.Users>
                                                 <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
                                             </Button>

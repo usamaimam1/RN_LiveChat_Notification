@@ -2,11 +2,11 @@ import React from 'react'
 import {
     StyleSheet, Platform,
     Image, Text, View, ScrollView, ImageBackground,
-    Dimensions, TextInput, Button, ToastAndroid, KeyboardAvoidingView,
+    Dimensions, TextInput, ToastAndroid, KeyboardAvoidingView,
     SafeAreaView, TouchableOpacity
 } from 'react-native';
 import { handleUpdate } from './EditUserProfile.functions'
-import { Header, Left, Right, Body, Title, Item, Label, Input } from 'native-base'
+import { Header, Left, Right, Button, Body, Title, Item, Label, Input, Footer, FooterTab, Badge, } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
 import ImageResizer from 'react-native-image-resizer'
 import { Toast, Root, Container, Spinner } from 'native-base'
@@ -31,6 +31,8 @@ class EditUserProfile extends React.Component {
     }
     constructor() {
         super();
+        this.activeColor = "#34304C"
+        this.inActiveColor = "#77869E"
         this.state = {
             fullName: null,
             imgSource: { uri: null },
@@ -100,7 +102,7 @@ class EditUserProfile extends React.Component {
                             <View style={styles.Header}>
                                 <View style={styles.HeaderInnerView} >
                                     <SvgIcons.Back height={hp(2.9)} width={wp(6.4)} color="#34304C" onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
-                                    <Text style={styles.HeaderTitle}>SignUp</Text>
+                                    <Text style={styles.HeaderTitle}>Edit User Profile</Text>
                                 </View>
                             </View>
                             <View style={styles.SignUpView}>
@@ -138,6 +140,57 @@ class EditUserProfile extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            {this.props.user ? this.props.user.adminaccess ?
+                                <View style={styles.Footer}>
+                                    <View style={styles.ProjectsIcon} onPress={() => { this.props.navigation.navigate('Dashboard') }}>
+                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projectsLength}</Text>
+                                        </View>
+                                        <SvgIcons.Projects style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color={this.inActiveColor} onPress={() => { this.props.navigation.navigate('Dashboard') }}></SvgIcons.Projects>
+                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0, color: this.inActiveColor }}>Projects</Text>
+                                    </View>
+                                    <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
+                                        <SvgIcons.UsersActive width={wv(19.5)} height={hv(22)} color={this.activeColor} style={{ alignSelf: 'center' }} onPress={() => { }} ></SvgIcons.UsersActive>
+                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: this.activeColor }}>Profile</Text>
+                                    </View>
+                                    <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
+                                        <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}></SvgIcons.AddProject>
+                                    </View>
+                                    <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
+                                        <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
+                                        <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: this.inActiveColor }}>Add User</Text>
+                                    </View>
+                                    <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
+                                        <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                            <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                        </View>
+                                        <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('IssuesIndex') }}></SvgIcons.IssueFooter>
+                                        <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0, color: this.inActiveColor }}>Issues</Text>
+                                    </View>
+                                </View> :
+                                <Footer style={{ backgroundColor: 'white', marginTop: hv(140.5) }}>
+                                    <FooterTab>
+                                        <Button badge vertical onPress={() => { this.props.navigation.navigate('Dashboard') }}>
+                                            <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projectsLength}</Text>
+                                            </Badge>
+                                            <SvgIcons.Projects width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.Projects>
+                                            <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', color: this.inActiveColor }}>Projects</Text>
+                                        </Button>
+                                        <Button vertical badge onPress={() => { }}>
+                                            <Badge style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}><Text style={{ color: 'rgba(255, 255, 255, 0.1)' }}>{this.props.projectsLength}</Text></Badge>
+                                            <SvgIcons.UsersActive width={RFValue(26)} height={RFValue(26)} ></SvgIcons.UsersActive>
+                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: this.activeColor }}>Profile</Text>
+                                        </Button>
+                                        <Button badge vertical title="" onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
+                                            <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text></Badge>
+                                            <SvgIcons.IssueFooter width={RFValue(26)} height={RFValue(26)}></SvgIcons.IssueFooter>
+                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: this.inActiveColor }}>Issues</Text>
+                                        </Button>
+                                    </FooterTab>
+                                </Footer> : null
+                            }
                         </SafeAreaView>
                     </KeyboardAwareScrollView>
             }
@@ -146,7 +199,9 @@ class EditUserProfile extends React.Component {
 }
 const mapStateToProps = state => {
     return {
-        user: state.userReducer.user
+        user: state.userReducer.user,
+        projectsLength: state.projectReducer.projectDetails.length,
+        issueCount: state.issuesReducer.issuesCount
     }
 }
 const mapDispatchToProps = null
@@ -157,7 +212,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000", shadowOpacity: 0.16
     },
     Header: {
-        height: hp(8.3), borderBottomColor: 'grey', borderBottomWidth: 1
+        height: hp(8.3), borderBottomColor: 'grey', borderBottomWidth: 0
     },
     HeaderInnerView: {
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
@@ -166,7 +221,7 @@ const styles = StyleSheet.create({
         marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C'
     },
     SignUpView: {
-        height: hv(478), width: wv(342), marginTop: hv(20.5), marginHorizontal: wv(17), marginBottom: hv(213.5),
+        height: hv(478), width: wv(342), marginTop: hv(20.5), marginHorizontal: wv(17), borderWidth: 0,
     },
     ProfilePictureView: {
         alignSelf: 'center', marginTop: hv(29.5),
@@ -191,6 +246,8 @@ const styles = StyleSheet.create({
     SignUpButton: {
         marginTop: hv(30.5), alignSelf: 'center', height: hv(32), width: wv(140), backgroundColor: '#F48A20', borderRadius: 20,
         justifyContent: 'center', alignItems: 'center'
-    }
+    },
+    Footer: { height: hv(94.5), width: wv(375), borderWidth: 0, flexDirection: 'row', marginTop: hv(113.5) },
+    ProjectsIcon: { width: wv(47), height: hv(47), marginTop: hv(20), marginLeft: wv(27), borderWidth: 0 },
 
 });

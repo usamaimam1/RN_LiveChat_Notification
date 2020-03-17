@@ -17,7 +17,22 @@ export const handleUpdate = async function () {
         if (this.state.userPassword === this.state.userPasswordConfirm) {
             let credential = firebase.auth.EmailAuthProvider.credential(this.props.user.email, this.state.userPassword)
             await user.reauthenticateWithCredential(credential)
+            if (updateEmail) {
+                await user.updateEmail(this.state.userEmail)
+                firebase.database().ref('users').child(this.props.user.uid).child('email').set(this.state.userEmail)
+                Toast.show({ text: 'Email Updated', buttonText: 'Ok', duration: 1000 })
+            }
+            if (updateFullName) {
+                firebase.database().ref('users').child(this.props.user.uid).child('fullName').set(this.state.fullName)
+                Toast.show({ text: 'Full Name Updated', buttonText: 'Ok', duration: 1000 })
+            }
+            if (updateProfilePic) {
+                const storageTask = await firebase.storage().ref(`profilepics/${this.props.user.uid}`).putFile(this.state.imgSource.uri)
+                firebase.database().ref('users').child(this.props.user.uid).child('profilepic').set(storageTask.downloadURL)
+                Toast.show({ text: 'Profile Picture Updated', buttonText: 'Ok', duration: 1000 })
+            }
             this.setState({ showActivity: false })
+            this.props.navigation.goBack()
         } else {
             Toast.show({ text: "Passwords Do not Match", buttonText: "Okay", duration: 1500 })
             this.setState({ showActivity: false })
