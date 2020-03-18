@@ -126,10 +126,6 @@ class Dashboard extends React.Component {
         // this.notificationListener()
     }
     render() {
-        const width = Dimensions.get("window").width
-        const height = Dimensions.get("window").height
-        // console.log(this.props)
-        // console.log(this.User)
         return (
             !this.props.netState.isConnected || !this.props.netState.isInternetReachable ?
                 <WarningScreen isConnected={this.props.netState.isConnected} isInternetReachable={this.props.netState.isInternetReachable} /> :
@@ -226,7 +222,7 @@ class Dashboard extends React.Component {
                                         </View>
                                     </View> :
                                     <Footer style={{ backgroundColor: 'white' }}>
-                                        <FooterTab>
+                                        <FooterTab style={{ backgroundColor: 'white' }}>
                                             <Button badge vertical>
                                                 <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
                                                     <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>

@@ -17,6 +17,8 @@ class UserProfile extends React.Component {
     }
     constructor(props) {
         super(props)
+        this.activeColor = "#34304C"
+        this.inActiveColor = "#77869E"
         this.state = {
             imagePicked: false,
             imageUploaded: false,
