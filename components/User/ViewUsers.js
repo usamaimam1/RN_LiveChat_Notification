@@ -175,8 +175,8 @@ class ViewUsers extends React.Component {
                         </View>
                         {this.props.ProjectManagers.map(pm => {
                             return (
-                                <View>
-                                    <View key={pm.uid} style={styles.InfoView}>
+                                <View key={pm.uid}>
+                                    <View style={styles.InfoView}>
                                         <Image source={{ uri: pm.profilepic }} resizeMode="cover" style={styles.Avatar}></Image>
                                         <View style={styles.InfoDetailView}>
                                             <Text style={styles.Name}>{pm.fullName}</Text>
