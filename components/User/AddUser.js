@@ -152,7 +152,9 @@ const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
         project: state.projectReducer.activeProjectData.length === 1 ? state.projectReducer.activeProjectData[0] : null,
-        searchResults: state.searchReducer.searchResults
+        searchResults: state.searchReducer.searchResults,
+        projectsCount: state.projectReducer.projectDetails.length,
+        issuesCount: state.issuesReducer.issuesCount
     }
 }
 const mapDispatchToProps = dispatch => {

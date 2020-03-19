@@ -31,6 +31,7 @@ export const handleUpdate = async function () {
                 firebase.database().ref('users').child(this.props.user.uid).child('profilepic').set(storageTask.downloadURL)
                 Toast.show({ text: 'Profile Picture Updated', buttonText: 'Ok', duration: 1000 })
             }
+            Toast.show({ text: "Updates Successful", buttonText: "Ok" })
             this.setState({ showActivity: false })
             this.props.navigation.goBack()
         } else {

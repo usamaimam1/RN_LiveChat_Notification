@@ -81,7 +81,7 @@ class AddProject extends React.Component {
         projectRef.child('projectThumbnail').set(storageTask.downloadURL, () => {
           Toast.show({ text: 'Project Added Successfully', duration: 2000, buttonText: 'Ok' });
           this.setState({ submitting: false, projectTitle: null, projectThumbnail: { uri: null } });
-          this.props.navigation.goBack()
+          this.props.navigation.navigate('Dashboard')
         });
       }).catch(err => {
         Toast.show({ text: err.message, duration: 2000, buttonText: 'Ok' });

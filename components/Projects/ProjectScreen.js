@@ -41,8 +41,10 @@ class ProjectScreen extends React.Component {
         this.disableListeners()
     }
     handleNavigation(projectId, issueId) {
+        // console.log(projectId, issueId)
         this.props.setActiveIssueId(issueId)
-        this.props.navigation.navigate('IssueScreen', { projectId: projectId, issueId: issueId })
+        this.props.setActiveProjectId(projectId)
+        this.props.navigation.navigate('IssueScreen', { projectId: projectId, IssueId: issueId })
     }
     enableListeners() {
         this._projectReference = firebase.database().ref('Projects').child(this.state.projectId)

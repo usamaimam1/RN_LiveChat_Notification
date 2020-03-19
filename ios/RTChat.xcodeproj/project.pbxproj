@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
 		04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */; };
@@ -832,7 +833,7 @@
 				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
@@ -861,7 +862,7 @@
 				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

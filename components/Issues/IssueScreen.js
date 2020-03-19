@@ -119,7 +119,6 @@ class IssueScreen extends React.Component {
   render() {
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
-
     return (
       <Root>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
