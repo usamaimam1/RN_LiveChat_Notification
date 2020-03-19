@@ -129,7 +129,7 @@ class IssueScreen extends React.Component {
                 <SvgIcons.Back width={wv(24)} height={hv(24)} style={{ marginLeft: wv(12) }} onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
               </Left>
               <Body>
-                <Title style={{ color: 'black', alignSelf: 'flex-start' }}>
+                <Title style={{ color: 'black', alignSelf: 'flex-start', fontFamily: "Montserrat", }}>
                   {this.props.issue ? this.props.issue.issueTitle : 'Issue'}
                 </Title>
               </Body>
@@ -209,7 +209,7 @@ class IssueScreen extends React.Component {
                         />
                       </Left>
                       <Body>
-                        <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
+                        <Text numberofLines={1} style={{ fontFamily: "Montserrat", fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
                           {this.props.users[message.sender] ? this.props.users[message.sender].fullName : '[Deleted User]'}
                         </Text>
                         {firebase.auth().currentUser.uid === message.sender ?
@@ -218,14 +218,14 @@ class IssueScreen extends React.Component {
                               minHeight: 30, alignItems: 'center', justifyContent: 'flex-end', paddingRight: 20,
                               borderColor: 'black', backgroundColor: '#F48A20',
                             }}>
-                            <Text style={{ color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>{message.messageBody}</Text>
+                            <Text style={{ fontFamily: "Montserrat", color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>{message.messageBody}</Text>
                           </Item>
                           : <Item rounded
                             style={{
                               minHeight: 30, alignItems: 'center', justifyContent: 'flex-start',
                               paddingLeft: 20, borderColor: 'black', backgroundColor: '#34304C',
                             }}>
-                            <Text note style={{ color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>
+                            <Text note style={{ fontFamily: "Montserrat", color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>
                               {message.messageBody}
                             </Text>
                           </Item>
@@ -233,7 +233,7 @@ class IssueScreen extends React.Component {
                       </Body>
                       <Right
                         style={{ alignItems: 'flex-end', justifyContent: 'center', marginTop: hv(10), paddingLeft: 5, }}>
-                        <Text style={{ fontSize: RFValue(11), color: '#161F3D' }}>
+                        <Text style={{ fontSize: RFValue(11), color: '#161F3D', fontFamily: "Montserrat", }}>
                           {this.formatDate(new Date(message.sentTime))}
                         </Text>
                       </Right>
@@ -247,6 +247,7 @@ class IssueScreen extends React.Component {
               <Body style={{ flexDirection: 'row' }}>
                 <Item rounded style={{ width: wv(283), height: hv(36), alignSelf: 'center', marginLeft: wv(39.5) }}>
                   <Input
+                    style={{ fontFamily: "Montserrat", }}
                     placeholder="Your Message"
                     value={this.state.messageBody}
                     onChangeText={val => {

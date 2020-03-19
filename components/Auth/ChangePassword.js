@@ -98,16 +98,16 @@ export default class ChangePassword extends React.Component {
                                     </View>
                                     <View style={styles.Form}>
                                         <Item rounded style={styles.Field}>
-                                            <Input placeholder='Old Password' value={this.state.oldPassword} onChangeText={this.handleOldPassword} textContentType="password" secureTextEntry />
+                                            <Input placeholder='Old Password' style={{ fontFamily: "Montserrat", }} value={this.state.oldPassword} onChangeText={this.handleOldPassword} textContentType="password" secureTextEntry />
                                         </Item>
                                         <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
-                                            <Input placeholder='New Password' value={this.state.newPassword} onChangeText={this.handleNewPassword} textContentType="password" secureTextEntry />
+                                            <Input placeholder='New Password' style={{ fontFamily: "Montserrat", }} value={this.state.newPassword} onChangeText={this.handleNewPassword} textContentType="password" secureTextEntry />
                                         </Item>
                                         <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
-                                            <Input placeholder='Confirm Password' value={this.state.newPasswordConfirm} onChangeText={this.handleNewPasswordConfirm} textContentType="password" secureTextEntry />
+                                            <Input placeholder='Confirm Password' style={{ fontFamily: "Montserrat", }} value={this.state.newPasswordConfirm} onChangeText={this.handleNewPasswordConfirm} textContentType="password" secureTextEntry />
                                         </Item>
                                         <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleConfirmAndValidation() }}>
-                                            <Text style={{ color: 'white' }}>Confirm</Text>
+                                            <Text style={{ color: 'white', fontFamily: "Montserrat", }}>Confirm</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500", fontFamily: "Montserrat",
     },
     SubContainer: {
         flex: 1,

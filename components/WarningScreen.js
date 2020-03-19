@@ -30,7 +30,7 @@ export default class WarningScreen extends React.Component {
         return (
             <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Icon name="warning" type="AntDesign" style={{ color: 'red' }}></Icon>
-                <Text style={{ fontSize: 13 }}>
+                <Text style={{ fontSize: 13, fontFamily: "Montserrat", }}>
                     {this.setMessage()}
                 </Text>
             </Container>

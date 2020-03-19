@@ -56,63 +56,6 @@ export default class AddIssue extends React.Component {
         const width = Dimensions.get("window").width
         const height = Dimensions.get("window").height
         return (
-            // <Root>
-            //     <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
-            //         <Container>
-            //             <ImageBackground source={require('../../assets/splash-bg.jpg')}
-            //                 style={{ width: width, height: height }}>
-            //                 <Header transparent>
-            //                     <Left>
-            //                         <Button transparent onPress={() => { this.props.navigation.pop() }}>
-            //                             <Icon name='arrow-back' style={{ color: 'blue' }} />
-            //                         </Button>
-            //                     </Left>
-            //                     <Body>
-            //                         <Title style={{ color: 'black' }}>Add Issue</Title>
-            //                     </Body>
-            //                     <Right>
-            //                     </Right>
-            //                 </Header>
-            //                 <Content>
-            //                     <View style={{ height: 300 }} >
-            //                         <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
-            //                     </View>
-            //                     <View>
-            //                         <Form>
-            //                             <Item rounded picker style={{ paddingLeft: 10, paddingRight: 10, marginTop: 5, marginBottom: 5 }}>
-            //                                 <Left style={{ margin: 5 }}>
-            //                                     <Text>Title</Text>
-            //                                 </Left>
-
-            //                                 <Input placeholder='Your Text here!' value={this.state.issueTitle} onChangeText={(val) => { this.setState({ issueTitle: val }) }} />
-
-            //                             </Item>
-            //                             <Item rounded picker style={{ paddingLeft: 10, paddingRight: 10, marginTop: 5, marginBottom: 5 }}>
-            //                                 <Left style={{ margin: 5 }}>
-            //                                     <Text>Issue Priority</Text>
-            //                                 </Left>
-
-            //                                 <Picker
-            //                                     mode="dropdown"
-            //                                     iosIcon={<Icon name="arrow-down" />}
-            //                                     style={{ width: undefined }}
-            //                                     selectedValue={this.state.issuePriority}
-            //                                     onValueChange={(val) => { this.setState({ issuePriority: val }) }}
-            //                                 >
-            //                                     <Picker.Item label="Critical" value="Critical" />
-            //                                     <Picker.Item label="Normal" value="Normal" />
-            //                                 </Picker>
-            //                             </Item>
-            //                             <Button rounded success style={{ width: 150, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }} onPress={() => { this.handleIssueSubmit() }}>
-            //                                 <Text style={{ color: 'white', alignSelf: 'center' }}>Submit Issue</Text>
-            //                             </Button>
-            //                         </Form>
-            //                     </View>
-            //                 </Content>
-            //             </ImageBackground>
-            //         </Container>
-            //     </KeyboardAwareScrollView>
-            // </Root >
             <Root>
                 <KeyboardAwareScrollView>
                     <SafeAreaView style={styles.Container}>
@@ -132,7 +75,7 @@ export default class AddIssue extends React.Component {
                             </View>
                             <View style={styles.Form}>
                                 <Item rounded style={styles.Field}>
-                                    <Input placeholder='Issue Title' value={this.state.issueTitle} onChangeText={text => { this.setState({ issueTitle: text }) }} textContentType="name" />
+                                    <Input placeholder='Issue Title' style={{ fontFamily: "Montserrat", }} value={this.state.issueTitle} onChangeText={text => { this.setState({ issueTitle: text }) }} textContentType="name" />
                                 </Item>
                                 <Item picker style={[styles.Field, { marginTop: hp(1.84) }]}>
                                     <Picker
@@ -140,17 +83,17 @@ export default class AddIssue extends React.Component {
                                         iosIcon={<Icon name="arrow-down" />}
                                         style={[styles.Field, { marginTop: hp(1.84) }]}
                                         placeholder="Issue Priority"
-                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderStyle={{ color: "#bfc6ea",fontFamily: "Montserrat", }}
                                         placeholderIconColor="#007aff"
                                         selectedValue={this.state.issuePriority}
                                         onValueChange={val => { this.setState({ issuePriority: val }) }}
                                     >
-                                        <Picker.Item label="Critical" value="Critical" />
-                                        <Picker.Item label="Normal" value="Normal" />
+                                        <Picker.Item style={{ fontFamily: "Montserrat", }} label="Critical" value="Critical" />
+                                        <Picker.Item style={{ fontFamily: "Montserrat", }} label="Normal" value="Normal" />
                                     </Picker>
                                 </Item>
                                 <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleIssueSubmit() }}>
-                                    <Text style={{ color: 'white' }}>Confirm</Text>
+                                    <Text style={{ color: 'white',fontFamily: "Montserrat", }}>Confirm</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -171,7 +114,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500",fontFamily: "Montserrat",
     },
     SubContainer: {
         flex: 1,

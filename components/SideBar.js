@@ -47,7 +47,7 @@ export default class SideBar extends React.Component {
                                 <SvgIcons.Users width={wp(16)} height={hp(18.05)}></SvgIcons.Users>
                             </View>
                             <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
-                                <Text style={{ fontSize: RFValue(13), color: '#758692' }}>Profile</Text>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Profile</Text>
                             </View>
                         </TouchableOpacity>
                         {/* Projects Navigator */}
@@ -56,7 +56,7 @@ export default class SideBar extends React.Component {
                                 <SvgIcons.Projects width={wp(16)} height={hp(18.05)}></SvgIcons.Projects>
                             </View>
                             <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
-                                <Text style={{ fontSize: RFValue(13), color: '#758692' }}>Projects</Text>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Projects</Text>
                             </View>
                         </TouchableOpacity>
                         {/* Issues Navigator */}
@@ -65,7 +65,7 @@ export default class SideBar extends React.Component {
                                 <SvgIcons.IssueFooter width={wp(16)} height={hp(18.05)}></SvgIcons.IssueFooter>
                             </View>
                             <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
-                                <Text style={{ fontSize: RFValue(13), color: '#758692' }}>Issues</Text>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Issues</Text>
                             </View>
                         </TouchableOpacity>
                         {/* Change Password */}
@@ -74,7 +74,7 @@ export default class SideBar extends React.Component {
                                 <SvgIcons.Password width={wp(16)} height={hp(18.05)}></SvgIcons.Password>
                             </View>
                             <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
-                                <Text style={{ fontSize: RFValue(13), color: '#758692' }}>Change Password</Text>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Change Password</Text>
                             </View>
                         </TouchableOpacity>
                         {/* Log Out */}
@@ -83,7 +83,7 @@ export default class SideBar extends React.Component {
                                 <SvgIcons.Logout width={wp(16)} height={hp(18.05)}></SvgIcons.Logout>
                             </View>
                             <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 0, flex: 1 }}>
-                                <Text style={{ fontSize: RFValue(13), color: '#758692' }}>Log Out</Text>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Log Out</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

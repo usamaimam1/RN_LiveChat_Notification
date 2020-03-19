@@ -163,7 +163,7 @@ export default class SignUp extends React.Component {
                                 <View style={styles.ProfilePictureView}>
                                     {this.state.imgSource ?
                                         <Image style={styles.Avatar} source={this.state.imgSource} resizeMode="cover" onPress={this.handlePickImage}></Image> :
-                                        <SvgIcons.Upload onPress={this.handlePickImage} ></SvgIcons.Upload>
+                                        <SvgIcons.Upload width={wv(120)} height={hv(120)} style={{ alignSelf: 'center' }} onPress={this.handlePickImage} ></SvgIcons.Upload>
                                     }
                                 </View>
                                 <View style={styles.UploadButton}>
@@ -174,23 +174,23 @@ export default class SignUp extends React.Component {
                                 </View>
                                 <View style={styles.SignUpForm}>
                                     <Item style={styles.SignUpField}>
-                                        <Input style={{ fontSize: 10, marginBottom: hv(11) }} placeholder="Full Name" textContentType="name"
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Full Name" textContentType="name"
                                             value={this.state.fullName} onChangeText={this.handlefullnamechange} />
                                     </Item>
                                     <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
-                                        <Input style={{ fontSize: 10, marginBottom: hv(11) }} placeholder="Email" textContentType="emailAddress"
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Email" textContentType="emailAddress"
                                             value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
                                     </Item>
                                     <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
-                                        <Input style={{ fontSize: 10, marginBottom: hv(11) }} placeholder="Password" textContentType="password" secureTextEntry
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Password" textContentType="password" secureTextEntry
                                             value={this.state.userPassword} onChangeText={this.handleUserPasswordChange} />
                                     </Item>
                                     <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
-                                        <Input style={{ fontSize: 10, marginBottom: hv(11) }} placeholder="Confirm Password" textContentType="password" secureTextEntry
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Confirm Password" textContentType="password" secureTextEntry
                                             value={this.state.userPasswordConfirm} onChangeText={this.handleUserPasswordChangeConfirm} />
                                     </Item>
                                     <TouchableOpacity style={styles.SignUpButton} onPress={() => { this.handleSignUp() }}>
-                                        <Text style={{ color: 'white' }}>SIGN UP</Text>
+                                        <Text style={{ color: 'white',fontFamily: "Montserrat", }}>SIGN UP</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C'
+        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C',fontFamily: "Montserrat",
     },
     SignUpView: {
         height: hv(478), width: wv(342), marginTop: hv(20.5), marginHorizontal: wv(17), marginBottom: hv(213.5),
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, borderColor: '#34304C'
     },
     UploadText: {
-        fontSize: 9, marginHorizontal: wv(10), marginVertical: hv(5), textAlign: 'center'
+        fontSize: 9, marginHorizontal: wv(10), marginVertical: hv(5), textAlign: 'center',fontFamily: "Montserrat",
     },
     SignUpForm: {
         height: hv(164), width: wv(300.5), marginHorizontal: wv(21), marginTop: hv(30.5)

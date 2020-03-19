@@ -83,10 +83,10 @@ export default class ForgotPassword extends React.Component {
                             </View>
                             <View style={styles.Form}>
                                 <Item rounded style={styles.Field}>
-                                    <Input placeholder='Email' value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
+                                    <Input placeholder='Email' style={{ fontFamily: "Montserrat", }} value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
                                 </Item>
                                 <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleConfirmation() }}>
-                                    <Text style={{ color: 'white' }}>Confirm</Text>
+                                    <Text style={{ color: 'white',fontFamily: "Montserrat", }}>Confirm</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
     HeaderTitle: {
-        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500"
+        marginLeft: wp(4.533), fontSize: RFValue(14), color: '#34304C', fontWeight: "500",fontFamily: "Montserrat",
     },
     SubContainer: {
         flex: 1,

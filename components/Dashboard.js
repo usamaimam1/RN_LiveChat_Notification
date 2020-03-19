@@ -78,19 +78,19 @@ class Dashboard extends React.Component {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {!this.state.userAdded && !this.state.usersAdded ?
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading User ...</Text>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading User ...</Text>
                         <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="red" />
                     </View>
                     : null}
                 {!this.state.projectAdded ?
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading Projects ...</Text>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading Projects ...</Text>
                         <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="blue" />
                     </View>
                     : null}
                 {!this.state.issuesAdded ?
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ flex: 1, textAlign: 'center' }}> Loading Issues ...</Text>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading Issues ...</Text>
                         <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="green" />
                     </View>
                     : null}
@@ -153,7 +153,7 @@ class Dashboard extends React.Component {
                                         <List>
                                             {this.props.projects.length === 0 ?
                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: 'grey' }}>No Projects To Display</Text>
+                                                    <Text style={{ color: 'grey', fontFamily: "Montserrat", }}>No Projects To Display</Text>
                                                 </View> :
                                                 <List>
                                                     {this.props.projects.map(item => {
@@ -168,8 +168,8 @@ class Dashboard extends React.Component {
                                                                             <Image source={{ uri: item.projectThumbnail }} style={{ height: RFValue(50), width: RFValue(50), borderRadius: RFValue(50 / 2) }}></Image>
                                                                         </View>
                                                                         <View style={{ marginLeft: wv(11), marginVertical: hv(5), height: hv(40), width: wv(159 + 90), borderWidth: 0 }}>
-                                                                            <Text style={{ fontSize: RFValue(14), fontWeight: '500' }}>{item.projectTitle}</Text>
-                                                                            <Text note numberOfLines={1} style={{ fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
+                                                                            <Text style={{ fontSize: RFValue(14), fontWeight: '500', fontFamily: "Montserrat", }}>{item.projectTitle}</Text>
+                                                                            <Text note numberOfLines={1} style={{ fontFamily: "Montserrat", fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
                                                                         </View>
                                                                     </TouchableOpacity>
                                                                     <View>
@@ -197,49 +197,49 @@ class Dashboard extends React.Component {
                                     <View style={styles.Footer}>
                                         <View style={styles.ProjectsIcon}>
                                             <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
                                             </View>
                                             <SvgIcons.ProjectsActive style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.ProjectsActive>
-                                            <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                         </View>
                                         <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
                                             <SvgIcons.Users width={wv(19.5)} height={hv(22)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('UserProfile') }} ></SvgIcons.Users>
-                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
                                         </View>
                                         <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
                                             <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}></SvgIcons.AddProject>
                                         </View>
                                         <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
                                             <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
-                                            <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
                                         </View>
                                         <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
                                             <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                                <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
                                             </View>
                                             <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('IssuesIndex') }}></SvgIcons.IssueFooter>
-                                            <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
                                         </View>
                                     </View> :
                                     <Footer style={{ backgroundColor: 'white' }}>
                                         <FooterTab style={{ backgroundColor: 'white' }}>
                                             <Button badge vertical>
                                                 <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                                    <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                                    <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
                                                 </Badge>
                                                 <SvgIcons.ProjectsActive width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.ProjectsActive>
-                                                <Text style={{ fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
                                             </Button>
                                             <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
                                                 <Badge style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}><Text style={{ color: 'rgba(255, 255, 255, 0.1)' }}>{this.props.projects.length}</Text></Badge>
                                                 <SvgIcons.Users width={RFValue(26)} height={RFValue(26)} ></SvgIcons.Users>
-                                                <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
                                             </Button>
                                             <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
                                                 <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
-                                                    <Text style={{ fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text></Badge>
+                                                    <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text></Badge>
                                                 <SvgIcons.IssueFooter width={RFValue(26)} height={RFValue(26)}></SvgIcons.IssueFooter>
-                                                <Text style={{ fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Issues</Text>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Issues</Text>
                                             </Button>
                                         </FooterTab>
                                     </Footer> : null
@@ -289,7 +289,7 @@ const mapStateToProps = state => {
 const styles = StyleSheet.create({
     Header: { height: hv(68) },
     InnerHeaderView: { borderWidth: 0, flexDirection: 'row', height: hv(24), marginTop: hv(58 - 32), marginLeft: wv(13), marginBottom: hv(18) },
-    WelcomeText: { marginLeft: wv(10), fontWeight: '500', textAlign: 'center', marginBottom: hv(2), fontSize: RFValue(15), fontWeight: "400" },
+    WelcomeText: { fontFamily: "Montserrat", marginLeft: wv(10), fontWeight: '500', textAlign: 'center', marginBottom: hv(2), fontSize: RFValue(15), fontWeight: "400" },
     Footer: { height: hv(94.5), width: wv(375), borderWidth: 0, flexDirection: 'row' },
     ProjectsIcon: { width: wv(47), height: hv(47), marginTop: hv(20), marginLeft: wv(27), borderWidth: 0 },
 })

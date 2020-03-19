@@ -92,42 +92,6 @@ export default class Login extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation
-        const contentToRender = (<ImageBackground
-            style={styles.background}
-            source={require('../../assets/splash-bg.jpg')}>
-            <View style={{ flex: 1 }}>
-                <View style={styles.logo} >
-                    <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: 150, height: 150, margin: 10, flex: 1 }} resizeMode="contain" >
-
-                    </Image>
-                </View>
-                <View style={styles.form} >
-                    <View style={styles.inputContainer}>
-                        <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail}>
-
-                        </TextInput>
-                        <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}>
-
-                        </TextInput>
-                    </View>
-                    <View style={styles.signinButton}>
-                        <Button title={"Sign In"} style={{ color: 'black' }} onPress={() => {
-                            this.handleSubmit()
-                        }}></Button>
-                    </View>
-                    <View style={styles.SignupText}>
-                        <Text style={{ flex: 1, textAlign: 'right' }}> Not have an ID? </Text>
-                        <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('SignUp') }}> Sign Up? </Text>
-                    </View>
-                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, marginBottom: 10 }}>
-                        <Text style={{ flex: 1, textAlign: 'center', color: 'red', marginTop: 15 }} onPress={() => {
-                            navigate('ForgotPassword')
-                        }}> Forgot Password? </Text>
-
-                    </View>
-                </View>
-            </View>
-        </ImageBackground>)
         return (
             <Root>{
                 this.state.showActivity ? (
@@ -146,21 +110,21 @@ export default class Login extends React.Component {
                                 </View>
                                 <View style={styles.Form}>
                                     <Item rounded style={styles.Field}>
-                                        <Input placeholder='Email' value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
+                                        <Input placeholder='Email' style={{ fontFamily: "Montserrat", }} value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
                                     </Item>
                                     <Item rounded style={[styles.Field, { marginTop: hp(1.84) }]}>
-                                        <Input placeholder='Password' value={this.state.userPassword} onChangeText={this.handleUserPasswordChange} textContentType="password" secureTextEntry />
+                                        <Input placeholder='Password' style={{ fontFamily: "Montserrat", }} value={this.state.userPassword} onChangeText={this.handleUserPasswordChange} textContentType="password" secureTextEntry />
                                     </Item>
                                     <Text style={styles.ForgotPassword} onPress={() => { navigate('ForgotPassword') }}>
                                         Forgot Password ?
                                         </Text>
                                     <TouchableOpacity style={styles.SignInButton} onPress={() => { this.handleSubmit() }}>
-                                        <Text style={{ color: 'white' }}>LOGIN</Text>
+                                        <Text style={{ color: 'white', fontFamily: "Montserrat", }}>LOGIN</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                                    <Text style={[styles.BottomText, { textAlign: 'right' }]}>Not A User? </Text>
-                                    <Text style={[styles.BottomText, { textAlign: 'left', marginLeft: 5, color: '#F48A20', fontWeight: '400' }]}
+                                    <Text style={[styles.BottomText, { textAlign: 'right', fontFamily: "Montserrat", }]}>Not A User? </Text>
+                                    <Text style={[styles.BottomText, { textAlign: 'left', marginLeft: 5, color: '#F48A20', fontWeight: '400', fontFamily: "Montserrat", }]}
                                         onPress={() => { navigate('SignUp') }}>
                                         Sign Up!
                                         </Text>
@@ -220,7 +184,7 @@ const styles = StyleSheet.create({
     ForgotPassword: {
         alignSelf: 'flex-end',
         fontSize: RFValue(11),
-        // fontFamily:,''
+        fontFamily: "Montserrat",
         marginTop: hp(1.72),
         color: '#758692'
     },
@@ -237,6 +201,7 @@ const styles = StyleSheet.create({
         flex: 1,
         color: '#758692',
         marginTop: hp(1.72),
+        fontFamily: "Montserrat",
         // color: '#F48A20'
     }
 });
