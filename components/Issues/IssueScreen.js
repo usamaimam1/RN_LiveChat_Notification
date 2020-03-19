@@ -4,12 +4,16 @@ import {
   Button, Title, Item, Input, Toast, List, Thumbnail, ListItem, StyleProvider, Root
 } from 'native-base';
 import {
-  Text, View, Image, Dimensions,
+  Text, View, Image, Dimensions, SafeAreaView,
   Platfrom, ImageBackground, FlatList, Alert
 } from 'react-native';
 import OptionsMenu from 'react-native-options-menu';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'react-native-firebase';
+import * as SvgIcons from '../../assets/SVGIcons/index'
+import { widthPercentage as wv, heightPercentage as hv } from '../../util/stylerHelpers'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import getTheme from '../../native-base-theme/components';
 import material from '../../native-base-theme/variables/material';
 import {
@@ -119,156 +123,141 @@ class IssueScreen extends React.Component {
     return (
       <Root>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
-          <StyleProvider style={getTheme(material)}>
-            <Container>
-              <ImageBackground
-                source={require('../../assets/splash-bg.jpg')}
-                style={{ width: width, height: height }}>
-                <Header transparent>
-                  <Left>
-                    <Button transparent onPress={() => {
-                      this.props.navigation.pop();
-                    }}>
-                      <Icon name="arrow-back" style={{ color: 'blue' }} />
-                    </Button>
-                  </Left>
-                  <Body>
-                    <Title style={{ color: 'black' }}>
-                      {this.props.issue ? this.props.issue.issueTitle : 'Issue'}
-                    </Title>
-                  </Body>
-                  <Right>
-                    {this.props.user ? this.evalStatus() ?
-                      Platform.OS == 'ios' ?
-                        <OptionsMenu
-                          customButton={<Icon name="menu" style={{ color: 'blue' }} />}
-                          destructiveIndex={2}
-                          options={[`Mark as ${this.props.issue ? this.props.issue.issueStatus === 'Opened' ? 'Closed' : 'Opened' : 'None'}`,
-                          `Change Issue Priority to ${this.props.issue ? this.props.issue.issuePriority === 'Critical' ? 'Normal' : 'Critical' : 'None'}`,
-                            'Delete this Issue',
-                            'Cancel',
-                          ]}
-                          actions={[() => { this.markClosed(); }, () => { this.changePriority(); }, () => { this.handleDelete() }, () => { }]}
-                        />
-                        : <OptionsMenu
-                          customButton={<Icon name="menu" style={{ color: 'blue' }} />}
-                          destructiveIndex={2}
-                          options={[
-                            `Mark as ${this.props.issue.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
-                            `Change Issue Priority to ${this.props.issue.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`,
-                            'Delete this Issue'
-                          ]}
-                          actions={[() => { this.markClosed(); }, () => { this.changePriority(); }, () => { this.handleDelete() }]}
-                        /> : null : null}
-                  </Right>
-                </Header>
-                <Content
-                  ref={c => { this._scroll = c; }}
-                  removeClippedSubviews
-                  onScroll={event => {
-                    const Bottom = this.isCloseToBottom(event.nativeEvent)
-                    const Top = this.isCloseToTop(event.nativeEvent)
-                    if (Top) {
-                      if (this.state.fetchingPrevious) { return }
-                      this.setState({ currentPosition: 'Top', fetchingPrevious: true })
-                      firebase.database().ref('Messages').child(this.state.projectId).child(this.state.IssueId)
-                        .orderByChild('sentTime')
-                        .endAt(this.state.messagesData[0].sentTime)
-                        .limitToLast(20).once('value', data => {
-                          if (data._value) {
-                            const Arr = Object.keys(data._value).map(messageid => data._value[messageid])
-                            const sortedArr = Arr.sort((a, b) => {
-                              if (a.sentTime < b.sentTime) return -1;
-                              if (a.sentTime > b.sentTime) return 1;
-                              return 0;
-                            });
-                            sortedArr.pop()
-                            // console.log(`Fetching ${sortedArr.length} old messages`)
-                            this.setState({ messagesData: [...sortedArr, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
-                          } else {
-                            // console.log('Nothing more left to fetch')
-                            this.setState({ currentPosition: 'Top', fetchingPrevious: false })
-                          }
-                        })
-                    } else if (Bottom) {
-                      this.setState({ currentPosition: 'Bottom' })
-                    } else {
-                      // this.setState({ currentPosition: 'Arbitrary' })
-                    }
-                  }}
-                  onContentSizeChange={(w, h) => {
-                    if (this.state.currentPosition === 'Bottom') {
-                      this._scroll._root.scrollToEnd({ animated: true });
-                    }
-                  }}>
-                  <List >
-                    {this.state.messagesData ? this.state.messagesData.map(message => {
-                      return (
-                        <ListItem avatar key={JSON.stringify(message.sentTime)} ref={c => { this._listitem = c }}>
-                          <Left>
-                            <Thumbnail
-                              source={{ uri: this.props.users[message.sender] ? this.props.users[message.sender].profilepic : this.state.defaultThumb }}
-                              style={{ width: 30, height: 30 }}
-                            />
-                          </Left>
-                          <Body>
-                            <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
-                              {this.props.users[message.sender] ? this.props.users[message.sender].fullName : '[Deleted User]'}
-                            </Text>
-                            {firebase.auth().currentUser.uid === message.sender ?
-                              <Item rounded success
-                                style={{
-                                  minHeight: 30, alignItems: 'center', justifyContent: 'flex-end', paddingRight: 20,
-                                  borderColor: 'black', backgroundColor: 'lightgreen',
-                                }}>
-                                <Text style={{ color: 'black' }}>{message.messageBody}</Text>
-                              </Item>
-                              : <Item rounded
-                                style={{
-                                  minHeight: 30, alignItems: 'center', justifyContent: 'flex-start',
-                                  paddingLeft: 20, borderColor: 'black', backgroundColor: 'lightblue',
-                                }}>
-                                <Text note style={{ color: 'black' }}>
-                                  {message.messageBody}
-                                </Text>
-                              </Item>
-                            }
-                          </Body>
-                          <Right
-                            style={{ alignItems: 'flex-end', justifyContent: 'center', paddingLeft: 5, }}>
-                            <Text style={{ fontSize: 11 }}>
-                              {this.formatDate(new Date(message.sentTime))}
-                            </Text>
-                          </Right>
-                        </ListItem>
-                      );
+          <Container>
+            <Header transparent>
+              <Left>
+                <SvgIcons.Back width={wv(24)} height={hv(24)} style={{ marginLeft: wv(12) }} onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
+              </Left>
+              <Body>
+                <Title style={{ color: 'black', alignSelf: 'flex-start' }}>
+                  {this.props.issue ? this.props.issue.issueTitle : 'Issue'}
+                </Title>
+              </Body>
+              <Right>
+                {this.props.user ? this.evalStatus() ?
+                  Platform.OS == 'ios' ?
+                    <OptionsMenu
+                      customButton={<Icon name="menu" style={{ color: '#F48A20' }} />}
+                      destructiveIndex={2}
+                      options={[`Mark as ${this.props.issue ? this.props.issue.issueStatus === 'Opened' ? 'Closed' : 'Opened' : 'None'}`,
+                      `Change Issue Priority to ${this.props.issue ? this.props.issue.issuePriority === 'Critical' ? 'Normal' : 'Critical' : 'None'}`,
+                        'Delete this Issue',
+                        'Cancel',
+                      ]}
+                      actions={[() => { this.markClosed(); }, () => { this.changePriority(); }, () => { this.handleDelete() }, () => { }]}
+                    />
+                    : <OptionsMenu
+                      customButton={<Icon name="menu" style={{ color: 'blue' }} />}
+                      destructiveIndex={2}
+                      options={[
+                        `Mark as ${this.props.issue.issueStatus === 'Opened' ? 'Closed' : 'Opened'}`,
+                        `Change Issue Priority to ${this.props.issue.issuePriority === 'Critical' ? 'Normal' : 'Critical'}`,
+                        'Delete this Issue'
+                      ]}
+                      actions={[() => { this.markClosed(); }, () => { this.changePriority(); }, () => { this.handleDelete() }]}
+                    /> : null : null}
+              </Right>
+            </Header>
+            <Content
+              ref={c => { this._scroll = c; }}
+              removeClippedSubviews
+              onScroll={event => {
+                const Bottom = this.isCloseToBottom(event.nativeEvent)
+                const Top = this.isCloseToTop(event.nativeEvent)
+                if (Top) {
+                  if (this.state.fetchingPrevious) { return }
+                  this.setState({ currentPosition: 'Top', fetchingPrevious: true })
+                  firebase.database().ref('Messages').child(this.state.projectId).child(this.state.IssueId)
+                    .orderByChild('sentTime')
+                    .endAt(this.state.messagesData[0].sentTime)
+                    .limitToLast(20).once('value', data => {
+                      if (data._value) {
+                        const Arr = Object.keys(data._value).map(messageid => data._value[messageid])
+                        const sortedArr = Arr.sort((a, b) => {
+                          if (a.sentTime < b.sentTime) return -1;
+                          if (a.sentTime > b.sentTime) return 1;
+                          return 0;
+                        });
+                        sortedArr.pop()
+                        // console.log(`Fetching ${sortedArr.length} old messages`)
+                        this.setState({ messagesData: [...sortedArr, ...this.state.messagesData], currentPosition: 'Arbitrary', fetchingPrevious: false })
+                      } else {
+                        // console.log('Nothing more left to fetch')
+                        this.setState({ currentPosition: 'Top', fetchingPrevious: false })
+                      }
                     })
-                      : null}
-                  </List>
-                </Content>
-                <Footer style={{ backgroundColor: 'white' }}>
-                  <Body>
-                    <Item rounded>
-                      <Input
-                        placeholder="Your Message"
-                        value={this.state.messageBody}
-                        onChangeText={val => {
-                          this.setState({ messageBody: val });
-                        }}
-                      />
-                      <Button
-                        transparent
-                        onPress={() => {
-                          this.handleSendMessage();
-                        }}>
-                        <Icon name="paper-plane" type="Entypo"></Icon>
-                      </Button>
-                    </Item>
-                  </Body>
-                </Footer>
-              </ImageBackground>
-            </Container>
-          </StyleProvider>
+                } else if (Bottom) {
+                  this.setState({ currentPosition: 'Bottom' })
+                } else {
+                  // this.setState({ currentPosition: 'Arbitrary' })
+                }
+              }}
+              onContentSizeChange={(w, h) => {
+                if (this.state.currentPosition === 'Bottom') {
+                  this._scroll._root.scrollToEnd({ animated: true });
+                }
+              }}>
+              <List >
+                {this.state.messagesData ? this.state.messagesData.map(message => {
+                  return (
+                    <ListItem avatar key={JSON.stringify(message.sentTime)} ref={c => { this._listitem = c }}>
+                      <Left>
+                        <Image
+                          source={{ uri: this.props.users[message.sender] ? this.props.users[message.sender].profilepic : this.state.defaultThumb }}
+                          style={{ width: RFValue(30), height: RFValue(30), borderRadius: RFValue(30) / 2, marginTop: hv(10) }}
+                          resizeMode="cover"
+                        />
+                      </Left>
+                      <Body>
+                        <Text numberofLines={1} style={{ fontSize: 10, paddingLeft: 30, fontStyle: 'italic', fontWeight: '700', paddingBottom: 5 }}>
+                          {this.props.users[message.sender] ? this.props.users[message.sender].fullName : '[Deleted User]'}
+                        </Text>
+                        {firebase.auth().currentUser.uid === message.sender ?
+                          <Item rounded success
+                            style={{
+                              minHeight: 30, alignItems: 'center', justifyContent: 'flex-end', paddingRight: 20,
+                              borderColor: 'black', backgroundColor: '#F48A20',
+                            }}>
+                            <Text style={{ color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>{message.messageBody}</Text>
+                          </Item>
+                          : <Item rounded
+                            style={{
+                              minHeight: 30, alignItems: 'center', justifyContent: 'flex-start',
+                              paddingLeft: 20, borderColor: 'black', backgroundColor: '#34304C',
+                            }}>
+                            <Text note style={{ color: 'white', fontSize: RFValue(14), fontWeight: "300", marginHorizontal: wv(12.5), marginVertical: hv(3) }}>
+                              {message.messageBody}
+                            </Text>
+                          </Item>
+                        }
+                      </Body>
+                      <Right
+                        style={{ alignItems: 'flex-end', justifyContent: 'center', marginTop: hv(10), paddingLeft: 5, }}>
+                        <Text style={{ fontSize: RFValue(11), color: '#161F3D' }}>
+                          {this.formatDate(new Date(message.sentTime))}
+                        </Text>
+                      </Right>
+                    </ListItem>
+                  );
+                })
+                  : null}
+              </List>
+            </Content>
+            <Footer style={{ backgroundColor: 'white' }}>
+              <Body style={{ flexDirection: 'row' }}>
+                <Item rounded style={{ width: wv(283), height: hv(36), alignSelf: 'center', marginLeft: wv(39.5) }}>
+                  <Input
+                    placeholder="Your Message"
+                    value={this.state.messageBody}
+                    onChangeText={val => {
+                      this.setState({ messageBody: val });
+                    }}
+                  />
+                </Item>
+                <SvgIcons.SendMessage width={wv(40)} height={hv(40)} style={{ alignSelf: 'center', marginLeft: wv(6) }} onPress={() => { this.handleSendMessage() }}></SvgIcons.SendMessage>
+              </Body>
+            </Footer>
+          </Container>
         </KeyboardAwareScrollView >
       </Root>
     );

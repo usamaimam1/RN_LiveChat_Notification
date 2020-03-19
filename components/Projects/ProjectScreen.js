@@ -135,8 +135,8 @@ class ProjectScreen extends React.Component {
                         <SvgIcons.Team width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('ViewUsers', { projectId: this.state.projectId }) }}></SvgIcons.Team>
                         {this.state.viewType === "ProjectManager" ?
                             <View style={{ flexDirection: 'row' }}>
-                                <SvgIcons.UserPlus width={wv(26)} height={hv(26)} style={{ marginLeft: wv(9), alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddUser', { projectId: this.state.projectId }) }}></SvgIcons.UserPlus>
-                                <SvgIcons.Remove width={wv(26)} height={hv(26)} style={{ marginLeft: wv(9), alignSelf: 'center' }} onPress={() => { this.deleteProject() }} ></SvgIcons.Remove>
+                                <SvgIcons.UserPlus width={wv(26)} height={hv(26)} style={{ marginLeft: wv(25), alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddUser', { projectId: this.state.projectId }) }}></SvgIcons.UserPlus>
+                                <SvgIcons.Remove width={wv(26)} height={hv(26)} style={{ marginLeft: wv(25), alignSelf: 'center' }} onPress={() => { this.deleteProject() }} ></SvgIcons.Remove>
                             </View>
                             : null
                         }
