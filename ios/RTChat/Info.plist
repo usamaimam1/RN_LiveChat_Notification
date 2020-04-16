@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>RTChat</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,13 +40,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>For taking a photo.</string>
+	<string>Project Hub requires the access of your Camera to set your profile picture and Project Thumbnails.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Project Hub requires the access of your Location to render location based custom views.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>For saving a photo.</string>
+	<string>Project Hub requires the access of your Photo Library to add your profile picture and Project Thumbnails.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>For choosing a photo.</string>
+	<string>Project Hub requires the access of your Photo Library to let you choose your profile picture and Project Thumbnails.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Black.ttf</string>
