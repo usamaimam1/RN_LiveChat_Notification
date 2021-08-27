@@ -3,15 +3,18 @@ import {
     StyleSheet, Platform,
     Image, Text, View, ScrollView, ImageBackground,
     Dimensions, TextInput, Button, ToastAndroid, KeyboardAvoidingView,
-    SafeAreaView
+    SafeAreaView, TouchableOpacity
 } from 'react-native';
+import { Header, Left, Right, Body, Title, Item, Label, Input } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
 import ImageResizer from 'react-native-image-resizer'
 import { Toast, Root, Container, Spinner } from 'native-base'
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentage as wv, heightPercentage as hv } from '../../util/stylerHelpers'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import firebase from 'react-native-firebase'
-import * as Progress from 'react-native-progress'
-
+import * as SvgIcons from '../../assets/SVGIcons/index'
 const options = {
     title: 'Select Image',
     storageOptions: {
@@ -22,7 +25,7 @@ const options = {
 
 export default class SignUp extends React.Component {
     static navigationOptions = {
-        // header: null
+        header: null
     }
     constructor() {
         super();
@@ -126,7 +129,7 @@ export default class SignUp extends React.Component {
     handlePickImage() {
         ImagePicker.showImagePicker(options, response => {
             if (response.didCancel) {
-                alert('You cancelled image picker 😟');
+                // alert('You cancelled image picker 😟');
             } else if (response.error) {
                 alert('And error occured: ', response.error);
             } else {
@@ -134,106 +137,109 @@ export default class SignUp extends React.Component {
                 ImageResizer.createResizedImage(source.uri, 200, 200, 'PNG', 99).then((output) => {
                     this.setState({ imgSource: { uri: output.uri } })
                     console.log(output.size)
-                    // response.uri is the URI of the new image that can now be displayed, uploaded...
-                    // response.path is the path of the new image
-                    // response.name is the name of the new image with the extension
-                    // response.size is the size of the new image
+
                 }).catch((err) => {
                     console.log(err.message)
-                    // Oops, something went wrong. Check that the filename is correct and
-                    // inspect err to get more details.
                 });
             }
         });
     }
     render() {
-        const { navigate } = this.props.navigation
-        // console.log(this.state)
-        const contentToRender = (
-            <KeyboardAwareScrollView>
-                <ImageBackground style={styles.background} source={require('../../assets/splash-bg.jpg')}>
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.logo} >
-                            <Image source={require('../../assets/ReactNativeFirebase.png')} style={{ width: Dimensions.get("window").width - 20, margin: 10, flex: 1 }} resizeMode="contain" ></Image>
-                        </View>
-                        <View style={styles.form} >
-                            <View style={styles.inputContainer}>
-                                <TextInput placeholder="Enter Full Name : " textContentType="name" style={styles.Text} onChangeText={this.handlefullnamechange} value={this.state.fullName}></TextInput>
-                                <TextInput placeholder="Enter Email : " textContentType="emailAddress" style={styles.Text} onChangeText={this.handleUserEmailChange} value={this.state.userEmail}></TextInput>
-                                <TextInput placeholder="Enter Password : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChange} secureTextEntry={true} value={this.state.userPassword}></TextInput>
-                                <TextInput placeholder="Enter Password Again : " textContentType="password" style={styles.Text} onChangeText={this.handleUserPasswordChangeConfirm} secureTextEntry={true} value={this.state.userPasswordConfirm}></TextInput>
-                                <TextInput placeholder="Pick An Image" textContentType="URL" style={styles.Text} onFocus={this.handlePickImage} secureTextEntry={false} value={this.state.imgSource ? this.state.imgSource.uri : null} ></TextInput>
-                            </View>
-                            <View style={styles.signinButton}>
-                                <Button title={"Sign Up"} onPress={() => {
-                                    this.handleSignUp()
-                                }}> </Button>
-                            </View>
-                            <View style={styles.SignupText}>
-                                <Text style={{ flex: 1, textAlign: 'right' }}> Already have an account? </Text>
-                                <Text style={{ flex: 1, textAlign: 'left', color: 'red' }} onPress={() => { navigate('Home') }}> Sign In? </Text>
-                            </View>
-                            {
-                                this.state.imgSource ?
-                                    <Image source={this.state.imgSource} style={{ width: 200, height: 200, alignSelf: 'center' }} >
-                                    </Image> : null
-                            }
-                        </View>
-                    </View>
-                </ImageBackground>
-            </KeyboardAwareScrollView>
-        )
         return (
             <Root>{
-                this.state.showActivity ?
-                    (
-                        <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                            <Spinner color="red" />
-                        </Container>
-                    )
-                    : Platform.OS === "ios" ?
-                        (<SafeAreaView>
-                            {contentToRender}
-                        </SafeAreaView>)
-                        : (<ScrollView keyboardShouldPersistTaps="always">
-                            {contentToRender}
-                        </ScrollView>)
+                this.state.showActivity ? (
+                    <Container style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                        <Spinner color="red" />
+                    </Container>) :
+                    <KeyboardAwareScrollView>
+                        <SafeAreaView style={styles.Container}>
+                            <View style={styles.Header}>
+                                <View style={styles.HeaderInnerView} >
+                                    <SvgIcons.Back height={hp(2.9)} width={wp(6.4)} color="#34304C" onPress={() => { this.props.navigation.goBack() }}></SvgIcons.Back>
+                                    <Text style={styles.HeaderTitle}>SignUp</Text>
+                                </View>
+                            </View>
+                            <View style={styles.SignUpView}>
+                                <View style={styles.ProfilePictureView}>
+                                    {this.state.imgSource ?
+                                        <Image style={styles.Avatar} source={this.state.imgSource} resizeMode="cover" onPress={this.handlePickImage}></Image> :
+                                        <SvgIcons.Upload width={wv(120)} height={hv(120)} style={{ alignSelf: 'center' }} onPress={this.handlePickImage} ></SvgIcons.Upload>
+                                    }
+                                </View>
+                                <View style={styles.UploadButton}>
+                                    {this.state.imgSource ?
+                                        <Text style={styles.UploadText} onPress={this.handlePickImage}>Change</Text>
+                                        : <Text style={styles.UploadText} onPress={this.handlePickImage}>Upload</Text>
+                                    }
+                                </View>
+                                <View style={styles.SignUpForm}>
+                                    <Item style={styles.SignUpField}>
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Full Name" textContentType="name"
+                                            value={this.state.fullName} onChangeText={this.handlefullnamechange} />
+                                    </Item>
+                                    <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Email" textContentType="emailAddress"
+                                            value={this.state.userEmail} onChangeText={this.handleUserEmailChange} />
+                                    </Item>
+                                    <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Password" textContentType="password" secureTextEntry
+                                            value={this.state.userPassword} onChangeText={this.handleUserPasswordChange} />
+                                    </Item>
+                                    <Item style={[styles.SignUpField, { marginTop: hv(16) }]}>
+                                        <Input style={{ fontSize: 10, marginBottom: hv(11),fontFamily: "Montserrat", }} placeholder="Confirm Password" textContentType="password" secureTextEntry
+                                            value={this.state.userPasswordConfirm} onChangeText={this.handleUserPasswordChangeConfirm} />
+                                    </Item>
+                                    <TouchableOpacity style={styles.SignUpButton} onPress={() => { this.handleSignUp() }}>
+                                        <Text style={{ color: 'white',fontFamily: "Montserrat", }}>SIGN UP</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </SafeAreaView>
+                    </KeyboardAwareScrollView>
             }
             </Root>)
     }
 }
 
 const styles = StyleSheet.create({
-    logo: {
-        flex: 1,
+    Container: {
+        shadowColor: "#000", shadowOpacity: 0.16
     },
-    background: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height
+    Header: {
+        height: hp(8.3), borderBottomColor: 'grey', borderBottomWidth: 1
     },
-    form: {
-        flex: 2,
-        margin: 20
+    HeaderInnerView: {
+        height: hp(2.9), marginVertical: hp(3.2), marginHorizontal: wp(3.0), flexDirection: 'row'
     },
-    inputContainer: {
-
+    HeaderTitle: {
+        marginLeft: wp(4.533), fontSize: RFValue(12), color: '#34304C',fontFamily: "Montserrat",
     },
-    signinButton: {
-        marginTop: 10,
-        marginLeft: 50,
-        marginRight: 50
+    SignUpView: {
+        height: hv(478), width: wv(342), marginTop: hv(20.5), marginHorizontal: wv(17), marginBottom: hv(213.5),
     },
-    Text: {
-        backgroundColor: 'white',
-        margin: 10,
-        borderRadius: 5,
-        height: 50,
-        backgroundColor: 'lightgrey'
+    ProfilePictureView: {
+        alignSelf: 'center', marginTop: hv(29.5),
     },
-    SignupText: {
-        flex: 1,
-        flexDirection: 'row',
-        marginTop: 10,
-        marginLeft: 30
+    Avatar: {
+        width: hv(100), height: hv(100), borderRadius: hv(100) / 2
+    },
+    UploadButton: {
+        alignSelf: 'center',
+        height: hv(25), width: wv(64), marginTop: hv(27),
+        borderWidth: 1, borderColor: '#34304C'
+    },
+    UploadText: {
+        fontSize: 9, marginHorizontal: wv(10), marginVertical: hv(5), textAlign: 'center',fontFamily: "Montserrat",
+    },
+    SignUpForm: {
+        height: hv(164), width: wv(300.5), marginHorizontal: wv(21), marginTop: hv(30.5)
+    },
+    SignUpField: {
+        height: hv(29)
+    },
+    SignUpButton: {
+        marginTop: hv(30.5), alignSelf: 'center', height: hv(32), width: wv(140), backgroundColor: '#F48A20', borderRadius: 20,
+        justifyContent: 'center', alignItems: 'center'
     }
+
 });

@@ -1,12 +1,15 @@
 import React from 'react'
 import {
     Text, View, Platform, Dimensions, StyleSheet, Image, StatusBar,
-    ImageBackground, Button
+    ImageBackground, Button, TouchableOpacity
 } from 'react-native'
 import {
     Content, Container, Header, Footer, Left, Body, Right,
     Icon, ListItem, List
 } from 'native-base'
+import { widthPercentage as wp, heightPercentage as hp } from '../util/stylerHelpers'
+import { RFValue } from 'react-native-responsive-fontsize'
+import * as SvgIcons from '../assets/SVGIcons/index'
 export default class SideBar extends React.Component {
     constructor(props) {
         super(props)
@@ -34,76 +37,56 @@ export default class SideBar extends React.Component {
         return (
             <Container>
                 <Content>
-                    <ImageBackground
-                        source={{
-                            uri: "https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                        }}
-                        style={{
-                            height: 150,
-                            alignSelf: "stretch",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                        <Image
-                            square
-                            style={{ height: 100, width: 100, borderRadius: 50 }}
-                            source={this.props.imgSrc}
-                        />
-                    </ImageBackground>
-                    {/* Profile Navigator */}
-                    <ListItem icon onPress={() => { this.props._navigation.navigate('UserProfile', { userData: this.state.userData }) }}>
-                        <Left>
-                            <Icon name="profile" type="AntDesign" />
-                        </Left>
-                        <Body>
-                            <Text>Profile</Text>
-                        </Body>
-                    </ListItem> 
-                    {/* Projects Navigator */}
-                    <ListItem icon onPress={() => { }}>
-                        <Left>
-                            <Icon name="project" type="Octicons" />
-                        </Left>
-                        <Body>
-                            <Text>Projects</Text>
-                        </Body>
-                    </ListItem>
-                    {/* Issues Navigator */}
-                    <ListItem icon onPress={() => { }}>
-                        <Left>
-                            <Icon name="issue-opened" type="Octicons" />
-                        </Left>
-                        <Body>
-                            <Text>Issues</Text>
-                        </Body>
-                    </ListItem>
-                    {/* Messages Navigator */}
-                    <ListItem icon onPress={() => { }}>
-                        <Left>
-                            <Icon name="message" type="Entypo" />
-                        </Left>
-                        <Body>
-                            <Text>Messages</Text>
-                        </Body>
-                    </ListItem>
-                    {/* Change Password */}
-                    <ListItem icon onPress={() => { this.props._onChangePassword() }}>
-                        <Left>
-                            <Icon name="account-details" type="MaterialCommunityIcons" />
-                        </Left>
-                        <Body>
-                            <Text>Change Password</Text>
-                        </Body>
-                    </ListItem>
-                    {/* LogOut */}
-                    <ListItem icon onPress={() => { this.props._onLogOut() }}>
-                        <Left>
-                            <Icon name="logout" type="AntDesign" />
-                        </Left>
-                        <Body>
-                            <Text>Log Out</Text>
-                        </Body>
-                    </ListItem>
+                    <View style={{ height: hp(100), width: wp(315), borderColor: 'red', borderWidth: 0 }}>
+                        <Image style={{ width: RFValue(65), height: RFValue(65), borderRadius: RFValue(65) / 2, marginVertical: hp(17), marginHorizontal: wp(100) }} source={this.props.imgSrc} resizeMode="cover"></Image>
+                    </View>
+                    <View style={{ width: wp(275.4), height: hp(180.6), marginTop: hp(19), marginHorizontal: wp(15), borderWidth: 0, borderColor: 'green' }}>
+                        {/* Profile Navigator */}
+                        <TouchableOpacity style={{ flexDirection: 'row', height: hp(30) }} onPress={() => { this.props._navigation.navigate('UserProfile') }}>
+                            <View>
+                                <SvgIcons.Users width={wp(16)} height={hp(18.05)}></SvgIcons.Users>
+                            </View>
+                            <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Profile</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* Projects Navigator */}
+                        <TouchableOpacity style={{ flexDirection: 'row', height: hp(30), marginTop: hp(11) }} onPress={() => { this.props._onClose() }}>
+                            <View>
+                                <SvgIcons.Projects width={wp(16)} height={hp(18.05)}></SvgIcons.Projects>
+                            </View>
+                            <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Projects</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* Issues Navigator */}
+                        <TouchableOpacity style={{ flexDirection: 'row', height: hp(30), marginTop: hp(11) }} onPress={() => { this.props._navigation.navigate('IssuesIndex') }}>
+                            <View>
+                                <SvgIcons.IssueFooter width={wp(16)} height={hp(18.05)}></SvgIcons.IssueFooter>
+                            </View>
+                            <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Issues</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* Change Password */}
+                        <TouchableOpacity style={{ flexDirection: 'row', height: hp(30), marginTop: hp(11) }} onPress={() => { this.props._onChangePassword() }}>
+                            <View>
+                                <SvgIcons.Password width={wp(16)} height={hp(18.05)}></SvgIcons.Password>
+                            </View>
+                            <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 1, flex: 1 }}>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Change Password</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* Log Out */}
+                        <TouchableOpacity style={{ flexDirection: 'row', height: hp(30), marginTop: hp(11) }} onPress={() => { this.props._onLogOut() }}>
+                            <View>
+                                <SvgIcons.Logout width={wp(16)} height={hp(18.05)}></SvgIcons.Logout>
+                            </View>
+                            <View style={{ marginLeft: wp(14), height: hp(30), borderBottomColor: '#D4DCE1', borderBottomWidth: 0, flex: 1 }}>
+                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(13), color: '#758692' }}>Log Out</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </Content>
             </Container>
         )

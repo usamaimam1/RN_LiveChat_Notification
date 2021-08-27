@@ -1,43 +1,36 @@
 import React from 'react'
 import {
-    Text,
-    View,
-    StyleSheet,
-    Image,
-    ToastAndroid,
-    Picker,
-    Dimensions,
-    SafeAreaView,
-    FlatList,
-    ImageBackground,
-    Alert,
-    BackHandler
+    Text, View, StyleSheet, Image, ToastAndroid, Picker, TouchableOpacity, Dimensions, SafeAreaView, FlatList, ImageBackground, Alert, BackHandler,
 } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import firebase from 'react-native-firebase'
+import NetInfo from '@react-native-community/netinfo'
 import {
     Root, Content, Header, Card, CardItem, Right, Icon, Fab, Container, Footer, FooterTab, Badge, Button, Left, Body,
-    Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch
+    Title, Subtitle, List, ListItem, Thumbnail, StyleProvider, Toast, Drawer, Switch, Spinner
 } from 'native-base'
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+// import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentage as wv, heightPercentage as hv } from '../util/stylerHelpers'
+import * as SvgIcons from '../assets/SVGIcons/index'
 import OptionsMenu from 'react-native-options-menu'
 import RNFetchBlob from 'rn-fetch-blob'
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer'
 import UUIDGenerator from 'react-native-uuid-generator';
-import { ScrollView } from 'react-native-gesture-handler';
+import { filterRelevantProjects, enableAddandRemoveListeners, disableAddandRemoveListeners, preFetchFunc, handleSignOut, handleChangePassword, formatDate, handleBackPress, closeDrawer, openDrawer, handleDeleteProject } from './Dashboard.functions'
 import SideBar from './SideBar'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject,DeleteProject } from '../redux/actions/index'
+import { SetProject, SetUser, AddUser, AddProjects, PrintUser, PrintProjects, AddProject, DeleteProject, SetActiveProjectId, AddIssues, SetIssuesCount, SetRelevantProjectIds, AddRelevantProject, SetUsers, ResetUser, ResetProjects, ResetIssues, ResetUsers, ResetSearchString, SetNetworkState } from '../redux/actions/index'
+import WarningScreen from './WarningScreen'
+import { RFValue } from 'react-native-responsive-fontsize'
+import CustomIcons from '../util/CustomIcons'
+import Svg from 'react-native-svg'
 const options = {
     title: 'Select Image',
-    storageOptions: {
-        skipBackup: true,
-        path: 'images'
-    }
+    storageOptions: { skipBackup: true, path: 'images' }
 };
 
 
@@ -45,264 +38,216 @@ class Dashboard extends React.Component {
     static navigationOptions = {
         header: null
     }
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.User = firebase.auth().currentUser._user
         this.state = {
-            userData: null,
             status: null,
             imgSource: null,
             iconSource: require('../assets/ReactNativeFirebase.png'),
             active: null,
-            projectDetails: [],
             refresh: null,
-            issueCount: 0
+            userAdded: false,
+            projectAdded: false,
+            issuesAdded: false,
+            usersAdded: false
         }
-        this.enableAddandRemoveListeners = this.enableAddandRemoveListeners.bind(this)
-        this.disableAddandRemoveListeners = this.disableAddandRemoveListeners.bind(this)
-        this.preFetchFunc = this.preFetchFunc.bind(this)
-        this.filterRelevantProjects = this.filterRelevantProjects.bind(this)
-        this.handleSignOut = this.handleSignOut.bind(this)
-        this.handleChangePassword = this.handleChangePassword.bind(this)
-        this.pickImage = this.pickImage.bind(this)
-        this.formatDate = this.formatDate.bind(this)
-        this.handleBackPress = this.handleBackPress.bind(this)
-        this.closeDrawer = this.closeDrawer.bind(this)
-        this.openDrawer = this.openDrawer.bind(this)
-        this.handleDeleteProject = this.handleDeleteProject.bind(this)
+        this.enableAddandRemoveListeners = enableAddandRemoveListeners.bind(this)
+        this.disableAddandRemoveListeners = disableAddandRemoveListeners.bind(this)
+        this.preFetchFunc = preFetchFunc.bind(this)
+        this.filterRelevantProjects = filterRelevantProjects.bind(this)
+        this.handleSignOut = handleSignOut.bind(this)
+        this.handleChangePassword = handleChangePassword.bind(this)
+        this.formatDate = formatDate.bind(this)
+        this.handleBackPress = handleBackPress.bind(this)
+        this.closeDrawer = closeDrawer.bind(this)
+        this.openDrawer = openDrawer.bind(this)
+        this.handleDeleteProject = handleDeleteProject.bind(this)
+        // this.setupNotificationsListeners = this.setupNotificationsListeners.bind(this)
+        this.setAndResetDeviceIds = this.setAndResetDeviceIds.bind(this)
+        this.handleFailMessage = this.handleFailMessage.bind(this)
+    }
+    handleFailMessage() {
+        const allLoading = this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded
+        // if (this.state.userAdded && this.state.usersAdded) {
+        //     const notification = new firebase.notifications.Notification().setNotificationId(1).setTitle('Users Loaded').setBody('Success !!')
+        //     firebase.notifications().displayNotification(notification)
+
+        // }
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                {!this.state.userAdded && !this.state.usersAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading User ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="red" />
+                    </View>
+                    : null}
+                {!this.state.projectAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading Projects ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="blue" />
+                    </View>
+                    : null}
+                {!this.state.issuesAdded ?
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ flex: 1, textAlign: 'center', fontFamily: "Montserrat", }}> Loading Issues ...</Text>
+                        <Spinner style={{ flex: 1, alignSelf: 'flex-start' }} color="green" />
+                    </View>
+                    : null}
+            </View>
+        )
+    }
+    async setAndResetDeviceIds() {
+        try {
+            const snapshot = await firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).once('value')
+            let fcmToken = await AsyncStorage.getItem('fcmToken');
+            if (snapshot._value && fcmToken) {
+                if (snapshot._value.includes(fcmToken)) {
+                    console.log('Token Already Included')
+                } else {
+                    let _vals = [...snapshot._value, fcmToken]
+                    firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).set(_vals)
+                }
+            } else {
+                firebase.database().ref("DeviceIds").child(firebase.auth().currentUser.uid).set([fcmToken])
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+        // BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
         this.preFetchFunc()
-        this.enableAddandRemoveListeners()
+        this.setAndResetDeviceIds()
     }
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
         this.disableAddandRemoveListeners()
-    }
-    filterRelevantProjects(project) {
-        const isProjectManager = project.projectmanager[this.User.uid] ? true : false
-        const isTeamLead = project.teamleads ? project.teamleads[this.User.uid] ? true : false : false
-        const isTeamMember = project.teammembers ? project.teammembers[this.User.uid] ? true : false : false
-        return isProjectManager || isTeamLead || isTeamMember
-    }
-    preFetchFunc() {
-        const projRef = firebase.database().ref('Projects')
-        projRef.once('value').then(data => {
-            if (!data._value) {
-                this.setState({ projectDetails: [] })
-                return
-            }
-            const ProjectVals = Object.keys(data._value).map(_key => data._value[_key]).filter(this.filterRelevantProjects)
-            this.props.addprojects(ProjectVals)
-            const issueCount = ProjectVals.map(project => project.issues ? Object.keys(project.issues).length : 0).reduce((res, curr) => res + curr)
-            this.setState({ projectDetails: ProjectVals, issueCount: issueCount })
-        })
-    }
-    enableAddandRemoveListeners() {
-        const ref = firebase.database().ref("users").child(this.User.uid)
-        this.userfuncref = ref.on('value', data => {
-            if (data.val()) {
-                this.props.adduser(data._value)
-                this.props.printuser()
-                this.setState({ status: data._value.adminaccess ? 'Admin' : 'Employee', userData: data._value })
-                this.setState({ iconSource: { uri: data._value.profilepic, cache: 'force-cache' } })
-            }
-        })
-        this.projectchildaddedref = firebase.database().ref('Projects').on('child_added', data => {
-            if (data.val()) {
-                const isIncluded = this.props.projects.filter(project => project.projectId === data.val().projectId)
-                if (isIncluded.length === 0 && this.filterRelevantProjects(data.val())) {
-                    this.props.addproject(data._value)
-                }
-            }
-        })
-        this.projectchildremoveref = firebase.database().ref('Projects').on('child_removed', data => {
-            if (data.val()) {
-                this.props.deleteproject(data._value.projectId)
-            }
-        })
-    }
-    disableAddandRemoveListeners() {
-        off('value', this.userfuncref)
-        off('child_added', this.projectchildaddedref)
-        off('child_removed', this.projectchildremoveref)
-    }
-    handleBackPress() {
-        Toast.show({ text: 'Button Pressed', buttonText: 'Okay' })
-        return true
-    }
-    formatDate(date) {
-        var monthNames = [
-            "JAN", "FEB", "MAR",
-            "APR", "MAY", "JUNE", "JULY",
-            "AUG", "SEP", "OCT",
-            "NOV", "DEC"
-        ];
-
-        var day = date.getDate();
-        var monthIndex = date.getMonth();
-        var year = date.getFullYear();
-        var hours = date.getHours()
-        var minutes = date.getMinutes()
-        var seconds = date.getSeconds()
-        return day + ' ' + monthNames[monthIndex] + ' ' + year;
-    }
-    handleSignOut() {
-        firebase.auth().signOut().then(() => {
-            this.props.navigation.navigate('Home')
-        }).catch((err) => {
-            ToastAndroid.show(err.message, ToastAndroid.LONG)
-        })
-    }
-    handleChangePassword() {
-        this.props.navigation.navigate('ChangePassword')
-    }
-    pickImage = () => {
-        ImagePicker.showImagePicker(options, response => {
-            if (response.didCancel) {
-                alert('You cancelled image picker 😟');
-            } else if (response.error) {
-                alert('And error occured: ', response.error);
-            } else {
-                const source = { uri: response.uri };
-                this.setState({ imgSource: source })
-            }
-        });
-    };
-    openDrawer() {
-        this._drawer._root.open()
-    }
-    closeDrawer() {
-        this._drawer._root.close()
-    }
-    handleDeleteProject(proj) {
-        const ref = firebase.database().ref('Projects').child(proj.projectId)
-        const projectThumbnail = proj.projectId
-        firebase.storage().ref('projectThumbnails/' + projectThumbnail).delete().then(() => { })
-            .catch(err => { console.log(err.message) })
-        ref.remove().then(() => {
-            this.setState({ refresh: null })
-        })
-        firebase.database().ref('Issues').orderByChild('projectId').equalTo(proj.projectId).once('value', data => {
-            data._childKeys.forEach(i => { firebase.database().ref('Issues').child(i).remove() })
-        })
-        firebase.database().ref('Messages').child(proj.projectId).remove()
+        // this.notificationListener()
     }
     render() {
-        const { navigate } = this.props.navigation
-        const width = Dimensions.get("window").width
-        const height = Dimensions.get("window").height
-        // console.log(this.props)
         return (
-            <Drawer
-                ref={ref => { this._drawer = ref }}
-                content={<SideBar
-                    imgSrc={this.state.iconSource}
-                    _userData={this.props.user}
-                    _navigation={this.props.navigation}
-                    _onLogOut={this.handleSignOut}
-                    _onChangePassword={this.handleChangePassword} />}
-                onClose={() => { this.closeDrawer() }}>
-                <Root>
-                    <Container>
-                        <ImageBackground source={require('../assets/splash-bg.jpg')}
-                            style={{ width: width, height: height }}>
-                            <Header transparent>
-                                <Left>
-                                    <Button transparent onPress={() => {
-                                        this.openDrawer()
-                                    }}>
-                                        <Icon name="menu" style={{ color: 'blue' }} />
-                                    </Button>
-                                </Left>
-                                <Body style={{ alignSelf: 'center' }}>
-                                    <Title style={{ color: 'black', textAlign: 'center' }}>Welcome</Title>
-                                    <Subtitle style={{ color: 'grey', textAlign: 'center' }}>{this.state.status}</Subtitle>
-                                </Body>
-                                <Right>
-
-                                </Right>
-                            </Header>
-                            <Content>
-                                <List>
-                                    {this.props.projects.map(proj => {
-                                        return (
-                                            <ListItem key={proj.projectId} thumbnail onPress={() => {
-                                                this.props.navigation.navigate('ProjectScreen', {
-                                                    projectId: proj.projectId,
-                                                    userData: this.props.user,
-                                                    projectDetails: this.props.projects,
-                                                })
-                                            }}>
-                                                <Left>
-                                                    <Thumbnail square source={{ uri: proj.projectThumbnail }} />
-                                                </Left>
-                                                <Body>
-                                                    <Text>{proj.projectTitle}</Text>
-                                                    <Text note numberOfLines={1} style={{ color: 'grey' }}>Date Added {this.formatDate(new Date(proj.dateAdded))}</Text>
-                                                </Body>
-                                                <Right>
-                                                    {this.props.user ? this.props.user.adminaccess ?
-                                                        <Button transparent onPress={() => {
-                                                            Alert.alert('Warning', 'Are you sure to want to delete this project?',
-                                                                [
-                                                                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
-                                                                    { text: 'OK', onPress: () => { this.handleDeleteProject(proj) } },
-                                                                ],
-                                                                { cancelable: true },
-                                                            );
-                                                        }} >
-                                                            <Icon name="cross" type="Entypo" />
-                                                        </Button> : null : null}
-                                                </Right>
-                                            </ListItem>
-                                        )
-                                    })}
-                                </List>
-                            </Content>
-                            <Footer>
-                                <FooterTab>
-                                    <Button active badge vertical>
-                                        <Badge><Text>{this.props.projects.length}</Text></Badge>
-                                        <Icon name="project" type="Octicons" />
-                                        <Text>Projects</Text>
-                                    </Button>
-                                    <Button vertical onPress={() => {
-                                        this.props.navigation.navigate('UserProfile', {
-                                            userData: this.props.user,
-                                            projectDetails: this.props.projects,
-                                            issueCount: this.state.issueCount
-                                        })
-                                    }}>
-                                        <Icon name="user" type="AntDesign" />
-                                        <Text>User</Text>
-                                    </Button>
-                                    <Button badge vertical onPress={() => {
-                                        this.props.navigation.navigate('IssuesIndex', {
-                                            userData: this.props.user,
-                                            projectDetails: this.props.projects,
-                                            issueCount: this.state.issueCount
-                                        })
-                                    }} >
-                                        <Badge ><Text>{this.state.issueCount}</Text></Badge>
-                                        <Icon name="issue-opened" type="Octicons" />
-                                        <Text>Issues</Text>
-                                    </Button>
-                                    {this.props.user ? this.props.user.adminaccess ?
-                                        <Button vertical onPress={() => {
-                                            this.props.navigation.navigate('AddProject')
-                                        }}>
-                                            <Icon name="plus" type="AntDesign" />
-                                            <Text>Add Project</Text>
-                                        </Button> : null : null
-                                    }
-                                </FooterTab>
-                            </Footer>
-                        </ImageBackground>
-                    </Container>
-                </Root>
-            </Drawer>
+            !this.props.netState.isConnected || !this.props.netState.isInternetReachable ?
+                <WarningScreen isConnected={this.props.netState.isConnected} isInternetReachable={this.props.netState.isInternetReachable} /> :
+                <Drawer
+                    ref={ref => { this._drawer = ref }}
+                    content={<SideBar
+                        imgSrc={this.state.iconSource}
+                        _userData={this.props.user}
+                        _navigation={this.props.navigation}
+                        _onLogOut={this.handleSignOut}
+                        _onChangePassword={this.handleChangePassword}
+                        _onClose={this.closeDrawer} />}
+                    onClose={() => { this.closeDrawer() }}>
+                    <Root>
+                        <SafeAreaView style={{ flex: 1 }}>
+                            <Container>
+                                <View style={styles.Header}>
+                                    <View style={styles.InnerHeaderView}>
+                                        <SvgIcons.Menu width={hv(24)} height={hv(24)} onPress={() => { this.openDrawer() }}></SvgIcons.Menu>
+                                        <Text style={styles.WelcomeText}>{`Welcome ${this.props.user ? this.props.user.adminaccess ? 'Admin' : 'Employee' : null}`}</Text>
+                                    </View>
+                                </View>
+                                <Content style={{ marginTop: hv(26), marginHorizontal: wv(15) }}>
+                                    {this.state.userAdded && this.state.projectAdded && this.state.issuesAdded && this.state.usersAdded ?
+                                        <List>
+                                            {this.props.projects.length === 0 ?
+                                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Text style={{ color: 'grey', fontFamily: "Montserrat", }}>No Projects To Display</Text>
+                                                </View> :
+                                                <List>
+                                                    {this.props.projects.map(item => {
+                                                        return (
+                                                            <View key={item.projectId} style={{ height: hv(55 + 17.5), width: wv(345.5), borderWidth: 0, marginTop: hv(13.5) }}>
+                                                                <View style={{ height: hv(55), width: wv(345.5), flexDirection: 'row' }}>
+                                                                    <TouchableOpacity style={{ height: hv(55), width: wv(55 + 95 + 159), flexDirection: 'row' }} onPress={() => {
+                                                                        this.props.setActiveProjectId(item.projectId)
+                                                                        this.props.navigation.navigate('ProjectScreen', { projectId: item.projectId })
+                                                                    }}>
+                                                                        <View style={{ height: hv(55), width: wv(55) }}>
+                                                                            <Image source={{ uri: item.projectThumbnail }} style={{ height: RFValue(50), width: RFValue(50), borderRadius: RFValue(50 / 2) }}></Image>
+                                                                        </View>
+                                                                        <View style={{ marginLeft: wv(11), marginVertical: hv(5), height: hv(40), width: wv(159 + 90), borderWidth: 0 }}>
+                                                                            <Text style={{ fontSize: RFValue(14), fontWeight: '500', fontFamily: "Montserrat", }}>{item.projectTitle}</Text>
+                                                                            <Text note numberOfLines={1} style={{ fontFamily: "Montserrat", fontSize: RFValue(12), color: '#758692', marginTop: hv(5) }}>Date Added {this.formatDate(new Date(item.dateAdded))}</Text>
+                                                                        </View>
+                                                                    </TouchableOpacity>
+                                                                    <View>
+                                                                        {this.props.user ? this.props.user.adminaccess ?
+                                                                            <SvgIcons.Remove width={RFValue(25)} height={RFValue(25)} style={{ marginVertical: hv(10) }} onPress={() => {
+                                                                                Alert.alert('Warning', 'Are you sure to want to delete this project?',
+                                                                                    [
+                                                                                        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel', },
+                                                                                        { text: 'OK', onPress: () => { this.handleDeleteProject(item) } },
+                                                                                    ],
+                                                                                    { cancelable: true },
+                                                                                );
+                                                                            }}></SvgIcons.Remove> : null : null}
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{ marginTop: hv(12.5), borderBottomWidth: 1, borderBottomColor: '#D8D8D8' }}></View>
+                                                            </View>)
+                                                    }
+                                                    )}
+                                                </List>
+                                            }
+                                        </List> : this.handleFailMessage()}
+                                </Content>
+                                {this.props.user ? this.props.user.adminaccess ?
+                                    <View style={styles.Footer}>
+                                        <View style={styles.ProjectsIcon}>
+                                            <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                            </View>
+                                            <SvgIcons.ProjectsActive style={{ alignSelf: 'center', borderWidth: 0 }} width={wv(30)} height={hv(30)} color="#34304C"></SvgIcons.ProjectsActive>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                        </View>
+                                        <View style={{ width: wv(38), height: hv(42), marginTop: hv(25) + RFValue(16), marginLeft: wv(33), borderWidth: 0 }}>
+                                            <SvgIcons.Users width={wv(19.5)} height={hv(22)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('UserProfile') }} ></SvgIcons.Users>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Profile</Text>
+                                        </View>
+                                        <View style={{ width: wv(52), height: wv(52), borderWidth: 0, marginLeft: wv(13.5) }}>
+                                            <SvgIcons.AddProject width={wv(52)} height={wv(52)} color="white" style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('AddProject') }}></SvgIcons.AddProject>
+                                        </View>
+                                        <View style={{ width: wv(52), height: hv(44), marginLeft: wv(13.5), marginTop: hv(23) + RFValue(16), borderWidth: 0 }}>
+                                            <SvgIcons.AddUserFooter width={wv(26)} height={hv(26)} style={{ alignSelf: 'center' }}></SvgIcons.AddUserFooter>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(6), color: '#77869E' }}>Add User</Text>
+                                        </View>
+                                        <View style={{ width: wv(34), height: hv(47), marginLeft: wv(35), marginTop: hv(20) }}>
+                                            <View style={{ height: RFValue(16), width: RFValue(16), alignSelf: 'flex-start', backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text>
+                                            </View>
+                                            <SvgIcons.IssueFooter width={wv(30)} height={hv(30)} style={{ alignSelf: 'center' }} onPress={() => { this.props.navigation.navigate('IssuesIndex') }}></SvgIcons.IssueFooter>
+                                            <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Issues</Text>
+                                        </View>
+                                    </View> :
+                                    <Footer style={{ backgroundColor: 'white' }}>
+                                        <FooterTab style={{ backgroundColor: 'white' }}>
+                                            <Button badge vertical>
+                                                <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                    <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.projects.length}</Text>
+                                                </Badge>
+                                                <SvgIcons.ProjectsActive width={RFValue(26)} height={RFValue(26)} color="#34304C"></SvgIcons.ProjectsActive>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), marginTop: hv(3), alignSelf: 'center', borderWidth: 0 }}>Projects</Text>
+                                            </Button>
+                                            <Button vertical badge onPress={() => { this.props.navigation.navigate('UserProfile') }}>
+                                                <Badge style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}><Text style={{ color: 'rgba(255, 255, 255, 0.1)' }}>{this.props.projects.length}</Text></Badge>
+                                                <SvgIcons.Users width={RFValue(26)} height={RFValue(26)} ></SvgIcons.Users>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Profile</Text>
+                                            </Button>
+                                            <Button badge vertical onPress={() => { this.props.navigation.navigate('IssuesIndex') }} >
+                                                <Badge style={{ height: RFValue(16), width: RFValue(16), backgroundColor: '#F48A20', borderRadius: RFValue(10), borderWidth: 0 }}>
+                                                    <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(11), alignSelf: 'center', color: 'white' }}>{this.props.issueCount}</Text></Badge>
+                                                <SvgIcons.IssueFooter width={RFValue(26)} height={RFValue(26)}></SvgIcons.IssueFooter>
+                                                <Text style={{ fontFamily: "Montserrat", fontSize: RFValue(10), alignSelf: 'center', borderWidth: 0, marginTop: hv(3), color: '#77869E' }}>Issues</Text>
+                                            </Button>
+                                        </FooterTab>
+                                    </Footer> : null
+                                }
+                            </Container>
+                        </SafeAreaView>
+                    </Root>
+                </Drawer >
         )
     }
 }
@@ -314,29 +259,38 @@ const mapDispatchToProps = dispatch => {
         addprojects: function (projects) { dispatch(AddProjects(projects)) },
         printprojects: function () { dispatch(PrintProjects()) },
         addproject: function (project) { dispatch(AddProject(project)) },
-        deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) }
+        setproject: function (projectId, project) { dispatch(SetProject(projectId, project)) },
+        deleteproject: function (projectId) { dispatch(DeleteProject(projectId)) },
+        setActiveProjectId: function (projectId) { dispatch(SetActiveProjectId(projectId)) },
+        addIssues: function (issues) { dispatch(AddIssues(issues)) },
+        setIssuesCount: function (issuesCount) { dispatch(SetIssuesCount(issuesCount)) },
+        setRelevantProjectIds: function (relevantProjectIds) { dispatch(SetRelevantProjectIds(relevantProjectIds)) },
+        addRelevantProject: function (projectId) { dispatch(AddRelevantProject(projectId)) },
+        addUsers: function (users) { dispatch(SetUsers(users)) },
+        resetUser: function () { dispatch(ResetUser()) },
+        resetProjects: function () { dispatch(ResetProjects()) },
+        resetIssues: function () { dispatch(ResetIssues()) },
+        resetUsers: function () { dispatch(ResetUsers()) },
+        resetSearchString: function () { dispatch(ResetSearchString()) },
+        setNetworkState: function (netstate) { dispatch(SetNetworkState(netstate)) }
     }
 }
 const mapStateToProps = state => {
-    console.log(state)
+    // console.log(state)
     return {
         user: state.userReducer.user,
-        projects: state.projectReducer.projectDetails
+        projects: state.projectReducer.projectDetails,
+        issueCount: state.issuesReducer.issuesCount,
+        activeProjectId: state.projectReducer.activeProjectId,
+        netState: state.networkReducer.netState
     }
 }
+
 const styles = StyleSheet.create({
-    item: {
-        flex: 1,
-        margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomWidth: 1
-    },
-    body: {
-        flex: 2
-    },
-    poet: {
-        flex: 1
-    }
+    Header: { height: hv(68) },
+    InnerHeaderView: { borderWidth: 0, flexDirection: 'row', height: hv(24), marginTop: hv(58 - 32), marginLeft: wv(13), marginBottom: hv(18) },
+    WelcomeText: { fontFamily: "Montserrat", marginLeft: wv(10), fontWeight: '500', textAlign: 'center', marginBottom: hv(2), fontSize: RFValue(15), fontWeight: "400" },
+    Footer: { height: hv(94.5), width: wv(375), borderWidth: 0, flexDirection: 'row' },
+    ProjectsIcon: { width: wv(47), height: hv(47), marginTop: hv(20), marginLeft: wv(27), borderWidth: 0 },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

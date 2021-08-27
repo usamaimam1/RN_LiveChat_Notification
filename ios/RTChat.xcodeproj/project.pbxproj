@@ -8,6 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RTChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RTChatTests.m */; };
+		04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */; };
+		047A132B2417A80600C1225A /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047A132A2417A80600C1225A /* fontello.ttf */; };
+		047C87282423769A0087F92F /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C8716242376990087F92F /* Montserrat-BlackItalic.ttf */; };
+		047C87292423769A0087F92F /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C8717242376990087F92F /* Montserrat-Light.ttf */; };
+		047C872A2423769A0087F92F /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87182423769A0087F92F /* Montserrat-BoldItalic.ttf */; };
+		047C872B2423769A0087F92F /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87192423769A0087F92F /* Montserrat-Italic.ttf */; };
+		047C872C2423769A0087F92F /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871A2423769A0087F92F /* Montserrat-ExtraBoldItalic.ttf */; };
+		047C872D2423769A0087F92F /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871B2423769A0087F92F /* Montserrat-ExtraLight.ttf */; };
+		047C872E2423769A0087F92F /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871C2423769A0087F92F /* Montserrat-LightItalic.ttf */; };
+		047C872F2423769A0087F92F /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871D2423769A0087F92F /* Montserrat-ExtraBold.ttf */; };
+		047C87302423769A0087F92F /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871E2423769A0087F92F /* Montserrat-Regular.ttf */; };
+		047C87312423769A0087F92F /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C871F2423769A0087F92F /* Montserrat-ExtraLightItalic.ttf */; };
+		047C87322423769A0087F92F /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87202423769A0087F92F /* Montserrat-MediumItalic.ttf */; };
+		047C87332423769A0087F92F /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87212423769A0087F92F /* Montserrat-Bold.ttf */; };
+		047C87342423769A0087F92F /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87222423769A0087F92F /* Montserrat-SemiBold.ttf */; };
+		047C87352423769A0087F92F /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87232423769A0087F92F /* Montserrat-SemiBoldItalic.ttf */; };
+		047C87362423769A0087F92F /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87242423769A0087F92F /* Montserrat-Thin.ttf */; };
+		047C87372423769A0087F92F /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87252423769A0087F92F /* Montserrat-ThinItalic.ttf */; };
+		047C87382423769A0087F92F /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87262423769A0087F92F /* Montserrat-Medium.ttf */; };
+		047C87392423769A0087F92F /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 047C87272423769A0087F92F /* Montserrat-Black.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -23,7 +43,6 @@
 		3B256739E3C6C2F16E4CC225 /* libPods-RTChat-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21AF910D002494F62737A55A /* libPods-RTChat-tvOS.a */; };
 		43FBE6600C1F4C58A8435704 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4A315D4321F48CAACF22DE7 /* Foundation.ttf */; };
 		5FDFE937C25B425C9392FD35 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B512A9AD0F0748DAB7FC9E51 /* EvilIcons.ttf */; };
-		629601DA237EA9DF00C4C65B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62AFDB93237990F9006985DA /* GoogleService-Info.plist */; };
 		6C155DECD18C4BDEA5A39D52 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5158FE4FA6A46458FACBC31 /* Zocial.ttf */; };
 		6DDC8D1CC11C4B9FA8697760 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BF3C12D580946FC86DCE82A /* SimpleLineIcons.ttf */; };
 		772E2C0925984D5CA1033CD8 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D83DF709E22A45E8A366663F /* AntDesign.ttf */; };
@@ -67,8 +86,30 @@
 		00E356EE1AD99517003FC87E /* RTChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RTChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RTChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTChatTests.m; sourceTree = "<group>"; };
+		046983D423EC416F00A4E037 /* RTChatRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatRelease.entitlements; path = RTChat/RTChatRelease.entitlements; sourceTree = "<group>"; };
+		04750E7623F2B6BE00AF63C2 /* RTChatDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RTChatDebug.entitlements; path = RTChat/RTChatDebug.entitlements; sourceTree = "<group>"; };
+		04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		047A132A2417A80600C1225A /* fontello.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = fontello.ttf; path = "../../../../Downloads/fontello-6db75a46/font/fontello.ttf"; sourceTree = "<group>"; };
+		047C8716242376990087F92F /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-BlackItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; };
+		047C8717242376990087F92F /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Light.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Light.ttf"; sourceTree = "<group>"; };
+		047C87182423769A0087F92F /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-BoldItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
+		047C87192423769A0087F92F /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Italic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Italic.ttf"; sourceTree = "<group>"; };
+		047C871A2423769A0087F92F /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		047C871B2423769A0087F92F /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-ExtraLight.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
+		047C871C2423769A0087F92F /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-LightItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; };
+		047C871D2423769A0087F92F /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-ExtraBold.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		047C871E2423769A0087F92F /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		047C871F2423769A0087F92F /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-ExtraLightItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		047C87202423769A0087F92F /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-MediumItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
+		047C87212423769A0087F92F /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		047C87222423769A0087F92F /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBold.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		047C87232423769A0087F92F /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-SemiBoldItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		047C87242423769A0087F92F /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Thin.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Thin.ttf"; sourceTree = "<group>"; };
+		047C87252423769A0087F92F /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-ThinItalic.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
+		047C87262423769A0087F92F /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		047C87272423769A0087F92F /* Montserrat-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Black.ttf"; path = "../../../../Downloads/Cruiser App Assets/Fonts/Montserrat/Montserrat-Black.ttf"; sourceTree = "<group>"; };
 		0B4C0AA3A9261A2DF9A58601 /* Pods-RTChat-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RTChat-tvOS/Pods-RTChat-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* RTChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Project Hub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Project Hub.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RTChat/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RTChat/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -91,7 +132,6 @@
 		479F281B499444DBA0BFE194 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChat.release.xcconfig"; path = "Target Support Files/Pods-RTChat/Pods-RTChat.release.xcconfig"; sourceTree = "<group>"; };
 		527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTChatTests.debug.xcconfig"; path = "Target Support Files/Pods-RTChatTests/Pods-RTChatTests.debug.xcconfig"; sourceTree = "<group>"; };
-		62AFDB93237990F9006985DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "RTChat/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		62D9594020CF410DA9A0E053 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		65275F3830C348A8B49FF460 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		70FF730174694D2C8F909A9A /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -172,7 +212,9 @@
 		13B07FAE1A68108700A75B9A /* RTChat */ = {
 			isa = PBXGroup;
 			children = (
-				62AFDB93237990F9006985DA /* GoogleService-Info.plist */,
+				04750E7723F2B79A00AF63C2 /* GoogleService-Info.plist */,
+				04750E7623F2B6BE00AF63C2 /* RTChatDebug.entitlements */,
+				046983D423EC416F00A4E037 /* RTChatRelease.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -208,6 +250,25 @@
 		4599446EE4C4464F8475D64B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				047C87272423769A0087F92F /* Montserrat-Black.ttf */,
+				047C8716242376990087F92F /* Montserrat-BlackItalic.ttf */,
+				047C87212423769A0087F92F /* Montserrat-Bold.ttf */,
+				047C87182423769A0087F92F /* Montserrat-BoldItalic.ttf */,
+				047C871D2423769A0087F92F /* Montserrat-ExtraBold.ttf */,
+				047C871A2423769A0087F92F /* Montserrat-ExtraBoldItalic.ttf */,
+				047C871B2423769A0087F92F /* Montserrat-ExtraLight.ttf */,
+				047C871F2423769A0087F92F /* Montserrat-ExtraLightItalic.ttf */,
+				047C87192423769A0087F92F /* Montserrat-Italic.ttf */,
+				047C8717242376990087F92F /* Montserrat-Light.ttf */,
+				047C871C2423769A0087F92F /* Montserrat-LightItalic.ttf */,
+				047C87262423769A0087F92F /* Montserrat-Medium.ttf */,
+				047C87202423769A0087F92F /* Montserrat-MediumItalic.ttf */,
+				047C871E2423769A0087F92F /* Montserrat-Regular.ttf */,
+				047C87222423769A0087F92F /* Montserrat-SemiBold.ttf */,
+				047C87232423769A0087F92F /* Montserrat-SemiBoldItalic.ttf */,
+				047C87242423769A0087F92F /* Montserrat-Thin.ttf */,
+				047C87252423769A0087F92F /* Montserrat-ThinItalic.ttf */,
+				047A132A2417A80600C1225A /* fontello.ttf */,
 				D83DF709E22A45E8A366663F /* AntDesign.ttf */,
 				B29A8B7E55BF4125A0B9B9E6 /* Entypo.ttf */,
 				B512A9AD0F0748DAB7FC9E51 /* EvilIcons.ttf */,
@@ -258,7 +319,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* RTChat.app */,
+				13B07F961A680F5B00A75B9A /* Project Hub.app */,
 				00E356EE1AD99517003FC87E /* RTChatTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* RTChat-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* RTChat-tvOSTests.xctest */,
@@ -321,7 +382,7 @@
 			);
 			name = RTChat;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* RTChat.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Project Hub.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* RTChat-tvOS */ = {
@@ -373,7 +434,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 2PZNM5JA9H;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 2PZNM5JA9H;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -420,26 +486,45 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				629601DA237EA9DF00C4C65B /* GoogleService-Info.plist in Resources */,
+				047C87302423769A0087F92F /* Montserrat-Regular.ttf in Resources */,
+				047C872A2423769A0087F92F /* Montserrat-BoldItalic.ttf in Resources */,
+				047C87312423769A0087F92F /* Montserrat-ExtraLightItalic.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				772E2C0925984D5CA1033CD8 /* AntDesign.ttf in Resources */,
+				047C87382423769A0087F92F /* Montserrat-Medium.ttf in Resources */,
+				047C87342423769A0087F92F /* Montserrat-SemiBold.ttf in Resources */,
+				047C872F2423769A0087F92F /* Montserrat-ExtraBold.ttf in Resources */,
 				DBB52F5E0B264FCCB5E58E1A /* Entypo.ttf in Resources */,
 				5FDFE937C25B425C9392FD35 /* EvilIcons.ttf in Resources */,
+				047C87352423769A0087F92F /* Montserrat-SemiBoldItalic.ttf in Resources */,
+				047C872B2423769A0087F92F /* Montserrat-Italic.ttf in Resources */,
 				C87CF97B7729459093FB54D5 /* Feather.ttf in Resources */,
+				047C872E2423769A0087F92F /* Montserrat-LightItalic.ttf in Resources */,
+				047C87392423769A0087F92F /* Montserrat-Black.ttf in Resources */,
 				B4DE282A8FEA4AD9A68E1E22 /* FontAwesome.ttf in Resources */,
 				932C4F7093144C5F96E6C3A9 /* FontAwesome5_Brands.ttf in Resources */,
 				C1BA0EE7628545909F36E0C0 /* FontAwesome5_Regular.ttf in Resources */,
 				CD179A71BF1948B88539D691 /* FontAwesome5_Solid.ttf in Resources */,
 				B9600FB5FD98446890032680 /* Fontisto.ttf in Resources */,
+				047A132B2417A80600C1225A /* fontello.ttf in Resources */,
 				43FBE6600C1F4C58A8435704 /* Foundation.ttf in Resources */,
+				047C872D2423769A0087F92F /* Montserrat-ExtraLight.ttf in Resources */,
+				047C87332423769A0087F92F /* Montserrat-Bold.ttf in Resources */,
+				047C87372423769A0087F92F /* Montserrat-ThinItalic.ttf in Resources */,
 				208A7E8EAA154EA99A4D390F /* Ionicons.ttf in Resources */,
+				047C87362423769A0087F92F /* Montserrat-Thin.ttf in Resources */,
 				77A4DE33B5084452A83738CE /* MaterialCommunityIcons.ttf in Resources */,
+				047C87292423769A0087F92F /* Montserrat-Light.ttf in Resources */,
 				D398B748134D4C25B2F5BBC5 /* MaterialIcons.ttf in Resources */,
 				14C0BECCB5A34FCBB830B9A8 /* Octicons.ttf in Resources */,
 				C0E9D953B76744CEACF693CD /* Roboto_medium.ttf in Resources */,
+				047C87322423769A0087F92F /* Montserrat-MediumItalic.ttf in Resources */,
 				C5795D469076457A93195981 /* Roboto.ttf in Resources */,
 				D578EF809AC04EDFBD06E173 /* rubicon-icon-font.ttf in Resources */,
+				04750E7823F2B79A00AF63C2 /* GoogleService-Info.plist in Resources */,
+				047C87282423769A0087F92F /* Montserrat-BlackItalic.ttf in Resources */,
+				047C872C2423769A0087F92F /* Montserrat-ExtraBoldItalic.ttf in Resources */,
 				6DDC8D1CC11C4B9FA8697760 /* SimpleLineIcons.ttf in Resources */,
 				6C155DECD18C4BDEA5A39D52 /* Zocial.ttf in Resources */,
 			);
@@ -684,6 +769,8 @@
 			baseConfigurationReference = 527906E54926BD86D793E4B1 /* Pods-RTChatTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -714,7 +801,9 @@
 			baseConfigurationReference = 8641AC0D8301051B49C0E3C8 /* Pods-RTChatTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -741,8 +830,12 @@
 			baseConfigurationReference = 73E7F5624043B6ED67FC8AB8 /* Pods-RTChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatDebug.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -754,8 +847,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
-				PRODUCT_NAME = RTChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spl.rtchatwithpn;
+				PRODUCT_NAME = "Project Hub";
+				PROVISIONING_PROFILE_SPECIFIER = com.spl.rtchatwithpn;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -765,7 +859,11 @@
 			baseConfigurationReference = 5270332A53B90C4BB64DA691 /* Pods-RTChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = RTChat/RTChatRelease.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = 2PZNM5JA9H;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
@@ -777,8 +875,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.invertase.RTChat;
-				PRODUCT_NAME = RTChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.spl.rtchatwithpn;
+				PRODUCT_NAME = "Project Hub";
+				PROVISIONING_PROFILE_SPECIFIER = com.spl.rtchatwithpndistribution;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -257,6 +257,8 @@ PODS:
     - React
   - react-native-image-resizer (1.1.0):
     - React
+  - react-native-netinfo (5.5.1):
+    - React
   - react-native-uuid-generator (6.1.1):
     - React
   - React-RCTActionSheet (0.60.5):
@@ -284,6 +286,8 @@ PODS:
     - React-Core (= 0.60.5)
   - rn-fetch-blob (0.11.2):
     - React-Core
+  - RNCAsyncStorage (1.8.1):
+    - React
   - RNFirebase (5.5.6):
     - Firebase/Core
     - React
@@ -294,6 +298,8 @@ PODS:
     - Firebase/Core
     - React
   - RNGestureHandler (1.4.1):
+    - React
+  - RNSVG (12.0.2):
     - React
   - yoga (0.60.5.React)
 
@@ -324,6 +330,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-uuid-generator (from `../node_modules/react-native-uuid-generator`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -336,8 +343,10 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -403,6 +412,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-image-resizer:
     :path: "../node_modules/react-native-image-resizer"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-uuid-generator:
     :path: "../node_modules/react-native-uuid-generator"
   React-RCTActionSheet:
@@ -427,10 +438,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/WebSocket"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNFirebase:
     :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -481,6 +496,7 @@ SPEC CHECKSUMS:
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
   react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
   react-native-image-resizer: 9dfb844937574db849fd18a56d8e6c607b0a31d8
+  react-native-netinfo: 1ee553f84e01aaffbed0e5bd53d8515f7d675055
   react-native-uuid-generator: 997d9848f07081ce7200a05b76e3f8c7b309963c
   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e
@@ -493,8 +509,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
   rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
+  RNCAsyncStorage: 00bdf63f7f1e0f11d3323533dba4f222e58bf092
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+  RNSVG: 9f7446f2e8fb1a5dc66a4aff58c33d367291d34c
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
 
 PODFILE CHECKSUM: c59925ce8dcfaed63f5e73f35649e41e0bdf725c
